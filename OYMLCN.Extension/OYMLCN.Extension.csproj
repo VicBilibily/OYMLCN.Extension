@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
-    <Company>广东佰群网络科技股份有限公司</Company>
+    <Company>欧阳敏岚工作室</Company>
     <Description>常用类型方法扩展封装
 .Net独有：BitmapExtensions、BitmapHandler、HardwareExtensions、MouseExtensions、RegistryExtensions、SystemInfo
 跨平台封装：CryptographyExtensions、DateTimeExtensions、EnumExtensions、FileExtensions、FormatExtensions、HTMLExtensions、HttpClientExtensions、LinqExtensions、ProcessExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
 常见第三方扩展：NewtonsoftJsonExtensions
 独立模块：Cryptography、EmailSender、PredicateBuilder</Description>
     <Copyright>OYML.CN</Copyright>
-    <Version>1.1.7</Version>
+    <Version>1.1.8</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
