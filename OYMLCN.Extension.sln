@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension", "OYMLCN.Extension\OYMLCN.Extension.csproj", "{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension", "OYMLCN.Extension\OYMLCN.Extension.csproj", "{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.Test", "OYMLCN.Extension.Test\OYMLCN.Extension.Test.csproj", "{9F7FEF34-7E00-4F10-8C0D-9FFAB73A0FB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Test", "OYMLCN.Extension.Test\OYMLCN.Extension.Test.csproj", "{9F7FEF34-7E00-4F10-8C0D-9FFAB73A0FB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.TestForDotNet", "OYMLCN.Extension.TestForDotNet\OYMLCN.Extension.TestForDotNet.csproj", "{9544B20B-732F-4B72-88C8-5BD2A681317D}"
 EndProject

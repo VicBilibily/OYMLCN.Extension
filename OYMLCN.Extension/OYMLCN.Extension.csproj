@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
     <Description>常用类型方法扩展封装
@@ -10,7 +10,7 @@
 常见第三方扩展：NewtonsoftJsonExtensions
 独立模块：Cryptography、EmailSender、PredicateBuilder</Description>
     <Copyright>OYML.CN</Copyright>
-    <Version>1.1.8</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
@@ -23,7 +23,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>
