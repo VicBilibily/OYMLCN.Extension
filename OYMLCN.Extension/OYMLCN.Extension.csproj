@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
     <Description>常用类型方法扩展封装
@@ -9,7 +9,7 @@
 常见第三方扩展：NewtonsoftJsonExtensions
 独立模块：Cryptography、EmailSender、PredicateBuilder</Description>
     <Copyright>OYML.CN</Copyright>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -19,8 +19,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <DocumentationFile>bin\Release\net461\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.1\OYMLCN.Extension.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="System.Management" />
