@@ -68,12 +68,11 @@ namespace OYMLCN
                 client = new HttpClient();
             client.Timeout = new TimeSpan(0, 0, timeout);
             var t = client.GetStreamAsync(url);
-            t.Wait();            
+            t.Wait();
             var result = t.Result;
             client.Dispose();
             return result;
         }
-
 
 
         /// <summary>
@@ -83,9 +82,10 @@ namespace OYMLCN
         /// <param name="data">提交字符数据</param>
         /// <param name="encoder">字符数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
         /// <returns></returns>
-        public static string PostString(string url, string data, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
+        public static string PostString(string url, string data, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PostData(url, data, encoder, "text/text", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPost提交Json数据
         /// </summary>
@@ -93,9 +93,10 @@ namespace OYMLCN
         /// <param name="json">提交Json数据</param>
         /// <param name="encoder">Json数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
         /// <returns></returns>
-        public static string PostJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, json, encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
+        public static string PostJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PostData(url, json, encoder, "application/json", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPost提交Xml数据
         /// </summary>
@@ -103,8 +104,10 @@ namespace OYMLCN
         /// <param name="xml">提交Xml数据</param>
         /// <param name="encoder">Xml数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
-        public static string XmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, xml, encoder, "text/xml").ReadToEnd(decoder ?? Encoding.UTF8);
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static string PostXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PostData(url, xml, encoder, "text/xml", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpPost提交数据
@@ -164,6 +167,117 @@ namespace OYMLCN
                 content = new StringContent(string.Empty);
             var stri = content.ReadAsStringAsync().Result;
             var t = client.PostAsync(url, content);
+            t.Wait();
+            var result = t.Result.Content.ReadAsStreamAsync();
+            result.Wait();
+            client.Dispose();
+            return result.Result;
+        }
+
+
+        /// <summary>
+        /// 通过HttpPut提交字符数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="data">提交字符数据</param>
+        /// <param name="encoder">字符数据编码（默认为UTF-8）</param>
+        /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static string PutString(string url, string data, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PutData(url, data, encoder, "text/text", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
+        /// <summary>
+        /// 通过HttpPut提交Json数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="json">提交Json数据</param>
+        /// <param name="encoder">Json数据编码（默认为UTF-8）</param>
+        /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static string PutJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PutData(url, json, encoder, "application/json", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
+        /// <summary>
+        /// 通过HttpPut提交Xml数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="xml">提交Xml数据</param>
+        /// <param name="encoder">Xml数据编码（默认为UTF-8）</param>
+        /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static string PutXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null, CookieContainer cookieContainer = null) =>
+            PutData(url, xml, encoder, "text/xml", cookieContainer: cookieContainer).ReadToEnd(decoder ?? Encoding.UTF8);
+
+        /// <summary>
+        /// 通过HttpPut提交数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="data">提交字符数据</param>
+        /// <param name="encoder">字符数据编码（默认为UTF-8）</param>
+        /// <param name="mediaType">字符数据类型</param>
+        /// <param name="timeout">请求超时时间（单位：秒）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static Stream PutData(string url, string data, Encoding encoder = null, string mediaType = "text/text", int timeout = 30, CookieContainer cookieContainer = null)
+        {
+            if (url.IsNullOrEmpty())
+                throw new ArgumentNullException("url", "请求URL地址不能为空");
+            HttpClient client;
+            if (cookieContainer != null)
+                client = new HttpClient(new HttpClientHandler
+                {
+                    CookieContainer = cookieContainer,
+                    UseCookies = true,
+                });
+            else
+                client = new HttpClient();
+            client.Timeout = new TimeSpan(timeout * 1000 * 10000);
+
+            HttpContent content = null;
+            if (!data.IsNullOrEmpty())
+                content = new StringContent(data, (encoder ?? Encoding.UTF8), mediaType);
+            if (content.IsNull())
+                content = new StringContent(string.Empty);
+            var stri = content.ReadAsStringAsync().Result;
+            var t = client.PutAsync(url, content);
+            t.Wait();
+            var result = t.Result.Content.ReadAsStreamAsync();
+            result.Wait();
+            client.Dispose();
+            return result.Result;
+        }
+
+        /// <summary>
+        /// 通过HttpDelete提交数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static string Delete(string url, CookieContainer cookieContainer = null) => Delete(url, cookieContainer);
+        /// <summary>
+        /// 通过HttpDelete提交数据
+        /// </summary>
+        /// <param name="url">请求Url</param>
+        /// <param name="timeout">请求超时时间（单位：秒）</param>
+        /// <param name="cookieContainer">Cookie容器</param>
+        /// <returns></returns>
+        public static Stream Delete(string url, int timeout = 30, CookieContainer cookieContainer = null)
+        {
+            if (url.IsNullOrEmpty())
+                throw new ArgumentNullException("url", "请求URL地址不能为空");
+            HttpClient client;
+            if (cookieContainer != null)
+                client = new HttpClient(new HttpClientHandler
+                {
+                    CookieContainer = cookieContainer,
+                    UseCookies = true,
+                });
+            else
+                client = new HttpClient();
+            client.Timeout = new TimeSpan(timeout * 1000 * 10000);
+
+            var t = client.DeleteAsync(url);
             t.Wait();
             var result = t.Result.Content.ReadAsStreamAsync();
             result.Wait();
