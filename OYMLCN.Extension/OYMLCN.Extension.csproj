@@ -3,18 +3,32 @@
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>常用类型方法扩展封装
-.Net独有：BitmapExtensions、BitmapHandler、HardwareExtensions、MouseExtensions、RegistryExtensions、SystemInfo
-跨平台封装：CryptographyExtensions、DateTimeExtensions、EnumExtensions、FileExtensions、FormatExtensions、HTMLExtensions、HttpClientExtensions、LinqExtensions、ProcessExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
-常见第三方扩展：NewtonsoftJsonExtensions
-独立模块：Cryptography、EmailSender、PredicateBuilder</Description>
-    <Copyright>OYML.CN</Copyright>
-    <Version>1.2.2</Version>
+    <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
+不排除大版本更新会大改而不做向前兼容。</Description>
+    <Copyright>base OYMLCN with WTFPL</Copyright>
+    <Version>1.3.0</Version>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseUrl>http://www.wtfpl.net/</PackageLicenseUrl>
+    <PackageReleaseNotes>常用类型方法扩展封装
+.Net独有：BitmapExtensions、BitmapHandler、HardwareExtensions、MouseExtensions、RegistryExtensions、SystemInfo
+.Net WPF：ApplicationInitialization、SelectorExtensions、TextBoxExtensions、VisualHepler
+.Net WinForm：ComboBoxExtensions、ControlExtensions、ListViewExtensions
+跨平台封装：CryptographyExtensions、DateTimeExtensions、EnumExtensions、FileExtensions、FormatExtensions、HTMLExtensions、HttpClientExtensions、LinqExtensions、ProcessExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
+常见第三方扩展：NewtonsoftJsonExtensions
+第三方SDK：Aliyun.SmsSender | TencentCloud.CosCloud、TencentCloud.SmsSender
+独立模块：Cryptography、EmailSender、PredicateBuilder
+自建模块：GlobalRegion
+
+常用字词功能集成
+Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和关键词Keywords提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <DocumentationFile>bin\Release\net461\OYMLCN.Extension.xml</DocumentationFile>
@@ -34,6 +48,9 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

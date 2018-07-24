@@ -9,9 +9,9 @@ using System.Windows.Controls.Primitives;
 namespace OYMLCN.WPF
 {
     /// <summary>
-    /// SelectorExtension
+    /// SelectorExtensions
     /// </summary>
-    public static class SelectorExtension
+    public static class SelectorExtensions
     {
         /// <summary>
         /// 获取数据源IEnumerable&lt;T&gt;

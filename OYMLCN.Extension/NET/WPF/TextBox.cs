@@ -11,7 +11,7 @@ namespace OYMLCN.WPF
     /// <summary>
     /// TextBoxExtension
     /// </summary>
-    public static class TextBoxExtension
+    public static class TextBoxExtensions
     {
         /// <summary>
         /// 只允许输入数字
