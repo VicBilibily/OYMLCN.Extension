@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using OYMLCN;
 
 namespace OYMLCN.GlobalRegion
 {
@@ -54,9 +56,9 @@ namespace OYMLCN.GlobalRegion
     }
 
     /// <summary>
-    /// Data
+    /// GlobalRegionData
     /// </summary>
-    public static partial class Data
+    public static partial class GlobalRegionData
     {
         /// <summary>
         /// M49InfoWorld
@@ -67,9 +69,9 @@ namespace OYMLCN.GlobalRegion
             ISO3166 = "ALL",
             CallingCode = "-",
             ShortName = "World",
-            FullName = "Earth",
+            FullName = "The Whole World",
             ChineseShortName = "世界",
-            ChineseFullName = "地球",
+            ChineseFullName = "全球",
             UTCTimeSpan = new TimeSpan(0, 0, 0)
         };
 
@@ -78,6 +80,8 @@ namespace OYMLCN.GlobalRegion
         /// </summary>
         public static IReadOnlyDictionary<M49, M49Info> M49Infos = new Dictionary<M49, M49Info>()
         {
+            { M49.World世界, M49InfoWorld },
+
 #region EasternAfrica东部非洲
 		    // EasternAfrica东部非洲
             { M49.Burundi布隆迪 , new M49Info(){
@@ -2577,5 +2581,22 @@ namespace OYMLCN.GlobalRegion
 #endregion
 
         };
+    }
+
+    /// <summary>
+    /// Extensions
+    /// </summary>
+    public static partial class Extensions
+    {
+        /// <summary>
+        /// 计算当前时间对应国家首都的时间
+        /// </summary>
+        /// <param name="dateTimeNow"></param>
+        /// <param name="country"></param>
+        /// <returns></returns>
+        public static M49Info GetM49Info(this M49 country)
+        {
+            return GlobalRegionData.M49Infos.Where(d => d.Key == country).Select(d => d.Value).FirstOrDefault();
+        }
     }
 }
