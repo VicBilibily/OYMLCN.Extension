@@ -28,7 +28,7 @@ namespace OYMLCN.GlobalRegion
         /// <returns></returns>
         public static double GetCountryUTCTimeDifference(M49 country)
         {
-            return GlobalRegionData.M49Infos.Where(d => d.Key == country).Select(d => d.Value.UTCTimeSpan.TotalHours).First();
+            return GlobalRegionData.M49CountryInfos.Where(d => d.Key == country).Select(d => d.Value.UTCTimeSpan.TotalHours).First();
             //switch (country)
             //{
             //    // UTC/GMT -11小时 (西十一区)
