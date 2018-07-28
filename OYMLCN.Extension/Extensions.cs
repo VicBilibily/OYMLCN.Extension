@@ -290,5 +290,20 @@ namespace OYMLCN
         /// <param name="i"></param>
         /// <returns></returns>
         public static char ToChar(this int i) => (char)i;
+
+        /// <summary>
+        /// 获取分页的最大页码
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="limit">页条目</param>
+        /// <returns></returns>
+        public static int GetMaxPagination(this int total, int limit = 10) => total / limit + (total % limit == 0 ? 0 : 1);
+        /// <summary>
+        /// 获取分页的最大页码
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="limit">页条目</param>
+        /// <returns></returns>
+        public static long GetMaxPagination(this long total, int limit = 10) => total / limit + (total % limit == 0 ? 0 : 1);
     }
 }
