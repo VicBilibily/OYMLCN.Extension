@@ -5,13 +5,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// SystemHelper
     /// </summary>
     public static class SystemHelpers
     {
+        #region 系统代理设置相关
         [DllImport(@"wininet", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "InternetSetOption", CallingConvention = CallingConvention.StdCall)]
         static extern bool InternetSetOption(int hInternet, int dmOption, IntPtr lpBuffer, int dwBufferLength);
 
@@ -60,12 +61,14 @@ namespace OYMLCN
         /// <summary>
         /// 设置禁用代理
         /// </summary>
-        public static void SetIEProxyInDisable() => SetIEProxy();
+        public static void SetIEProxyInDisable() => SetIEProxy(); 
+        #endregion
 
+        #region 窗口捕获处理相关
         static int GetWindowFromPoint(int xPoint, int yPoint) =>
-            Environment.Is64BitProcess ?
-                WindowFromPoint(new POINT() { x = xPoint, y = yPoint })
-                : WindowFromPoint(xPoint, yPoint);
+    Environment.Is64BitProcess ?
+        WindowFromPoint(new POINT() { x = xPoint, y = yPoint })
+        : WindowFromPoint(xPoint, yPoint);
         [DllImport("user32", EntryPoint = "WindowFromPoint")]//指定坐标处窗体句柄
         static extern int WindowFromPoint(int xPoint, int yPoint);
         struct POINT
@@ -148,7 +151,8 @@ namespace OYMLCN
                 }
             }
             return false;
-        }
+        } 
+        #endregion
 
     }
 }

@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// 排序方式

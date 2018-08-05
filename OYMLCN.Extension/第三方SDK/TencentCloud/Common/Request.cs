@@ -5,6 +5,7 @@ using System.Net;
 using System.IO;
 using System.Web;
 using Newtonsoft.Json;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.TencentCloud.Common
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// DateTimeExtension

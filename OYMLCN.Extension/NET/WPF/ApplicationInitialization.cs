@@ -14,7 +14,7 @@ namespace OYMLCN.WPF
     /// <summary>
     /// ApplicationInitialization
     /// </summary>
-    public class ApplicationInitialization
+    public static class ApplicationInitialization
     {
         /// <summary>
         /// NativeMethods
@@ -71,10 +71,27 @@ namespace OYMLCN.WPF
                 Application.Current.Shutdown();
             }
         }
+        /// <summary>
+        /// 杀掉程序主线程
+        /// </summary>
+        public static void KillMainProcess() => Process.GetCurrentProcess().Kill();
+
 
         /// <summary>
+        /// 程序异常提示标题
+        /// </summary>
+        public static string UnhandledExceptionTipTitle = "程序异常";
+        /// <summary>
+        /// 致命异常提示标题
+        /// </summary>
+        public static string UnhandledExceptionFatalTitle = "致命异常";
+        /// <summary>
+        /// 无法恢复的异常提示文本
+        /// </summary>
+        public static string UnhandledExceptionTipFatalText = "发生不可恢复异常，程序即将退出。";
+        /// <summary>
         /// 捕获程序异常
-        /// AppDomain.CurrentDomain.UnhandledException += ApplicationInitialization.UnhandledException;
+        /// Systgem.AppDomain.CurrentDomain.UnhandledException += <see cref="UnhandledException"/>;
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -83,25 +100,48 @@ namespace OYMLCN.WPF
             try
             {
                 if (e.ExceptionObject is Exception exception)
+                {
+                    var list = new List<Exception>();
+                    do
+                    {
+                        list.Add(exception);
+                        exception = exception?.InnerException;
+                    }
+                    while (exception != null);
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine();
+                    list.Reverse();
+                    foreach (var item in list)
+                        str.AppendLine(item?.Message);
+
                     ThreadPool.QueueUserWorkItem(o =>
                     {
-                        MessageBox.Show(exception.Message, "程序异常", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(str.ToString(), UnhandledExceptionTipTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     });
+                }
             }
             catch (Exception err)
             {
                 ThreadPool.QueueUserWorkItem(o =>
                 {
-                    MessageBox.Show($"发生不可恢复异常，程序即将退出。/r/n{err.Message}");
+                    MessageBox.Show($"{UnhandledExceptionTipFatalText}/r/n{err.Message}", UnhandledExceptionFatalTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     KillMainProcess();
                 });
             }
         }
-
         /// <summary>
-        /// 杀掉程序主线程
+        /// 注册未处理异常处理
+        /// 勿重复注册处理事件
+        /// 更改提示信息可直接更改 <see cref="UnhandledExceptionTipTitle"/> 和 <see cref="UnhandledExceptionTipFatalText"/>
         /// </summary>
-        public static void KillMainProcess() => Process.GetCurrentProcess().Kill();
+        /// <param name="showEx">默认弹出错误提示</param>
+        public static void RegisterUnhandledException(bool showEx = true)
+        {
+            if (showEx)
+                AppDomain.CurrentDomain.UnhandledException += UnhandledException;
+            else
+                AppDomain.CurrentDomain.UnhandledException += delegate (object sender, UnhandledExceptionEventArgs e) { };
+        }
 
         /// <summary>
         /// 捕获所有未处理异常
@@ -135,18 +175,37 @@ namespace OYMLCN.WPF
                 if (e.Exception != null)
                     ThreadPool.QueueUserWorkItem(o =>
                     {
-                        MessageBox.Show(e.Exception.Message, "程序异常", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(e.Exception.Message, UnhandledExceptionTipTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     });
             }
             catch (Exception err)
             {
                 ThreadPool.QueueUserWorkItem(o =>
                 {
-                    MessageBox.Show($"{err.Message}\r\n发生不可恢复异常，程序即将退出。", "致命异常", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{err.Message}\r\n{UnhandledExceptionTipFatalText}", UnhandledExceptionFatalTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     KillMainProcess();
                 });
             }
         }
+
+        /// <summary>
+        /// 注册未处理异常处理
+        /// 勿重复注册处理事件
+        /// 更改提示信息可直接更改 <see cref="UnhandledExceptionTipTitle"/> 和 <see cref="UnhandledExceptionTipFatalText"/>
+        /// </summary>
+        /// <param name="app">WPF主程序</param>
+        /// <param name="showEx">默认弹出错误提示</param>
+        public static void RegisterDispatcherUnhandledException(this Application app, bool showEx = true)
+        {
+            if (showEx)
+                app.DispatcherUnhandledException += DispatcherUnhandledException;
+            else
+                app.DispatcherUnhandledException += delegate (object sender, DispatcherUnhandledExceptionEventArgs e)
+                {
+                    e.Handled = true;
+                };
+        }
+
     }
 }
 #endif

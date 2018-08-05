@@ -2,14 +2,13 @@
 using System.Collections;
 using System.Windows.Forms;
 
-namespace OYMLCN.WinForm
+namespace OYMLCN.WinFormExtensions
 {
     /// <summary>
     /// ComboBoxExtension
     /// </summary>
     public static class ComboBoxExtensions
     {
-
         /// <summary>
         /// 清空选项
         /// </summary>

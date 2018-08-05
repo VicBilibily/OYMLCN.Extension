@@ -1,14 +1,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// JsonExtension
@@ -42,22 +39,41 @@ namespace OYMLCN
         }
 
         /// <summary>
-        /// JSON字符串转换为对象
+        /// NewtonsoftJsonHandler
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="jsonstr"></param>
-        /// <returns></returns>
-        public static T DeserializeJsonString<T>(this string jsonstr) => JsonConvert.DeserializeObject<T>(jsonstr);
+        public class NewtonsoftJsonHandler
+        {
+            internal string Str;
+            internal NewtonsoftJsonHandler(string str) => Str = str;
 
+            /// <summary>
+            /// JSON字符串转换为对象
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <returns></returns>
+            public T DeserializeToObject<T>() => JsonConvert.DeserializeObject<T>(Str);
+            /// <summary>
+            /// 转换JSON字符串为可供查询的Array数组
+            /// </summary>
+            /// <returns></returns>
+            public JToken ParseToJToken() => JToken.Parse(Str.IsNullOrWhiteSpace() ? "{}" : Str);
+        }
 
         /// <summary>
-        /// 转换JSON字符串为可供查询的Array数组
+        /// 将字符串作为Json对象处理
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="jsonstr"></param>
         /// <returns></returns>
-        public static JToken ParseToJToken(this string str) => JToken.Parse(str.IsNullOrWhiteSpace() ? "{}" : str);
+        public static NewtonsoftJsonHandler AsJsonHandler(this string jsonstr) => new NewtonsoftJsonHandler(jsonstr);
 
-
+        ///// <summary>
+        ///// JSON字符串转换为对象
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="jsonstr"></param>
+        ///// <returns></returns>
+        //[Obsolete("为减少扩展方法污染，请使用AsJsonHandler().DeserializeToObject<T>()", true)]
+        //public static T DeserializeJsonString<T>(this string jsonstr) => throw new NotSupportedException();
 
         /// <summary>
         /// 获取指定值
@@ -186,7 +202,6 @@ namespace OYMLCN
         /// <param name="key"></param>
         /// <returns></returns>
         public static object[] GetObjectArray(this JToken jt, string key) => jt[key].ToObjectArray();
-
 
     }
 }

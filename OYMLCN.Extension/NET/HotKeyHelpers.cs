@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// 注册表操作

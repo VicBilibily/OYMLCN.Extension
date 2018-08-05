@@ -9,7 +9,7 @@ using System.IO;
 using System.Security.Principal;
 using System.IO.MemoryMappedFiles;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// 进程或线程相关操作

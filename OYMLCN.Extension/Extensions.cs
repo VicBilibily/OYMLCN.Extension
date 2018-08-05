@@ -6,12 +6,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
-    /// Extension
+    /// 杂项扩展
     /// </summary>
-    public static class Extensions
+    public static partial class SundryExtensions
     {
         #region ReleaseMemory释放内存
         [DllImport("kernel32")]

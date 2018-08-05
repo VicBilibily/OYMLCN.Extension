@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Linq;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// ZipExtension

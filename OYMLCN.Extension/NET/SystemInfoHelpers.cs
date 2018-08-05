@@ -3,9 +3,8 @@ using System;
 using System.Management;
 using System.Runtime.InteropServices;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
-
     /// <summary>
     /// 系统信息辅助方法
     /// </summary>

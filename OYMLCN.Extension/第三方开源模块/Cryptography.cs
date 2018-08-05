@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Xml;
 using System.IO;
+using OYMLCN.Extensions;
 
 // base on https://github.com/myloveCc/NETCore.Encrypt v2.0.3
-namespace OYMLCN.Cryptography
+namespace OYMLCN.ThirdParty.Cryptography
 {
     internal static class BytesAndStringExtensions
     {
@@ -147,7 +148,7 @@ namespace OYMLCN.Cryptography
             RSAParameters parameters = new RSAParameters();
             try
             {
-                var paramsJson = jsonString.DeserializeJsonString<RSAParametersJson>();
+                var paramsJson = jsonString.AsJsonHandler().DeserializeToObject<RSAParametersJson>();
 
                 parameters.Modulus = paramsJson.Modulus != null ? Convert.FromBase64String(paramsJson.Modulus) : null;
                 parameters.Exponent = paramsJson.Exponent != null ? Convert.FromBase64String(paramsJson.Exponent) : null;

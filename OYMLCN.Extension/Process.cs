@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Threading;
 
-namespace OYMLCN
+namespace OYMLCN.Extensions
 {
     /// <summary>
     /// 进程或线程相关操作

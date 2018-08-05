@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using OYMLCN.TencentCloud.Common;
 using OYMLCN.TencentCloud.Util;
@@ -10,6 +9,7 @@ using System.Web;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.TencentCloud
 {

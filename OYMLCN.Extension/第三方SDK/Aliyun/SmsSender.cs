@@ -1,3 +1,4 @@
+using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -118,7 +119,7 @@ namespace OYMLCN.Aliyun
             using (var webclient = new WebClient())
             {
                 var result = webclient.GetSourceString(requestUrl);
-                return result.DeserializeJsonString<SmsSenderResponse>();
+                return result.AsJsonHandler().DeserializeToObject<SmsSenderResponse>();
             }
         }
 

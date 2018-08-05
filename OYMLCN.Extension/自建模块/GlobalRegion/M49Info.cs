@@ -11,6 +11,9 @@ namespace OYMLCN.GlobalRegion
     /// </summary>
     public class M49Info
     {
+        /// <summary>
+        /// 信息集合
+        /// </summary>
         public M49Info() { }
 
         /// <summary>

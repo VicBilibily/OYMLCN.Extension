@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using System.Management;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// 硬件信息

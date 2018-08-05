@@ -1,7 +1,7 @@
 #if NET461
 using System.Runtime.InteropServices;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// 鼠标操作

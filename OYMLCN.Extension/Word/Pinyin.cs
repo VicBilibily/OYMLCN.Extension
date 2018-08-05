@@ -1,34 +1,20 @@
-﻿using OYMLCN.Word.Pinyin;
+﻿using OYMLCN.Extensions;
+using OYMLCN.Word.Pinyin;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OYMLCN.Word
+namespace OYMLCN.WordExtensions
 {
     /// <summary>
-    /// PinYinExtension
+    /// PinYinExtensions
     /// </summary>
-    public static class PinYinExtension
+    public static class PinYinExtensions
     {
-        /// <summary>
-        /// 拼音Model
-        /// </summary>
-        public class PinyinModel
-        {
-            /// <summary>
-            /// 全拼列表
-            /// </summary>
-            public string[] TotalPinYin { get; set; }
-            /// <summary>
-            /// 首字母列表
-            /// </summary>
-            public string[] FirstPinYin { get; set; }
-        }
-
         /// <summary>
         /// 根据汉字获取拼音，如果不是汉字直接返回原字符
         /// </summary>
         /// <param name="str">要转换的汉字</param>
-        /// <param name="polyphone">支持多音字</param>
+        /// <param name="polyphone">默认支持多音字</param>
         /// <returns></returns>
         public static PinyinModel Pinyin(this string str, bool polyphone = true)
         {
@@ -92,7 +78,6 @@ namespace OYMLCN.Word
                 return result.Take(1).ToArray();
         }
 
-
         static Dictionary<string, string> _dic;
         /// <summary>
         /// 字典
@@ -106,7 +91,7 @@ namespace OYMLCN.Word
 
                 _dic = new Dictionary<string, string>();
 
-                var lines =  Resources.pinyin.SplitByLine();
+                var lines = Resources.pinyin.SplitByLine();
                 foreach (var item in lines)
                 {
                     var data = item.Split('|');

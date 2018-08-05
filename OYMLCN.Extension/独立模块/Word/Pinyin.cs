@@ -1,4 +1,5 @@
-﻿using OYMLCN.Word.Pinyin;
+﻿using OYMLCN.Extensions;
+using OYMLCN.Word.Pinyin;
 using System.Collections.Generic;
 using System.Linq;
 

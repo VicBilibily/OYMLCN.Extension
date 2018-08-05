@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Security.Cryptography;
 using OYMLCN.TencentCloud.Util;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.TencentCloud.Common
 {

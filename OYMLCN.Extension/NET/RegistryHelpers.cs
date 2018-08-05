@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using System;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// 注册表操作

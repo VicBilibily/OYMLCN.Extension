@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace OYMLCN.WinForm
+namespace OYMLCN.WinFormExtensions
 {
     /// <summary>
     /// ControlExtension

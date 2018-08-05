@@ -1,11 +1,12 @@
 #if NET461
 using Microsoft.Win32;
+using OYMLCN.Extensions;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace OYMLCN
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// WebBrowserHelper

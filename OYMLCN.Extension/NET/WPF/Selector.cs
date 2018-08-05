@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace OYMLCN.WPF
+namespace OYMLCN.WPFExtensions
 {
     /// <summary>
     /// SelectorExtensions
