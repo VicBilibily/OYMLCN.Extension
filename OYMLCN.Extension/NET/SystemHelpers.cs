@@ -1,6 +1,7 @@
 #if NET461
 using Microsoft.Win32;
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -12,147 +13,204 @@ namespace OYMLCN.Helpers
     /// </summary>
     public static class SystemHelpers
     {
-        #region 系统代理设置相关
-        [DllImport(@"wininet", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "InternetSetOption", CallingConvention = CallingConvention.StdCall)]
-        static extern bool InternetSetOption(int hInternet, int dmOption, IntPtr lpBuffer, int dwBufferLength);
-
-        static void SetIEProxy(bool enable = false, bool global = false, string host = "127.0.0.1", int port = 1080, string autoConfigPath = "")
+        /// <summary>
+        /// 打开注册表
+        /// </summary>
+        /// <param name="name">注册表路径</param>
+        /// <param name="writable">是否以可写方式打开</param>
+        /// <param name="hive">顶级节点（默认为CurrentUser）</param>
+        /// <returns></returns>
+        public static RegistryKey OpenRegKey(string name, bool writable = false, RegistryHive hive = RegistryHive.CurrentUser)
         {
-            using (var setting = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true))
+            try
             {
-                setting.SetValue("MigrateProxy", 1);
-                setting.DeleteValue("ProxyOverride", false);
-                setting.DeleteValue("ProxyServer", false);
-                setting.DeleteValue("AutoConfigURL", false);
-                setting.SetValue("ProxyEnable", 0);
-                if (enable)
+                return RegistryKey.OpenBaseKey(
+                    hive,
+                    Environment.Is64BitOperatingSystem ? RegistryView.Registry64 : RegistryView.Registry32
+                    ).OpenSubKey(name, writable);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 可执行程序路径
+        /// </summary>
+        // Don't use Application.ExecutablePath
+        // see https://stackoverflow.com/questions/12945805/odd-c-sharp-path-issue
+        public static string ExecutablePath = Assembly.GetEntryAssembly().Location;
+
+        /// <summary>
+        /// 系统代理
+        /// </summary>
+        public class SystemProxy
+        {
+            [DllImport(@"wininet", SetLastError = true, CharSet = CharSet.Auto, EntryPoint = "InternetSetOption", CallingConvention = CallingConvention.StdCall)]
+            static extern bool InternetSetOption(int hInternet, int dmOption, IntPtr lpBuffer, int dwBufferLength);
+
+            private string _host;
+            private int _port;
+            private string _autoConfigPath;
+
+            /// <summary>
+            /// 系统代理
+            /// </summary>
+            /// <param name="ipOrHost">代理服务地址</param>
+            /// <param name="port">代理服务端口</param>
+            /// <param name="autoConfigPath">自动代理配置路径(仅包含域名后的路径)</param>
+            public SystemProxy(string ipOrHost = "127.0.0.1", int port = 1080, string autoConfigPath = "pac")
+            {
+                _host = ipOrHost;
+                _port = port;
+                _autoConfigPath = autoConfigPath;
+            }
+
+            /// <summary>
+            /// 设置代理
+            /// </summary>
+            /// <param name="enable"></param>
+            /// <param name="global"></param>
+            protected void SetProxy(bool enable, bool global)
+            {
+                using (var setting = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true))
                 {
-                    if (!global)
-                        setting.SetValue("AutoConfigURL", $"http://{host}:{port.ToString()}/{autoConfigPath}?t={DateTime.Now.ToString("yyyyMMddHHmmssfff")}");
-                    else
+                    setting.SetValue("MigrateProxy", 1);
+                    setting.DeleteValue("ProxyOverride", false);
+                    setting.DeleteValue("ProxyServer", false);
+                    setting.DeleteValue("AutoConfigURL", false);
+                    setting.SetValue("ProxyEnable", 0);
+                    if (enable)
                     {
-                        setting.SetValue("ProxyOverride", "<local>;localhost;127.*;10.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;192.168.*");
-                        setting.SetValue("ProxyServer", $"{host}:{port.ToString()}");
-                        setting.SetValue("ProxyEnable", 1);
+                        if (!global)
+                            setting.SetValue("AutoConfigURL", $"http://{_host}:{_port.ToString()}/{_autoConfigPath}?t={DateTime.Now.ToString("yyyyMMddHHmmssfff")}");
+                        else
+                        {
+                            setting.SetValue("ProxyOverride", "<local>;localhost;127.*;10.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;192.168.*");
+                            setting.SetValue("ProxyServer", $"{_host}:{_port.ToString()}");
+                            setting.SetValue("ProxyEnable", 1);
+                        }
                     }
                 }
+
+                //激活代理设置
+                InternetSetOption(0, 39, IntPtr.Zero, 0);
+                InternetSetOption(0, 37, IntPtr.Zero, 0);
             }
 
-            //激活代理设置
-            InternetSetOption(0, 39, IntPtr.Zero, 0);
-            InternetSetOption(0, 37, IntPtr.Zero, 0);
+            /// <summary>
+            /// 使用自动代理设置
+            /// </summary>
+            public void SetWithAutoConfig() => SetProxy(true, false);
+            /// <summary>
+            /// 使用全局代理设置
+            /// </summary>
+            public void SetGlobalProxy() => SetProxy(true, true);
+            /// <summary>
+            /// 禁用系统代理设置
+            /// </summary>
+            public void DisableProxy() => SetProxy(false, false);
+
         }
 
         /// <summary>
-        /// 设置自动智能代理
+        /// Url协议操作
         /// </summary>
-        /// <param name="host">域名</param>
-        /// <param name="port">端口</param>
-        /// <param name="autoConfigPath">配置文件路径</param>
-        public static void SetIEProxyWithAutoConfigUrl(string host = "127.0.0.1", int port = 1080, string autoConfigPath = "pac") =>
-            SetIEProxy(true, false, host, port, autoConfigPath);
-        /// <summary>
-        /// 设置全局代理
-        /// </summary>
-        /// <param name="host"></param>
-        /// <param name="port"></param>
-        public static void SetIEProxyWithGlobal(string host = "127.0.0.1", int port = 1080) =>
-            SetIEProxy(true, true, host, port);
-        /// <summary>
-        /// 设置禁用代理
-        /// </summary>
-        public static void SetIEProxyInDisable() => SetIEProxy(); 
-        #endregion
-
-        #region 窗口捕获处理相关
-        static int GetWindowFromPoint(int xPoint, int yPoint) =>
-    Environment.Is64BitProcess ?
-        WindowFromPoint(new POINT() { x = xPoint, y = yPoint })
-        : WindowFromPoint(xPoint, yPoint);
-        [DllImport("user32", EntryPoint = "WindowFromPoint")]//指定坐标处窗体句柄
-        static extern int WindowFromPoint(int xPoint, int yPoint);
-        struct POINT
+        public static class URLProcotol
         {
-            public int x { get; set; }
-            public int y { get; set; }
-        }
-        [DllImport("user32", EntryPoint = "WindowFromPoint")]//指定坐标处窗体句柄
-        static extern int WindowFromPoint(POINT point);
-        const int WM_CLOSE = 0x10;
-        [DllImport("user32", EntryPoint = "SendMessageA")]
-        static extern int SendMessage(int hwnd, int wMsg, int wParam, int lParam);
-        //[DllImport("user32", EntryPoint = "GetWindowText")]
-        //static extern int GetWindowText(int hwnd, StringBuilder lpString, int cch);
-        [DllImport("user32")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetWindowRect(int hWnd, ref RECT lpRect);
-        [StructLayout(LayoutKind.Sequential)]
-        struct RECT
-        {
-            public int Left;//最左坐标
-            public int Top;//最上坐标
-            public int Right;//最右坐标
-            public int Bottom;//最下坐标
-        }
-
-        /// <summary>
-        /// 关闭指定坐标位置的窗口
-        /// </summary>
-        /// <param name="xPoint"></param>
-        /// <param name="yPoint"></param>
-        /// <returns></returns>
-        public static bool CloseWindowFormPoint(int xPoint, int yPoint)
-        {
-            var point = GetWindowFromPoint(xPoint, yPoint);
-            if (point > 0)
-                return SendMessage(point, WM_CLOSE, 0, 0) > 0;
-            return false;
-        }
-        /// <summary>
-        /// 关闭指定坐标位置并且窗口大小匹配的窗口
-        /// </summary>
-        /// <param name="xPoint"></param>
-        /// <param name="yPoint"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static bool CloseWindowFormPointWidthSize(int xPoint, int yPoint, int width, int height)
-        {
-            var point = GetWindowFromPoint(xPoint, yPoint);
-            if (point > 0)
+            /// <summary>
+            /// 注册启动项到注册表
+            /// </summary>
+            /// <param name="procotol"></param>
+            public static void Reg(string procotol) => Reg(procotol, ExecutablePath);
+            /// <summary>
+            /// 注册启动项到注册表
+            /// </summary>
+            /// <param name="procotol"></param>
+            /// <param name="exeFullPath">指定执行程序</param>
+            public static void Reg(string procotol, string exeFullPath)
             {
-                RECT rc = new RECT();
-                GetWindowRect(point, ref rc);
-                if (rc.Right - rc.Left == width && rc.Bottom - rc.Top == height)
+                //注册的协议头，即在地址栏中的路径 如QQ的：tencent://xxxxx/xxx
+                var surekamKey = Registry.ClassesRoot.CreateSubKey(procotol);
+                //以下这些参数都是固定的，不需要更改，直接复制过去 
+                var shellKey = surekamKey.CreateSubKey("shell");
+                var openKey = shellKey.CreateSubKey("open");
+                var commandKey = openKey.CreateSubKey("command");
+                surekamKey.SetValue("URL Protocol", "");
+                //注册可执行文件取当前程序全路径
+                commandKey.SetValue("", "\"" + exeFullPath + "\"" + " \"%1\"");
+            }
+            /// <summary>
+            /// 取消注册
+            /// </summary>
+            /// <param name="procotol"></param>
+            public static void UnReg(string procotol) =>
+                //直接删除节点
+                Registry.ClassesRoot.DeleteSubKeyTree(procotol);
+        }
+
+        /// <summary>
+        /// AutoStartup开机启动项操作
+        /// </summary>
+        public class AutoStartup
+        {
+            private string Key;
+            /// <summary>
+            /// 将启动程序的主程序设置为开机启动项目（仅当前用户）
+            /// </summary>
+            /// <param name="programKey">程序集唯一标识</param>
+            public AutoStartup(string programKey) => Key = programKey;
+
+            /// <summary>
+            /// 注册开机启动
+            /// </summary>
+            public void Enable()
+            {
+                using (RegistryKey runKey = OpenRegKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                    runKey.SetValue(Key, ExecutablePath);
+            }
+            /// <summary>
+            /// 取消开机启动
+            /// </summary>
+            public void Disable()
+            {
+                using (RegistryKey runKey = OpenRegKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                    runKey.DeleteValue(Key);
+            }
+
+            /// <summary>
+            /// 是否已经存在
+            /// </summary>
+            public bool IsEnabled
+            {
+                get
                 {
-                    SendMessage(point, WM_CLOSE, 0, 0);
-                    return true;
+                    try
+                    {
+                        using (RegistryKey runKey = OpenRegKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true))
+                        {
+                            if (runKey == null)
+                                return false;
+                            string[] runList = runKey.GetValueNames();
+                            foreach (string item in runList)
+                                if (item.Equals(Key, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // 修正路径变更后的记录
+                                    if (!runKey.GetValue(Key).Equals(ExecutablePath))
+                                        runKey.SetValue(Key, ExecutablePath);
+                                    return true;
+                                }
+                            return false;
+                        }
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+
                 }
             }
-            return false;
         }
-        /// <summary>
-        /// 关闭屏幕右下角的弹出窗口
-        /// </summary>
-        /// <returns></returns>
-        public static bool CloseWindowFormOnRightBottom()
-        {
-            var area = SystemInformation.WorkingArea;
-            int iAreaWidth = area.Width, iAreaHeight = area.Height;
-            var point = GetWindowFromPoint(iAreaWidth - 10, iAreaHeight - 10);
-            if (point > 0)
-            {
-                RECT rc = new RECT();
-                GetWindowRect(point, ref rc);
-                if (rc.Left != 0 && rc.Top != 0 && rc.Right == iAreaWidth && rc.Bottom == iAreaHeight)
-                {
-                    SendMessage(point, WM_CLOSE, 0, 0);
-                    return true;
-                }
-            }
-            return false;
-        } 
-        #endregion
 
     }
 }

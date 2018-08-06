@@ -31,7 +31,7 @@ namespace OYMLCN.Extensions
         /// <param name="data">任意对象</param>
         /// <param name="settings">序列化配置</param>
         /// <returns>JSON字符串</returns>
-        public static string ToJsonString(this object data, JsonSerializerSettings settings = null)
+        public static string ToJsonString<T>(this T data, JsonSerializerSettings settings = null) where T : class
         {
             var jsonString = JsonConvert.SerializeObject(data, settings ?? DefaultSettings);
             MatchEvaluator evaluator = new MatchEvaluator(DecodeUnicode);
@@ -39,169 +39,29 @@ namespace OYMLCN.Extensions
         }
 
         /// <summary>
-        /// NewtonsoftJsonHandler
+        /// JSON字符串转换为对象
         /// </summary>
-        public class NewtonsoftJsonHandler
-        {
-            internal string Str;
-            internal NewtonsoftJsonHandler(string str) => Str = str;
-
-            /// <summary>
-            /// JSON字符串转换为对象
-            /// </summary>
-            /// <typeparam name="T"></typeparam>
-            /// <returns></returns>
-            public T DeserializeToObject<T>() => JsonConvert.DeserializeObject<T>(Str);
-            /// <summary>
-            /// 转换JSON字符串为可供查询的Array数组
-            /// </summary>
-            /// <returns></returns>
-            public JToken ParseToJToken() => JToken.Parse(Str.IsNullOrWhiteSpace() ? "{}" : Str);
-        }
-
-        /// <summary>
-        /// 将字符串作为Json对象处理
-        /// </summary>
-        /// <param name="jsonstr"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static NewtonsoftJsonHandler AsJsonHandler(this string jsonstr) => new NewtonsoftJsonHandler(jsonstr);
-
-        ///// <summary>
-        ///// JSON字符串转换为对象
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="jsonstr"></param>
-        ///// <returns></returns>
-        //[Obsolete("为减少扩展方法污染，请使用AsJsonHandler().DeserializeToObject<T>()", true)]
-        //public static T DeserializeJsonString<T>(this string jsonstr) => throw new NotSupportedException();
-
+        public static T DeserializeToObject<T>(this string str) => JsonConvert.DeserializeObject<T>(str);
         /// <summary>
-        /// 获取指定值
+        /// 转换JSON字符串为可供查询的Array数组
         /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
         /// <returns></returns>
-        public static string GetString(this JToken jt, string key) => jt[key]?.Value<string>();
+        public static JToken ParseToJToken(this string str) => JToken.Parse(str.IsNullOrWhiteSpace() ? "{}" : str);
         /// <summary>
-        /// 获取指定值
+        /// 转换JToken对象为数组
         /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
         /// <returns></returns>
-        public static int? GetInt32(this JToken jt, string key) => jt[key]?.Value<int>();
-        /// <summary>
-        /// 获取指定值
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static long? GetInt64(this JToken jt, string key) => jt[key]?.Value<long>();
-        /// <summary>
-        /// 获取指定值
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static bool? GetBoolean(this JToken jt, string key) => jt[key]?.Value<bool>();
-        /// <summary>
-        /// 获取指定值
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static DateTime? GetDateTime(this JToken jt, string key) => jt[key]?.Value<DateTime>();
-
-
-        /// <summary>
-        /// 转换为整型数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <returns></returns>
-        public static int[] ToIntArray(this JToken jt)
+        public static T[] ToArray<T>(this JToken jt)
         {
             if (jt == null || jt.Count() == 0)
-                return new int[0];
+                return new T[0];
             int length = jt.Count();
-            int[] array = new int[length];
+            T[] array = new T[length];
             for (int i = 0; i < length; i++)
-                array[i] = jt[i].Value<int>();
+                array[i] = jt[i].Value<T>();
             return array;
         }
-        /// <summary>
-        /// 获取整型数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static int[] GetIntArray(this JToken jt, string key) => jt[key].ToIntArray();
-        /// <summary>
-        /// 转换为长整型数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <returns></returns>
-        public static long[] ToLongArray(this JToken jt)
-        {
-            if (jt == null || jt.Count() == 0)
-                return new long[0];
-            int length = jt.Count();
-            long[] array = new long[length];
-            for (int i = 0; i < length; i++)
-                array[i] = jt[i].Value<long>();
-            return array;
-        }
-        /// <summary>
-        /// 获取长整型数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static long[] GetLongArray(this JToken jt, string key) => jt[key].ToLongArray();
-
-        /// <summary>
-        /// 转换为字符串数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <returns></returns>
-        public static string[] ToStringArray(this JToken jt)
-        {
-            if (jt == null || jt.Count() == 0)
-                return new string[0];
-            int length = jt.Count();
-            string[] array = new string[length];
-            for (int i = 0; i < length; i++)
-                array[i] = jt[i].Value<string>();
-            return array;
-        }
-        /// <summary>
-        /// 获取字符串数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static string[] GetStringArray(this JToken jt, string key) => jt[key].ToStringArray();
-
-        /// <summary>
-        /// 转换为对象数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <returns></returns>
-        public static object[] ToObjectArray(this JToken jt)
-        {
-            if (jt == null || jt.Count() == 0)
-                return new object[0];
-            int length = jt.Count();
-            object[] array = new object[length];
-            for (int i = 0; i < length; i++)
-                array[i] = jt[i].Value<JValue>().Value;
-            return array;
-        }
-        /// <summary>
-        /// 获取对象数组
-        /// </summary>
-        /// <param name="jt"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public static object[] GetObjectArray(this JToken jt, string key) => jt[key].ToObjectArray();
-
     }
 }

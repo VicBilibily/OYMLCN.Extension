@@ -54,7 +54,7 @@ namespace OYMLCN
             first.Compose(second, Expression.OrElse);
 
         /// <summary>
-        /// 剔除条件
+        /// 组合Not条件
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="expression"></param>
@@ -70,8 +70,8 @@ namespace OYMLCN
         {
             // zip parameters (map from parameters of second to parameters of first)    
             var map = first.Parameters
-    .Select((f, i) => new { f, s = second.Parameters[i] })
-    .ToDictionary(p => p.s, p => p.f);
+                .Select((f, i) => new { f, s = second.Parameters[i] })
+                .ToDictionary(p => p.s, p => p.f);
 
             // replace parameters in the second lambda expression with the parameters in the first    
             var secondBody = ParameterRebinder.ReplaceParameters(map, second.Body);
@@ -98,9 +98,7 @@ namespace OYMLCN
                 ParameterExpression replacement;
 
                 if (map.TryGetValue(p, out replacement))
-                {
                     p = replacement;
-                }
 
                 return base.VisitParameter(p);
             }

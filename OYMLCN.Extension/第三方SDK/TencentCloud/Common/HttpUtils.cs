@@ -14,7 +14,7 @@ namespace OYMLCN.TencentCloud.Util
     /// <summary>
     /// HttpUtils
     /// </summary>
-	public static class HttpUtils
+	internal static class HttpUtils
 	{
         static char[] reserveChar = new char[] {'/','?','*',':','|','\\','<','>','\"'};
 

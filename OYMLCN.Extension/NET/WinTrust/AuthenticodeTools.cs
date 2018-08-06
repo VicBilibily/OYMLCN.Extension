@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿#if NET461
+//using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace OYMLCN.WinTrust
@@ -11,9 +10,13 @@ namespace OYMLCN.WinTrust
     /// </summary>
     public static class AuthenticodeTools
     {
-        static string CurrentProcessModulePath => Process.GetCurrentProcess().MainModule.FileName;
+        ///// <summary>
+        ///// 执行程序路径
+        ///// </summary>
+        ////static string CurrentProcessModulePath => Process.GetCurrentProcess().MainModule.FileName;
+        //static string ExecutablePath => Assembly.GetEntryAssembly().Location;
         /// <summary>
-        /// 获取本程序集的的路径
+        /// 本程序集路径
         /// </summary>
         ///<returns></returns>
         static string GetAssemblyPath => Assembly.GetExecutingAssembly().CodeBase.Substring(8);
@@ -22,7 +25,7 @@ namespace OYMLCN.WinTrust
         /// 检查执行程序签名
         /// </summary>
         /// <returns>如通过则返回证书信息，否则为Null</returns>
-        public static X509Certificate2 CheckEXE() => CheckDLL(CurrentProcessModulePath);
+        public static X509Certificate2 CheckEXE() => CheckDLL(Helpers.SystemHelpers.ExecutablePath);
 
         /// <summary>
         /// 检查指定程序集签名
@@ -43,3 +46,4 @@ namespace OYMLCN.WinTrust
         }
     }
 }
+#endif

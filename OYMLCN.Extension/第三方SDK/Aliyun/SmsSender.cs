@@ -119,7 +119,7 @@ namespace OYMLCN.Aliyun
             using (var webclient = new WebClient())
             {
                 var result = webclient.GetSourceString(requestUrl);
-                return result.AsJsonHandler().DeserializeToObject<SmsSenderResponse>();
+                return result.DeserializeToObject<SmsSenderResponse>();
             }
         }
 

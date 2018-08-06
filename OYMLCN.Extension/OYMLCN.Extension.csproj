@@ -6,7 +6,7 @@
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.0-alpha2</Version>
+    <Version>1.4.0-alpha4</Version>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -29,6 +29,7 @@
 常用字词功能集成
 Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和关键词Keywords提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RootNamespace>OYMLCN</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <DocumentationFile>bin\Release\net461\OYMLCN.Extension.xml</DocumentationFile>
@@ -64,5 +65,21 @@ Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和�
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="第三方开源模块\NETCore.Encrypt\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Word\Pinyin\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Word\Pinyin\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

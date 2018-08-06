@@ -32,46 +32,12 @@ namespace OYMLCN.Helpers
             private static extern void GlobalMemoryStatus(ref MEMORY_INFO meminfo);
 
             private MEMORY_INFO MemInfo = new MEMORY_INFO();
-            private Memory() => GlobalMemoryStatus(ref MemInfo);
+            internal Memory() => GlobalMemoryStatus(ref MemInfo);
 
 
-            static uint PhysicalMemorySize = 0, FreePhysicalMemory = 0,
+            internal uint PhysicalMemorySize = 0, FreePhysicalMemory = 0,
                 TotalSwapSpaceSize = 0, FreeSpaceInPagingFiles = 0,
                 VirtualMemorySize = 0, FreeVirtualMemory = 0;
-
-
-            /// <summary>
-            /// 内存配置及占用信息
-            /// </summary>
-            /// <returns></returns>
-            public static Memory Initialize()
-            {
-                var memory = new Memory();
-                ManagementClass osClass = new ManagementClass("Win32_OperatingSystem");
-                foreach (ManagementObject obj in osClass.GetInstances())
-                {
-                    if (obj["TotalVisibleMemorySize"] != null)
-                        PhysicalMemorySize = (uint)(ulong)obj["TotalVisibleMemorySize"];
-                    if (obj["FreePhysicalMemory"] != null)
-                        FreePhysicalMemory = (uint)(ulong)obj["FreePhysicalMemory"];
-
-                    if (obj["TotalSwapSpaceSize"] != null)
-                        TotalSwapSpaceSize = (uint)(ulong)obj["TotalSwapSpaceSize"];
-                    if (obj["FreeSpaceInPagingFiles"] != null)
-                        FreeSpaceInPagingFiles = (uint)(ulong)obj["FreeSpaceInPagingFiles"];
-
-                    if (obj["TotalVirtualMemorySize"] != null)
-                        VirtualMemorySize = (uint)(ulong)obj["TotalVirtualMemorySize"];
-                    if (obj["FreeVirtualMemory"] != null)
-                        FreeVirtualMemory = (uint)(ulong)obj["FreeVirtualMemory"];
-
-                    break;
-                }
-                return memory;
-            }
-
-
-
 
             /// <summary>
             /// 正在使用的内存百分比
@@ -102,69 +68,90 @@ namespace OYMLCN.Helpers
             /// </summary>
             public uint AvailableVirtual => FreeVirtualMemory > 0 ? FreeVirtualMemory : MemInfo.dwAvailVirtual / 1024;
         }
-        
+        private static Memory _memoryInfo;
         /// <summary>
-        /// 获取系统版本号
-        /// 要正确获取Win10及Win8.1的版本号
-        /// 请参考http://www.cnblogs.com/chihirosan/p/5139078.html
+        /// 内存配置及占用信息
         /// </summary>
-        public static string Version => Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
-        /// <summary>
-        /// 系统版本
-        /// </summary>
-        public enum WindowsVersion
+        /// <returns></returns>
+        public static Memory MemoryInfo
         {
-            /// <summary>
-            /// Windows7
-            /// </summary>
-            Windows7,
-            /// <summary>
-            /// Windows8/8.1
-            /// </summary>
-            Windows8,
-            /// <summary>
-            /// Windows10
-            /// </summary>
-            Windows10,
-            /// <summary>
-            /// Windows2008
-            /// </summary>
-            Windows2008
+            get
+            {
+                if (_memoryInfo != null)
+                    return _memoryInfo;
+
+                _memoryInfo = new Memory();
+                ManagementClass osClass = new ManagementClass("Win32_OperatingSystem");
+                foreach (ManagementObject obj in osClass.GetInstances())
+                {
+                    if (obj["TotalVisibleMemorySize"] != null)
+                        _memoryInfo.PhysicalMemorySize = (uint)(ulong)obj["TotalVisibleMemorySize"];
+                    if (obj["FreePhysicalMemory"] != null)
+                        _memoryInfo.FreePhysicalMemory = (uint)(ulong)obj["FreePhysicalMemory"];
+
+                    if (obj["TotalSwapSpaceSize"] != null)
+                        _memoryInfo.TotalSwapSpaceSize = (uint)(ulong)obj["TotalSwapSpaceSize"];
+                    if (obj["FreeSpaceInPagingFiles"] != null)
+                        _memoryInfo.FreeSpaceInPagingFiles = (uint)(ulong)obj["FreeSpaceInPagingFiles"];
+
+                    if (obj["TotalVirtualMemorySize"] != null)
+                        _memoryInfo.VirtualMemorySize = (uint)(ulong)obj["TotalVirtualMemorySize"];
+                    if (obj["FreeVirtualMemory"] != null)
+                        _memoryInfo.FreeVirtualMemory = (uint)(ulong)obj["FreeVirtualMemory"];
+
+                    break;
+                }
+                return _memoryInfo;
+            }
         }
 
         /// <summary>
-        /// 判断系统是否为Windows Server2008
+        /// 系统版本相关
         /// </summary>
-        public static bool IsWindows2008 => Version == "6.0";
-        /// <summary>
-        /// 判断系统是否为Windows7/Server2012 R2
-        /// </summary>
-        public static bool IsWindows7 => Version == "6.1";
-        /// <summary>
-        /// 判断系统是否为Windows8/Server2012
-        /// </summary>
-        public static bool IsWindows8 => Version == "6.2";
-        /// <summary>
-        /// 判断系统是否为Windows8.1/Server2012 R2
-        /// </summary>
-        public static bool IsWindows8_1 => Version == "6.3";
-        /// <summary>
-        /// 判断系统是否为Windows10/Server2016
-        /// </summary>
-        public static bool IsWindows10 => Environment.OSVersion.Version.Major == 10;
+        public static class SystemVersion
+        {
+            /// <summary>
+            /// 获取系统版本号
+            /// 要正确获取Win10及Win8.1的版本号
+            /// 请参考http://www.cnblogs.com/chihirosan/p/5139078.html
+            /// </summary>
+            public static string Version => Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
 
-        /// <summary>
-        /// 判断系统版本是否高于或是Windows Server2008
-        /// </summary>
-        public static bool IsWindows2008OrHigher => Environment.OSVersion.Version.Major >= 6;
-        /// <summary>
-        /// 判断系统版本是否高于或是Windows7/Server2012 R2
-        /// </summary>
-        public static bool IsWindows7OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1 || Environment.OSVersion.Version.Major > 6;
-        /// <summary>
-        /// 判断系统版本是否高于或是Windows7/Server2012 R2
-        /// </summary>
-        public static bool IsWindows8OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2 || Environment.OSVersion.Version.Major > 6;
+            /// <summary>
+            /// 判断系统是否为Windows Server2008
+            /// </summary>
+            public static bool IsWindows2008 => Version == "6.0";
+            /// <summary>
+            /// 判断系统是否为Windows7/Server2012 R2
+            /// </summary>
+            public static bool IsWindows7 => Version == "6.1";
+            /// <summary>
+            /// 判断系统是否为Windows8/Server2012
+            /// </summary>
+            public static bool IsWindows8 => Version == "6.2";
+            /// <summary>
+            /// 判断系统是否为Windows8.1/Server2012 R2
+            /// </summary>
+            public static bool IsWindows81 => Version == "6.3";
+            /// <summary>
+            /// 判断系统是否为Windows10/Server2016
+            /// </summary>
+            public static bool IsWindows10 => Environment.OSVersion.Version.Major == 10;
+
+            /// <summary>
+            /// 判断系统版本是否高于或是Windows Server2008
+            /// </summary>
+            public static bool IsWindows2008OrHigher => Environment.OSVersion.Version.Major >= 6;
+            /// <summary>
+            /// 判断系统版本是否高于或是Windows7/Server2012 R2
+            /// </summary>
+            public static bool IsWindows7OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1 || Environment.OSVersion.Version.Major > 6;
+            /// <summary>
+            /// 判断系统版本是否高于或是Windows7/Server2012 R2
+            /// </summary>
+            public static bool IsWindows8OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2 || Environment.OSVersion.Version.Major > 6;
+
+        }
 
     }
 }

@@ -38,13 +38,13 @@ namespace OYMLCN.TencentCloud.Common
         public const string PARA_CONTENT_ENCODING = "Content-Encoding";
     }
 
-    public static class CosDefaultValue
+    static class CosDefaultValue
     {
         public const string USER_AGENT_VERSION = "cos-dotnet-sdk-v4.2";
         public const string ACCEPT = "*/*";
     }
 
-	public static class FolderPattern
+	static class FolderPattern
 	{
 		public const string PATTERN_FILE = "eListFileOnly";
 		public const string PATTERN_DIR = "eListDirOnly";

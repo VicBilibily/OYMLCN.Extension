@@ -3,7 +3,7 @@ using OYMLCN.Word.Pinyin;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OYMLCN.WordExtensions
+namespace OYMLCN.Word.Extensions
 {
     /// <summary>
     /// PinYinExtensions
@@ -91,7 +91,7 @@ namespace OYMLCN.WordExtensions
 
                 _dic = new Dictionary<string, string>();
 
-                var lines = Resources.pinyin.SplitByLine();
+                var lines = Resources.pinyin_txt.GZipDecompress().ConvertToString().SplitByLine();
                 foreach (var item in lines)
                 {
                     var data = item.Split('|');

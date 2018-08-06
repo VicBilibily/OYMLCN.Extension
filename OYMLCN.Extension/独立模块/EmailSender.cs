@@ -14,7 +14,7 @@ namespace OYMLCN
     public class EmailSender
     {
         /// <summary>
-        /// 保护方法，仅用于继承
+        /// 仅用于继承
         /// </summary>
         protected EmailSender() { }
         /// <summary>

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#if NET461
+using System;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace OYMLCN.WinTrust
 {
@@ -167,3 +163,4 @@ namespace OYMLCN.WinTrust
         private WinTrust() { }
     }
 }
+#endif

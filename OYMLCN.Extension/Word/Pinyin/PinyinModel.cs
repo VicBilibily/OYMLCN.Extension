@@ -1,4 +1,4 @@
-﻿namespace OYMLCN.Word.Pinyin
+﻿namespace OYMLCN.Word
 {
     /// <summary>
     /// 拼音Model
