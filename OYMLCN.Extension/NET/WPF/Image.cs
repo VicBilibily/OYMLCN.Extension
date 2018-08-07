@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace OYMLCN.WPFExtensions
+namespace OYMLCN.WPF.Extensions
 {
     /// <summary>
     /// ImageExtension
     /// </summary>
-    public static class ImageExtension
+    public static class ImageExtensions
     {
         /// <summary>
         /// 转换为BitmapImage

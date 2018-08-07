@@ -5,13 +5,14 @@ using System.Net;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using OYMLCN.Extensions;
 
-namespace OYMLCN.Extensions
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// HttpClient方法封装
     /// </summary>
-    public static partial class HttpClientExtensions
+    public static partial class HttpClientHelpers
     {
         /// <summary>
         /// 通过HttpGet获取数据

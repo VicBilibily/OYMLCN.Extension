@@ -12,7 +12,7 @@ namespace OYMLCN.Extension.Test
         [TestMethod]
         public void DemoTestMethod()
         {
-            Assert.AreEqual(OYMLCN.Word.WorkPinYinExtension.Pinyin("我们").TotalPinYin.FirstOrDefault(), "women");
+            string publicKey, privateKey;
         }
     }
 }

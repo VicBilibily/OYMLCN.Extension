@@ -1,3 +1,4 @@
+#if !NET461
 namespace NETCore.Encrypt
 {
     /// <summary>
@@ -15,3 +16,4 @@ namespace NETCore.Encrypt
         L32 = 32
     }
 }
+#endif

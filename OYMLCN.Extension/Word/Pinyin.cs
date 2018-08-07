@@ -23,7 +23,7 @@ namespace OYMLCN.Word.Extensions
             foreach (var strChar in str.StringToArray())
             {
                 string pinyin = strChar, py = strChar;
-                if (strChar.IsChineseRegString())
+                if (strChar.AsFormat().IsChineseRegString)
                 {
                     string[] a = GetPinyinByOne(strChar, polyphone);
                     if (a.Count() > 0)

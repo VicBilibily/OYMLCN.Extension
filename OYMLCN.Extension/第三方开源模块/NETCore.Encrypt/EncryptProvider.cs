@@ -1,16 +1,15 @@
+#if !NET461
 // base on https://github.com/myloveCc/NETCore.Encrypt
 // version 2.0.7
 #pragma warning disable CS0168 // 声明了 ex 变量，但从未使用过
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
-using NETCore.Encrypt.Shared;
-using NETCore.Encrypt.Extensions;
 using NETCore.Encrypt.Internal;
 using NETCore.Encrypt.Extensions.Internal;
+using OYMLCN;
 
 namespace NETCore.Encrypt
 {
@@ -72,13 +71,13 @@ namespace NETCore.Encrypt
         /// <returns>Encrypted string</returns>  
         public static string AESEncrypt(string data, string key, string vector)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
 
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
-            Check.Argument.IsNotEmpty(vector, nameof(vector));
-            Check.Argument.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
+            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
 
             Byte[] plainBytes = Encoding.UTF8.GetBytes(data);
 
@@ -99,13 +98,13 @@ namespace NETCore.Encrypt
         /// <returns>Encrypted byte array</returns>  
         public static byte[] AESEncrypt(byte[] data, string key, string vector)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
 
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
-            Check.Argument.IsNotEmpty(vector, nameof(vector));
-            Check.Argument.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
+            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
 
             Byte[] plainBytes = data;
             Byte[] bKey = new Byte[32];
@@ -148,13 +147,13 @@ namespace NETCore.Encrypt
         /// <returns>Decrypted string</returns>  
         public static string AESDecrypt(string data, string key, string vector)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
 
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
-            Check.Argument.IsNotEmpty(vector, nameof(vector));
-            Check.Argument.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
+            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
 
             Byte[] encryptedBytes = Convert.FromBase64String(data);
 
@@ -177,13 +176,13 @@ namespace NETCore.Encrypt
 
         public static byte[] AESDecrypt(byte[] data, string key, string vector)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
 
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
-            Check.Argument.IsNotEmpty(vector, nameof(vector));
-            Check.Argument.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
+            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
 
             Byte[] encryptedBytes = data;
             Byte[] bKey = new Byte[32];
@@ -232,10 +231,10 @@ namespace NETCore.Encrypt
         /// <returns>Encrypted string</returns>  
         public static string AESEncrypt(string data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
 
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
             using (MemoryStream Memory = new MemoryStream())
             {
@@ -276,9 +275,9 @@ namespace NETCore.Encrypt
         /// <returns>Decrypted string</returns>  
         public static string AESDecrypt(string data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
 
             Byte[] encryptedBytes = Convert.FromBase64String(data);
             Byte[] bKey = new Byte[32];
@@ -334,9 +333,9 @@ namespace NETCore.Encrypt
         /// <returns>Encrypted string</returns>  
         public static string DESEncrypt(string data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
 
             byte[] plainBytes = Encoding.UTF8.GetBytes(data);
             var encryptBytes = DESEncrypt(plainBytes, key);
@@ -356,9 +355,9 @@ namespace NETCore.Encrypt
         /// <returns>Encrypted byte array</returns>  
         public static byte[] DESEncrypt(byte[] data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
 
             using (MemoryStream Memory = new MemoryStream())
             {
@@ -396,9 +395,9 @@ namespace NETCore.Encrypt
         /// <returns>Decrypted string</returns>  
         public static string DESDecrypt(string data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
 
             Byte[] encryptedBytes = Convert.FromBase64String(data);
             Byte[] bytes = DESDecrypt(encryptedBytes, key);
@@ -418,9 +417,9 @@ namespace NETCore.Encrypt
         /// <returns>Decrypted byte array</returns>  
         public static byte[] DESDecrypt(byte[] data, string key)
         {
-            Check.Argument.IsNotEmpty(data, nameof(data));
-            Check.Argument.IsNotEmpty(key, nameof(key));
-            Check.Argument.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
+            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotOutOfRange(key.Length, 24, 24, nameof(key));
 
             Byte[] encryptedBytes = data;
             Byte[] bKey = new Byte[24];
@@ -476,9 +475,9 @@ namespace NETCore.Encrypt
         /// <returns>encrypted string</returns>
         public static string RSAEncrypt(string publicKey, string srcString, RSAEncryptionPadding padding)
         {
-            Check.Argument.IsNotEmpty(publicKey, nameof(publicKey));
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotNull(padding, nameof(padding));
+            ArgumentChecker.IsNotEmpty(publicKey, nameof(publicKey));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotNull(padding, nameof(padding));
 
             using (RSA rsa = RSA.Create())
             {
@@ -517,9 +516,9 @@ namespace NETCore.Encrypt
         /// <returns>encrypted string</returns>
         public static string RSADecrypt(string privateKey, string srcString, RSAEncryptionPadding padding)
         {
-            Check.Argument.IsNotEmpty(privateKey, nameof(privateKey));
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotNull(padding, nameof(padding));
+            ArgumentChecker.IsNotEmpty(privateKey, nameof(privateKey));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotNull(padding, nameof(padding));
 
             using (RSA rsa = RSA.Create())
             {
@@ -537,7 +536,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static RSA RSAFromString(string rsaKey)
         {
-            Check.Argument.IsNotEmpty(rsaKey, nameof(rsaKey));
+            ArgumentChecker.IsNotEmpty(rsaKey, nameof(rsaKey));
             RSA rsa = RSA.Create();
 
             rsa.FromJsonString(rsaKey);
@@ -619,7 +618,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Md5(string srcString, MD5Length length = MD5Length.L32)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
 
             string str_md5_out = string.Empty;
             using (MD5 md5 = MD5.Create())
@@ -646,8 +645,8 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string HMACMD5(string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACMD5 md5 = new HMACMD5(secrectKey))
@@ -670,7 +669,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Sha1(string str)
         {
-            Check.Argument.IsNotEmpty(str, "SHA1待加密字符");
+            ArgumentChecker.IsNotEmpty(str, "SHA1待加密字符");
 
             using (SHA1 sha1 = SHA1.Create())
             {
@@ -692,7 +691,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Sha256(string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
 
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -715,7 +714,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Sha384(string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
 
             using (SHA384 sha384 = SHA384.Create())
             {
@@ -737,7 +736,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Sha512(string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
 
             using (SHA512 sha512 = SHA512.Create())
             {
@@ -761,8 +760,8 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string HMACSHA1(string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA1 hmac = new HMACSHA1(secrectKey))
@@ -791,8 +790,8 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string HMACSHA256(string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA256 hmac = new HMACSHA256(secrectKey))
@@ -821,8 +820,8 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string HMACSHA384(string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA384 hmac = new HMACSHA384(secrectKey))
@@ -852,8 +851,8 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string HMACSHA512(string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
-            Check.Argument.IsNotEmpty(key, nameof(key));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(key, nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA512 hmac = new HMACSHA512(secrectKey))
@@ -881,7 +880,7 @@ namespace NETCore.Encrypt
         /// <returns>DecryptionKey</returns>
         public static string CreateDecryptionKey(int length)
         {
-            Check.Argument.IsNotOutOfRange(length, 16, 48, nameof(length));
+            ArgumentChecker.IsNotOutOfRange(length, 16, 48, nameof(length));
             return CreateMachineKey(length);
         }
 
@@ -892,7 +891,7 @@ namespace NETCore.Encrypt
         /// <returns>ValidationKey</returns>
         public static string CreateValidationKey(int length)
         {
-            Check.Argument.IsNotOutOfRange(length, 48, 128, nameof(length));
+            ArgumentChecker.IsNotOutOfRange(length, 48, 128, nameof(length));
             return CreateMachineKey(length);
         }
 
@@ -948,7 +947,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Base64Encrypt(string input, Encoding encoding)
         {
-            Check.Argument.IsNotEmpty(input, nameof(input));
+            ArgumentChecker.IsNotEmpty(input, nameof(input));
             return Convert.ToBase64String(encoding.GetBytes(input));
         }
 
@@ -970,7 +969,7 @@ namespace NETCore.Encrypt
         /// <returns></returns>
         public static string Base64Decrypt(string input, Encoding encoding)
         {
-            Check.Argument.IsNotEmpty(input, nameof(input));
+            ArgumentChecker.IsNotEmpty(input, nameof(input));
             return encoding.GetString(Convert.FromBase64String(input));
         }
         #endregion
@@ -978,3 +977,4 @@ namespace NETCore.Encrypt
         #endregion
     }
 }
+#endif

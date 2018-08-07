@@ -10,6 +10,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class FileExtensions
     {
+        #region FileInfo
         /// <summary>
         /// 获取文件信息
         /// </summary>
@@ -87,7 +88,6 @@ namespace OYMLCN.Extensions
             }
         }
 
-
         /// <summary>
         /// 读取文本文件
         /// </summary>
@@ -98,9 +98,10 @@ namespace OYMLCN.Extensions
             if (!file.Exists)
                 return string.Empty;
             return File.ReadAllText(file.FullName);
-        }
+        } 
+        #endregion
 
-
+        #region DirectoryInfo
         /// <summary>
         /// 获取文件夹信息
         /// </summary>
@@ -112,11 +113,11 @@ namespace OYMLCN.Extensions
             catch { return null; }
         }
         /// <summary>
-        /// 获取文件夹大小(字节)
+        /// 获取文件夹总大小(字节)
         /// </summary>
         /// <param name="directory"></param>
         /// <returns></returns>
-        public static long GetLength(this DirectoryInfo directory)
+        public static long GetAllLength(this DirectoryInfo directory)
         {
             if (!directory.Exists)
                 return 0;
@@ -126,7 +127,7 @@ namespace OYMLCN.Extensions
             DirectoryInfo[] dis = directory.GetDirectories();
             if (dis.Length > 0)
                 for (int i = 0; i < dis.Length; i++)
-                    len += GetLength(dis[i]);
+                    len += GetAllLength(dis[i]);
             return len;
         }
         /// <summary>
@@ -150,9 +151,11 @@ namespace OYMLCN.Extensions
                 else
                     File.Copy(file, target + Path.GetFileName(file), true);
             }
-        }
+        } 
+        #endregion
 
 
+        #region FileHash
         /// <summary>
         /// 获取路径文件的MD5码(文件不存在时返回空值)
         /// </summary>
@@ -207,8 +210,9 @@ namespace OYMLCN.Extensions
                 sb.Append(retVal[i].ToString("x2"));
             return sb.ToString();
         }
+        #endregion
 
-
+        #region TextReader ReadLines
         /// <summary>
         /// 获取文本全部行
         /// </summary>
@@ -247,6 +251,8 @@ namespace OYMLCN.Extensions
                 if (line.IsNullOrWhiteSpace()) continue;
                 yield return line;
             }
-        }
+        } 
+        #endregion
+
     }
 }

@@ -1,9 +1,10 @@
+#if !NET461
 using System;
 using System.Collections.Generic;
 using System.Text;
 using NETCore.Encrypt;
 using Newtonsoft.Json;
-using NETCore.Encrypt.Shared;
+using OYMLCN;
 
 namespace NETCore.Encrypt.Extensions
 {
@@ -19,7 +20,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string MD5(this string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.Md5(srcString);
         }
 
@@ -30,7 +31,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string SHA1(this string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.Sha1(srcString);
         }
 
@@ -41,7 +42,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string SHA256(this string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.Sha256(srcString);
         }
 
@@ -52,7 +53,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string SHA384(this string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.Sha384(srcString);
         }
 
@@ -63,7 +64,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string SHA512(this string srcString)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.Sha512(srcString);
         }
 
@@ -75,7 +76,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string HMACMD5(this string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.HMACMD5(srcString, key);
         }
 
@@ -87,7 +88,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string HMACSHA1(this string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.HMACSHA1(srcString, key);
         }
 
@@ -99,7 +100,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string HMACSHA256(this string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.HMACSHA256(srcString, key);
         }
 
@@ -111,7 +112,7 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string HMACSHA384(this string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.HMACSHA384(srcString, key);
         }
 
@@ -123,8 +124,9 @@ namespace NETCore.Encrypt.Extensions
         /// <returns></returns>
         public static string HMACSHA512(this string srcString, string key)
         {
-            Check.Argument.IsNotEmpty(srcString, nameof(srcString));
+            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
             return EncryptProvider.HMACSHA512(srcString, key);
         }
     }
 }
+#endif

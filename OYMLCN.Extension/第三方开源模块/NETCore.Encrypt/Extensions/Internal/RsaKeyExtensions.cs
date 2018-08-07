@@ -1,3 +1,4 @@
+#if !NET461
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,8 +6,8 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Xml;
 using Newtonsoft.Json;
-using NETCore.Encrypt.Shared;
 using NETCore.Encrypt.Internal;
+using OYMLCN;
 
 namespace NETCore.Encrypt.Extensions.Internal
 {
@@ -23,7 +24,7 @@ namespace NETCore.Encrypt.Extensions.Internal
         /// <param name="jsonString">RSA的Key序列化JSON字符串</param>
         internal static void FromJsonString(this RSA rsa, string jsonString)
         {
-            Check.Argument.IsNotEmpty(jsonString, nameof(jsonString));
+            ArgumentChecker.IsNotEmpty(jsonString, nameof(jsonString));
 
             RSAParameters parameters = new RSAParameters();
             try
@@ -135,3 +136,4 @@ namespace NETCore.Encrypt.Extensions.Internal
         #endregion
     }
 }
+#endif

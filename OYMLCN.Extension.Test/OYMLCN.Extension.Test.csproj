@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DateTime.cs" />
+    <Compile Remove="常见第三方扩展\NewtonsoftJson.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DateTime.cs" />
+    <None Include="常见第三方扩展\NewtonsoftJson.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />

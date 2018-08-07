@@ -1,4 +1,5 @@
 #if NET461
+using OYMLCN.Handlers;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -79,6 +80,13 @@ namespace OYMLCN.Extensions
                 stream.Close();
             }
         }
+
+        /// <summary>
+        /// 处理Bitmap图像
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static BitmapHandler AsBitmapHandler(this Bitmap bitmap) => new BitmapHandler(bitmap);
 
         /// <summary>
         /// Bitmap转byte[]  

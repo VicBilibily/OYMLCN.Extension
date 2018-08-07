@@ -6,7 +6,7 @@
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.0-alpha4</Version>
+    <Version>1.4.0</Version>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -17,17 +17,18 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>http://www.wtfpl.net/</PackageLicenseUrl>
     <PackageReleaseNotes>常用类型方法扩展封装
-.Net独有：BitmapExtensions、BitmapHandler、HardwareExtensions、MouseExtensions、RegistryExtensions、SystemInfo
-.Net WPF：ApplicationInitialization、SelectorExtensions、TextBoxExtensions、VisualHepler
+.Net独有：CloseWindowHelpers、HardwareHelpers、HotKeyHelpers、MouseHelpers(未包含)、SystemHelpers、SystemInfoHelpers、WebBrowserHelpers、BitmapExtensions、WinTrust.AuthenticodeTools
+.Net WPF：ApplicationInitialization、ImageExtensions、SelectorExtensions、TextBoxExtensions、VisualHeplers
 .Net WinForm：ComboBoxExtensions、ControlExtensions、ListViewExtensions
 跨平台封装：CryptographyExtensions、DateTimeExtensions、EnumExtensions、FileExtensions、FormatExtensions、HTMLExtensions、HttpClientExtensions、LinqExtensions、ProcessExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
 常见第三方扩展：NewtonsoftJsonExtensions
 第三方SDK：Aliyun.SmsSender | TencentCloud.CosCloud、TencentCloud.SmsSender
-独立模块：Cryptography、EmailSender、PredicateBuilder
+内置第三方开源模块：NETCore.Encrypt
+独立模块：EmailSender、PredicateBuilder
 自建模块：GlobalRegion
 
 常用字词功能集成
-Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和关键词Keywords提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
+Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆词和关键词分析提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RootNamespace>OYMLCN</RootNamespace>
   </PropertyGroup>
@@ -39,7 +40,7 @@ Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和�
     <DocumentationFile>bin\Debug\netstandard2.0\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="System.Management" />
@@ -61,7 +62,7 @@ Word：中文字词处理，本库仅包含拼音PinYin，拆词Segmentation和�
     <Compile Remove="NET\MouseHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NET\MouseHelpers.cs" />
+    <None Include="NET\Helpers\MouseHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

@@ -1,3 +1,4 @@
+#if !NET461
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,3 +26,4 @@ namespace NETCore.Encrypt.Internal
         public string D { get; set; }
     }
 }
+#endif

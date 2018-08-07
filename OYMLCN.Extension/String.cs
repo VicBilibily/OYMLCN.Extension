@@ -1,3 +1,4 @@
+using OYMLCN.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -5,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace OYMLCN.Extensions
 {
@@ -13,48 +15,18 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringExtensions
     {
-        #region 生成随机字符
         /// <summary>
-        /// 生成随机字符
+        /// 格式判断或格式化
         /// </summary>
-        /// <param name="length">字符串长度</param>
-        /// <param name="blur">是否包含特殊符号</param>
-        /// <param name="onlyNumber">只生成数字字符</param>
+        /// <param name="str"></param>
         /// <returns></returns>
-        public static string RandCode(int length = 6, bool blur = false, bool onlyNumber = false)
-        {
-            if (length <= 0)
-                return "";
-            const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const string numbers = "0123456789";
-            const string symbols = "~!@#$%^&*()_-+=[{]}|><,.?/";
-            var hash = string.Empty;
-            var rand = new Random();
-
-            for (var cont = 0; cont < length; cont++)
-                switch (onlyNumber ? 1 : rand.Next(0, 3))
-                {
-                    case 1:
-                        hash = hash + numbers[rand.Next(0, 10)];
-                        break;
-                    case 2:
-                        hash = hash + (blur ? symbols[rand.Next(0, 26)] : letters[rand.Next(0, 26)]);
-                        break;
-                    default:
-                        hash = hash + ((cont % 3 == 0)
-                            ? letters[rand.Next(0, 26)].ToString()
-                            : (letters[rand.Next(0, 26)]).ToString().ToLower());
-                        break;
-                }
-            return hash;
-        }
+        public static StringFormatHandler AsFormat(this string str) => new StringFormatHandler(str);
         /// <summary>
-        /// 生成带特殊符号的随机字符串
+        /// 类型相关转换
         /// </summary>
-        /// <param name="length">字符串长度</param>
+        /// <param name="str"></param>
         /// <returns></returns>
-        public static string RandBlurCode(int length) => RandCode(length, true);
-        #endregion
+        public static StringTypeHandler AsType(this string str) => new StringTypeHandler(str);
 
         #region Is对比判断
         /// <summary>
@@ -64,11 +36,24 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
         /// <summary>
+        /// 判断字符串是否为空
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsNotNullOrEmpty(this string str) => !IsNullOrEmpty(str);
+
+        /// <summary>
         /// 判断字符串是否为空/空格
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string str) => string.IsNullOrWhiteSpace(str);
+        /// <summary>
+        /// 判断字符串是否为空/空格
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsNotNullOrWhiteSpace(this string str) => !IsNullOrWhiteSpace(str);
 
         /// <summary>
         /// 对比两个字符串是否相等
@@ -106,30 +91,6 @@ namespace OYMLCN.Extensions
         /// <param name="values"></param>
         /// <returns></returns>
         public static bool IsEqualIgnoreCase(this string str, string[] values) => str.IsEqual(values, StringComparison.OrdinalIgnoreCase);
-
-        /// <summary>
-        /// 判断字符串是否是邮箱地址
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool IsEmailAddress(this string str) =>
-            str.IsNullOrEmpty() ? false : new Regex(@"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?").IsMatch(str.Trim());
-        /// <summary>
-        /// 判断字符串是否是手机号码
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool IsMobilePhoneNumber(this string str) =>
-            str.IsNullOrEmpty() ? false : new Regex(@"^1[0-9]{10}$").IsMatch(str.Trim());
-
-
-        /// <summary>
-        /// 判断字符是不是汉字
-        /// </summary>
-        /// <param name="text">待判断字符或字符串</param>
-        /// <returns>true是 false不是</returns>
-        public static bool IsChineseRegString(this string text) => Regex.IsMatch(text, @"[\u4e00-\u9fbb]+$");
-
         #endregion
 
         #region 截取字符串
@@ -212,7 +173,6 @@ namespace OYMLCN.Extensions
         /// <param name="sign">分割标识</param>
         /// <param name="option">分割结果去重方式</param>
         /// <returns></returns>
-
         public static string[] SplitBySign(this string str, string sign, StringSplitOptions option = StringSplitOptions.None) => str?.Split(new string[] { sign }, option) ?? new string[0];
         /// <summary>
         /// 根据标志分割字符串(不包含空字符串)
@@ -261,27 +221,25 @@ namespace OYMLCN.Extensions
         public static string[] SplitByLine(this string str) => str.SplitByMultiSign("\r\n", "\r", "\n");
         #endregion
 
-
         /// <summary>
         /// 去除过多的换行符
         /// </summary>
-        /// <param name="html"></param>
+        /// <param name="text"></param>
         /// <param name="keep">文本中保留的换行符最大数量（文本末尾的换行将不会保留）</param>
         /// <returns></returns>
-        public static string RemoveWrap(this string html, byte keep = 0)
+        public static string RemoveWrap(this string text, byte keep = 0)
         {
             string[] param = new string[] { "\r\n", "\r", "\n" };
             if (keep == 0)
-                return html.ReplaceNormalWithRegex(string.Empty, param);
+                return text.ReplaceNormalWithRegex(string.Empty, param);
 
             var stop = "._RWHS_.";
-            var word = html.ReplaceNormalWithRegex(stop, param);
+            var word = text.ReplaceNormalWithRegex(stop, param);
             string wrap = string.Empty;
             for (var i = 0; i < keep; i++)
                 wrap += "\r\n";
             return word.SplitBySign(stop, StringSplitOptions.RemoveEmptyEntries).Join(wrap);
         }
-
 
         #region 编码转换
         /// <summary>
@@ -360,23 +318,7 @@ namespace OYMLCN.Extensions
                     sb.Append((char)(c - 0x20));
             return sb.ToString();
         }
-
         #endregion
-
-
-        /// <summary>
-        /// 获取url字符串的的协议域名地址
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static string UrlGetHost(this string url) => url.ToUri().GetHost();
-        /// <summary>
-        /// 获取Uri的协议域名地址
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        public static string GetHost(this Uri uri) => uri.IsNull() ? null : $"{uri.Scheme}://{uri.Host}/";
-
 
         /// <summary>
         /// 正则匹配所有结果
@@ -643,6 +585,23 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
+
+
+        /// <summary>
+        /// 将字符串填充到Steam中
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="encoder">默认使用UTF-8进行编码</param>
+        /// <returns></returns>
+        public static Stream StringToStream(this string str, Encoding encoder = null) => new MemoryStream(str.StringToBytes(encoder));
+
+        /// <summary>
+        /// 将字符串填充到byte[]字节流中
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="encoder">默认使用UTF-8进行编码</param>
+        /// <returns></returns>
+        public static byte[] StringToBytes(this string str, Encoding encoder = null) => encoder?.GetBytes(str) ?? Encoding.UTF8.GetBytes(str);
 
     }
 }

@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using OYMLCN.Extensions;
-using OYMLCN.WPFExtensions;
+using OYMLCN.WPF.Extensions;
 
-namespace OYMLCN.WPFHeplers
+namespace OYMLCN.WPF.Heplers
 {
     /// <summary>
     /// 界面辅助方法

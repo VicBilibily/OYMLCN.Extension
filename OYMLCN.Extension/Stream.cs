@@ -23,14 +23,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="formData">表单信息字典</param>
-        public static Stream FillFormDataStream(this Stream stream, Dictionary<string, string> formData)
+        public static Stream FillFormDataToStream(this Stream stream, Dictionary<string, string> formData)
         {
             var formDataBytes = formData.IsEmpty() ? new byte[0] : Encoding.UTF8.GetBytes(formData.ToQueryString());
             stream.Write(formDataBytes, 0, formDataBytes.Length);
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
-
 
         /// <summary>
         /// 将Byte[]转换为字符串
@@ -52,7 +51,6 @@ namespace OYMLCN.Extensions
             stream.Seek(0, SeekOrigin.Begin);
             return bytes;
         }
-
 
         /// <summary>
         /// 将Byte转换为Stream

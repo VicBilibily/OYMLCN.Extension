@@ -28,7 +28,7 @@ namespace OYMLCN.Aliyun
         }
 
         static string SpecialUrlEncoder(string str) =>
-            str.UrlEncode().Replace("+", "%20").Replace("*", "%2A").Replace("%7E", "~");
+            str.AsUrlFormat().UrlEncode.Replace("+", "%20").Replace("*", "%2A").Replace("%7E", "~");
         string GetAlidayuQueryString(IDictionary<string, string> parameters)
         {
             if (parameters.ContainsKey("Signature"))
@@ -49,8 +49,8 @@ namespace OYMLCN.Aliyun
 
             string secretString = accessKeySecret + "&";
             string signString = stringToSign.ToString();
-            string sign = signString.EncodeToHMACSHA1Base64(secretString);
-            return sign;
+            //return signString.EncodeToHMACSHA1Base64(secretString);
+            return signString.AsEncrypt().HMACSHA1Base64;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace OYMLCN.Aliyun
             using (var webclient = new WebClient())
             {
                 var result = webclient.GetSourceString(requestUrl);
-                return result.DeserializeToObject<SmsSenderResponse>();
+                return result.DeserializeJsonToObject<SmsSenderResponse>();
             }
         }
 

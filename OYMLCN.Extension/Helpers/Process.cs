@@ -1,14 +1,16 @@
+﻿using OYMLCN.Extensions;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 
-namespace OYMLCN.Extensions
+namespace OYMLCN.Helpers
 {
     /// <summary>
     /// 进程或线程相关操作
     /// </summary>
-    public static partial class ProcessExtensions
+    public static partial class ProcessHelpers
     {
         /// <summary>
         /// 挂起线程（Thread.Sleep一年）
@@ -35,26 +37,29 @@ namespace OYMLCN.Extensions
         /// 确定当前主体是否属于具有指定 Administrator 的 Windows 用户组
         /// </summary>
         /// <returns>如果当前主体是指定的 Administrator 用户组的成员，则为 true；否则为 false。</returns>
-        public static bool IsAdministrator()
+        public static bool IsAdministrator
         {
-            bool result;
-            try
+            get
             {
-                WindowsIdentity identity = WindowsIdentity.GetCurrent();
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                result = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                bool result;
+                try
+                {
+                    WindowsIdentity identity = WindowsIdentity.GetCurrent();
+                    WindowsPrincipal principal = new WindowsPrincipal(identity);
+                    result = principal.IsInRole(WindowsBuiltInRole.Administrator);
 
-                //http://www.cnblogs.com/Interkey/p/RunAsAdmin.html
-                //AppDomain domain = Thread.GetDomain();
-                //domain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
-                //WindowsPrincipal windowsPrincipal = (WindowsPrincipal)Thread.CurrentPrincipal;
-                //result = windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
+                    //http://www.cnblogs.com/Interkey/p/RunAsAdmin.html
+                    //AppDomain domain = Thread.GetDomain();
+                    //domain.SetPrincipalPolicy(PrincipalPolicy.WindowsPrincipal);
+                    //WindowsPrincipal windowsPrincipal = (WindowsPrincipal)Thread.CurrentPrincipal;
+                    //result = windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
+                }
+                catch
+                {
+                    result = false;
+                }
+                return result;
             }
-            catch
-            {
-                result = false;
-            }
-            return result;
         }
         /// <summary>
         /// 以管理员身份执行程序
@@ -63,7 +68,7 @@ namespace OYMLCN.Extensions
         /// <param name="args"></param>
         public static void RunAsAdministrator(FileInfo file, params string[] args)
         {
-            if (IsAdministrator())
+            if (IsAdministrator)
                 try
                 {
                     Process.Start(file.FullName, args.Join(" "));
@@ -89,7 +94,5 @@ namespace OYMLCN.Extensions
             }
         }
 #endif
-
     }
-
 }

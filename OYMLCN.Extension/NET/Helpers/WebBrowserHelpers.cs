@@ -23,7 +23,7 @@ namespace OYMLCN.Helpers
             {
                 if (Regkey != null && Convert.ToString(Regkey.GetValue(appName)) != verKey)
                 {
-                    if (!ProcessExtensions.IsAdministrator())
+                    if (!ProcessHelpers.IsAdministrator)
                         throw new Exception("需要管理员权限");
                     using (var SetRegkey = Registry.LocalMachine.OpenSubKey(keyPath, true))
                         SetRegkey.SetValue(appName, verKey, RegistryValueKind.DWord);
@@ -35,7 +35,7 @@ namespace OYMLCN.Helpers
             {
                 if (Regkey != null && Convert.ToString(Regkey.GetValue(appName)) != verKey)
                 {
-                    if (!ProcessExtensions.IsAdministrator())
+                    if (!ProcessHelpers.IsAdministrator)
                         throw new Exception("需要管理员权限");
                     using (var SetRegkey = Registry.LocalMachine.OpenSubKey(keyPath, true))
                         SetRegkey.SetValue(appName, verKey, RegistryValueKind.DWord);

@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace OYMLCN.WPFExtensions
+namespace OYMLCN.WPF.Extensions
 {
     /// <summary>
     /// TextBoxExtension

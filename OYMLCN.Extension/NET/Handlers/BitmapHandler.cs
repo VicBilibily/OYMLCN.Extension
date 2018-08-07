@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace OYMLCN
+namespace OYMLCN.Handlers
 {
     /// <summary>
     /// 图片处理
