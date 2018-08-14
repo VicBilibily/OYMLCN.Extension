@@ -101,7 +101,7 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 时间转换为中文 年月日 时:分:秒
         /// </summary>
-        public string CnDatetimeWithSecond => dt.ToString($"yyyy年MM月dd日 HH:mm:ss");
+        public string CnDatetimeStringWithSecond => dt.ToString($"yyyy年MM月dd日 HH:mm:ss");
 
 
         /// <summary>
