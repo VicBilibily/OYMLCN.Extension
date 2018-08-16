@@ -7,8 +7,18 @@ namespace OYMLCN.Helpers
     /// </summary>
     public class PaginationHelpers
     {
-        private long Total;
-        private int Limit;
+        /// <summary>
+        /// 总数据长度
+        /// </summary>
+        public long Total { get; private set; }
+        /// <summary>
+        /// 单页条目
+        /// </summary>
+        public int Limit { get; private set; }
+        /// <summary>
+        /// 有效页码
+        /// </summary>
+        public int Page { get; internal set; }
 
         /// <summary>
         /// 分页页码辅助
@@ -43,7 +53,7 @@ namespace OYMLCN.Helpers
                 page = max;
             else
                 page = targetPage;
-            return page;
+            return Page = page;
         }
 
         ///// <summary>

@@ -34,8 +34,11 @@ namespace OYMLCN.Extensions
         /// <param name="page"></param>
         /// <param name="limit"></param>
         /// <returns></returns>
-        public static IQueryable<TSource> TakePage<TSource>(this IQueryable<TSource> source, int page, int limit = 10) =>
-            source.Skip((page - 1) * limit).Take(limit);
+        public static IQueryable<TSource> TakePage<TSource>(this IQueryable<TSource> source, int page, int limit = 10)
+        {
+            int skip = (page - 1) * limit;
+            return source.Skip(skip < 0 ? 0 : skip).Take(limit);
+        }
 
         /// <summary>
         /// 获取分页页数据（自动获取有效数据）
@@ -49,8 +52,8 @@ namespace OYMLCN.Extensions
         public static IQueryable<TSource> TakePageAuto<TSource>(this IQueryable<TSource> source, int page, out PaginationHelpers pagination, int limit = 10)
         {
             pagination = new PaginationHelpers(source.Count(), limit);
-            page = pagination.GetValidPage(page);
-            return source.Skip((page - 1) * limit).Take(limit);
+            pagination.GetValidPage(page);
+            return source.TakePage(pagination.Page, pagination.Limit);
         }
 
         /// <summary>

@@ -8,7 +8,7 @@
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.2</Version>
+    <Version>1.4.3-beta8162246</Version>
     <FileUpgradeFlags></FileUpgradeFlags>
     <UpgradeBackupLocation></UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
