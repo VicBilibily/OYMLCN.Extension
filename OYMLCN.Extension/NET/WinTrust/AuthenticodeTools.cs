@@ -83,22 +83,6 @@ namespace OYMLCN.WinTrust
             }
         }
 
-        /// <summary>
-        /// 开发环境是否已经导入代码签名证书
-        /// </summary>
-        public static bool IsDevelopmentEnvironmentWithCodeSigningCertificate
-        {
-            get
-            {
-                return CurrentUserCertificates
-                    .Where(d => d.Verify())
-                    .Any(d =>
-                        d.Subject == "CN=欧阳敏岚, E=mail@oyml.cn, L=佛山市, S=广东省, C=CN" &&
-                        d.Thumbprint == "DA4C0372E0FCE68143481C566071E3DA6C2B18FF"
-                    );
-            }
-        }
-
     }
 }
 #endif
