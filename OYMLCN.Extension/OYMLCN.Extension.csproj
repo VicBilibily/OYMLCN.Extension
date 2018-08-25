@@ -8,7 +8,7 @@
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.3-beta8162246</Version>
+    <Version>1.4.3</Version>
     <FileUpgradeFlags></FileUpgradeFlags>
     <UpgradeBackupLocation></UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -93,5 +93,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>REM Eazfuscator.NET is integrated with this project at MSBuild level: https://www.gapotchenko.com/eazfuscator.net/kb/100036</PostBuildEvent>
+    <PackageId>OYMLCN.Extension</PackageId>
   </PropertyGroup>
 </Project>

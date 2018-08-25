@@ -1,5 +1,7 @@
 ﻿#if NET461
 //using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
@@ -19,7 +21,7 @@ namespace OYMLCN.WinTrust
         /// 本程序集路径
         /// </summary>
         ///<returns></returns>
-        static string GetAssemblyPath => Assembly.GetExecutingAssembly().CodeBase.Substring(8);
+        static string AssemblyPath => Assembly.GetExecutingAssembly().CodeBase.Substring(8);
 
         /// <summary>
         /// 检查执行程序签名
@@ -30,20 +32,73 @@ namespace OYMLCN.WinTrust
         /// <summary>
         /// 检查指定程序集签名
         /// </summary>
-        /// <param name="filename">文件路径</param>
+        /// <param name="filepath">文件路径</param>
         /// <returns>如通过则返回证书信息，否则为Null</returns>
-        public static X509Certificate2 CheckDLL(string filename)
+        public static X509Certificate2 CheckDLL(string filepath)
         {
             // 通过系统内置的API验证进行证书有效性验证
-            if (WinTrust.VerifyEmbeddedSignature(filename))
+            if (WinTrust.VerifyEmbeddedSignature(filepath))
             {
                 // 获取证书更多的信息进行进一步验证
                 // 通过则返回证书以进一步自定义验证
-                X509Certificate2 cert = new X509Certificate2(filename);
+                X509Certificate2 cert = new X509Certificate2(filepath);
                 return cert.Verify() ? cert : null;
             }
             return null;
         }
+
+        /// <summary>
+        /// 检查执行程序签名是否与指定程序集签名相同
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <returns></returns>
+        public static bool CheckEXEAndDLLSignWithSameCodeSigningCertificate(string filepath)
+        {
+            var thisAssembly = CheckDLL(filepath);
+            var currentProcess = CheckEXE();
+            if (thisAssembly != null && currentProcess != null &&
+                thisAssembly.Subject == currentProcess.Subject &&
+                thisAssembly.Thumbprint == currentProcess.Thumbprint
+                )
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// 获取当前用户已注册的有效证书
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<X509Certificate2> CurrentUserCertificates
+        {
+            get
+            {
+                X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);//获取本地计算机受信任的根证书的储存区
+                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                X509Certificate2Collection collection = store.Certificates;//获取储存区上的所有证书
+                                                                           //X509Certificate2Collection fcollection = (X509Certificate2Collection)collection.Find(X509FindType.FindByIssuerName, "demo", false);//找到所有demo颁发的证书
+                foreach (var item in collection)
+                    if (item.Verify())
+                        yield return item;
+            }
+        }
+
+        /// <summary>
+        /// 开发环境是否已经导入代码签名证书
+        /// </summary>
+        public static bool IsDevelopmentEnvironmentWithCodeSigningCertificate
+        {
+            get
+            {
+                return CurrentUserCertificates
+                    .Where(d => d.Verify())
+                    .Any(d =>
+                        d.Subject == "CN=欧阳敏岚, E=mail@oyml.cn, L=佛山市, S=广东省, C=CN" &&
+                        d.Thumbprint == "DA4C0372E0FCE68143481C566071E3DA6C2B18FF"
+                    );
+            }
+        }
+
     }
 }
 #endif
