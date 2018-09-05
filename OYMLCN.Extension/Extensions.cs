@@ -1,10 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace OYMLCN.Extensions
 {
@@ -55,6 +50,20 @@ namespace OYMLCN.Extensions
         #endregion
 
         #region IDictionary
+        /// <summary>
+        /// 增加或更新字典
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IDictionary<TKey, TValue> AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value)
+        {
+            dict[key] = value;
+            return dict;
+        }
         /// <summary>
         /// 获取字典值
         /// </summary>

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <Import Condition=" '$(EAZFUSCATOR_NET_HOME)' != '' and Exists('$(EAZFUSCATOR_NET_HOME)\Integration\MSBuild\Eazfuscator.NET.targets') " Project="$(EAZFUSCATOR_NET_HOME)\Integration\MSBuild\Eazfuscator.NET.targets" />
   <PropertyGroup>
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
@@ -8,7 +7,7 @@
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.4</Version>
+    <Version>1.4.5-beta9051840</Version>
     <FileUpgradeFlags></FileUpgradeFlags>
     <UpgradeBackupLocation></UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -36,9 +35,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <EazfuscatorIntegration>MSBuild</EazfuscatorIntegration>
-    <EazfuscatorActiveConfiguration>Release</EazfuscatorActiveConfiguration>
-    <EazfuscatorCompatibilityVersion>2018.2</EazfuscatorCompatibilityVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
     <DocumentationFile>bin\Release\net461\OYMLCN.Extension.xml</DocumentationFile>
@@ -92,7 +88,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>REM Eazfuscator.NET is integrated with this project at MSBuild level: https://www.gapotchenko.com/eazfuscator.net/kb/100036</PostBuildEvent>
     <PackageId>OYMLCN.Extension</PackageId>
   </PropertyGroup>
 </Project>

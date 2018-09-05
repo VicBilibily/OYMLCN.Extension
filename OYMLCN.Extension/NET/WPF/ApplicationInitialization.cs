@@ -109,7 +109,7 @@ namespace OYMLCN.WPF
                     }
                     while (exception != null);
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine();
+                    //str.AppendLine();
                     list.Reverse();
                     foreach (var item in list)
                         str.AppendLine(item?.Message);
@@ -163,7 +163,7 @@ namespace OYMLCN.WPF
                 }
                 while (exception != null);
                 StringBuilder str = new StringBuilder();
-                str.AppendLine();
+                //str.AppendLine();
                 list.Reverse();
                 foreach (var item in list)
                     str.AppendLine(item?.Message);
@@ -175,7 +175,7 @@ namespace OYMLCN.WPF
                 if (e.Exception != null)
                     ThreadPool.QueueUserWorkItem(o =>
                     {
-                        MessageBox.Show(e.Exception.Message, UnhandledExceptionTipTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(str.ToString(), UnhandledExceptionTipTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     });
             }
             catch (Exception err)
