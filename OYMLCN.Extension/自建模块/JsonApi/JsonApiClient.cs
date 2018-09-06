@@ -21,6 +21,7 @@ namespace OYMLCN.JsonApi
         public readonly CookieContainer CookieContainer;
 
         private readonly Dictionary<int, Action<ResponseResult<PartialResponse[]>>> ResponseHandlers;
+        private readonly Dictionary<int, Action<PartialResponse>> PartialErrorHandlers;
         private readonly Dictionary<string, Action<PartialResponse>> PartialHandlers;
         /// <summary>
         /// JsonApi方法封装
@@ -40,6 +41,7 @@ namespace OYMLCN.JsonApi
                 Timeout = TimeSpan.FromSeconds(timeout)
             };
             ResponseHandlers = new Dictionary<int, Action<ResponseResult<PartialResponse[]>>>();
+            PartialErrorHandlers = new Dictionary<int, Action<PartialResponse>>();
             PartialHandlers = new Dictionary<string, Action<PartialResponse>>();
         }
 

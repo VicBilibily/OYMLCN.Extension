@@ -16,6 +16,12 @@ namespace OYMLCN.JsonApi
         /// <param name="statuCode"></param>
         /// <param name="handler"></param>
         public void On(int statuCode, Action<ResponseResult<PartialResponse[]>> handler) => ResponseHandlers[statuCode] = handler;
+        /// <summary>
+        /// 部分错误代码回应处理
+        /// </summary>
+        /// <param name="statuCode"></param>
+        /// <param name="handler"></param>
+        public void OnPartialError(int statuCode, Action<PartialResponse> handler) => PartialErrorHandlers[statuCode] = handler;
 
         /// <summary>
         /// 回应处理
@@ -71,9 +77,13 @@ namespace OYMLCN.JsonApi
                     result = str.Result.DeserializeJsonToObject<ResponseResult<PartialResponse[]>>();
                     if (result.code == 0)
                         foreach (var item in result.data)
-                            PartialHandlers.SelectValueOrDefault(item.name)?.Invoke(item);
-                    else
-                        ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
+                        {
+                            if (item.code != 0)
+                                PartialErrorHandlers.SelectValueOrDefault(item.code)?.Invoke(item);
+                            else
+                                PartialHandlers.SelectValueOrDefault(item.name)?.Invoke(item);
+                        }
+                    ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
                     return result;
                 });
             }
@@ -84,12 +94,12 @@ namespace OYMLCN.JsonApi
                     code = -1,
                     msg = ex.Message,
                     data = new PartialResponse[] {
-                                new PartialResponse()
-                                {
-                                    code = (int)rsp.Result.StatusCode,
-                                    msg = rsp.Result.StatusCode.ToString()
-                                }
-                           }
+                        new PartialResponse()
+                        {
+                            code = (int)rsp.Result.StatusCode,
+                            msg = rsp.Result.StatusCode.ToString()
+                        }
+                    }
                 };
             }
             catch (Exception ex)
