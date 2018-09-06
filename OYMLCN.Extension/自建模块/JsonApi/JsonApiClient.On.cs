@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 using OYMLCN.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,66 +61,82 @@ namespace OYMLCN.JsonApi
             handler(arr.GetT1, arr.GetT2, arr.GetT3, arr.GetT4, arr.GetT5, arr.GetT6);
         });
 
-        /// <summary>
-        /// 调用接口方法
-        /// </summary>
-        /// <param name="methodName"></param>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public void Invoke(string methodName, object obj) => InvokeAsync(methodName, obj).Wait();
-        /// <summary>
-        /// 调用接口方法
-        /// </summary>
-        /// <param name="methodName"></param>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public async Task<ResponseResult<PartialResponse[]>> InvokeAsync(string methodName, object obj)
+        private Task<ResponseResult<PartialResponse[]>> RspHandler(Task<HttpResponseMessage> rsp, string methodName)
         {
-            return await await HttpClient
-                .PostAsync($"{HubUrl}/{methodName}", new StringContent(obj.ToJsonString(), Encoding.UTF8, "application/json"))
-                .ContinueWith((rsp) =>
+            ResponseResult<PartialResponse[]> result;
+            try
+            {
+                return rsp.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ContinueWith((str) =>
                 {
-                    ResponseResult<PartialResponse[]> result;
-                    try
-                    {
-                        return rsp.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().ContinueWith((str) =>
-                        {
-                            result = str.Result.DeserializeJsonToObject<ResponseResult<PartialResponse[]>>();
-                            if (result.code == 0)
-                                foreach (var item in result.data)
-                                    PartialHandlers.SelectValueOrDefault(item.name)?.Invoke(item);
-                            else
-                                ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
-                            return result;
-                        });
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        result = new ResponseResult<PartialResponse[]>()
-                        {
-                            code = -1,
-                            msg = ex.Message,
-                            data = new PartialResponse[] {
+                    result = str.Result.DeserializeJsonToObject<ResponseResult<PartialResponse[]>>();
+                    if (result.code == 0)
+                        foreach (var item in result.data)
+                            PartialHandlers.SelectValueOrDefault(item.name)?.Invoke(item);
+                    else
+                        ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
+                    return result;
+                });
+            }
+            catch (HttpRequestException ex)
+            {
+                result = new ResponseResult<PartialResponse[]>()
+                {
+                    code = -1,
+                    msg = ex.Message,
+                    data = new PartialResponse[] {
                                 new PartialResponse()
                                 {
                                     code = (int)rsp.Result.StatusCode,
                                     msg = rsp.Result.StatusCode.ToString()
                                 }
-                            }
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        result = new ResponseResult<PartialResponse[]>()
-                        {
-                            code = -1,
-                            msg = ex.Message
-                        };
-                    }
-                    result.source = methodName;
-                    ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
-                    return Task.FromResult(result);
-                });
+                           }
+                };
+            }
+            catch (Exception ex)
+            {
+                result = new ResponseResult<PartialResponse[]>()
+                {
+                    code = -1,
+                    msg = ex.Message
+                };
+            }
+            result.source = methodName;
+            ResponseHandlers.SelectValueOrDefault(result.code)?.Invoke(result);
+            return Task.FromResult(result);
+        }
+
+        public async Task<ResponseResult<PartialResponse[]>> InvokeAsync(string methodName)
+        {
+            return await await HttpClient
+               .GetAsync($"{HubUrl}/{methodName}")
+               .ContinueWith(rsp => RspHandler(rsp, methodName));
+        }
+        public async Task<ResponseResult<PartialResponse[]>> InvokeAsync(string methodName, object obj)
+        {
+            if (obj == null)
+                return await InvokeAsync(methodName);
+            else
+            {
+                var dic = new Dictionary<string, string>();
+                var type = obj.GetType();
+                foreach (var pro in type.GetProperties())
+                    dic.Add(pro.Name, pro.GetValue(obj)?.ToString());
+                return await await HttpClient
+                   .PostAsync($"{HubUrl}/{methodName}", new FormUrlEncodedContent(dic))
+                   .ContinueWith(rsp => RspHandler(rsp, methodName));
+            }
+        }
+        /// <summary>
+        /// 调用接口方法
+        /// </summary>
+        /// <param name="methodName"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public async Task<ResponseResult<PartialResponse[]>> SendAsync(string methodName, object obj)
+        {
+            return await await HttpClient
+                .PostAsync($"{HubUrl}/{methodName}", new StringContent(obj.ToJsonString(), Encoding.UTF8, "application/json"))
+               .ContinueWith(rsp => RspHandler(rsp, methodName));
         }
 
     }

@@ -55,14 +55,14 @@ namespace OYMLCN.Extensions
             foreach (var kv in formData)
             {
                 i++;
-                sb.AppendFormat("{0}={1}", kv.Key, kv.Value.AsUrlFormat().EncodeAsUrlData);
+                sb.AppendFormat("{0}={1}", kv.Key, kv.Value?.ToString().AsUrlFormat().EncodeAsUrlData);
                 if (i < formData.Count)
                     sb.Append("&");
             }
             return sb.ToString();
         }
 
-  
+
 
 
     }
