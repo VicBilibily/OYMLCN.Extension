@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace OYMLCN.Handlers
 {
@@ -17,13 +18,27 @@ namespace OYMLCN.Handlers
         /// </summary>
         public HtmlFormatHandler HtmlDecode()
         {
+#if NET35
+            Result = HttpUtility.HtmlDecode(Result);
+#else
             Result = WebUtility.HtmlDecode(Result);
+#endif
             return this;
         }
         /// <summary>
         /// HTML转义为数据库合法模式
         /// </summary>
-        public string HtmlEncode => WebUtility.HtmlEncode(Result);
+        public string HtmlEncode
+        {
+            get
+            {
+#if NET35
+                return HttpUtility.HtmlEncode(Result);
+#else
+                return WebUtility.HtmlEncode(Result);
+#endif
+            }
+        }
 
         /// <summary>
         /// 使用正则表达式删除Html标签

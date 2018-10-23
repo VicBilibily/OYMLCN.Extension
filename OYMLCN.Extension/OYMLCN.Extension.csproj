@@ -1,24 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
     <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
     <Version>1.4.7</Version>
-    <FileUpgradeFlags></FileUpgradeFlags>
-    <UpgradeBackupLocation></UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>http://www.wtfpl.net/</PackageLicenseUrl>
     <PackageReleaseNotes>常用类型方法扩展封装
-.Net独有：CloseWindowHelpers、HardwareHelpers、HotKeyHelpers、MouseHelpers(未包含)、SystemHelpers、SystemInfoHelpers、WebBrowserHelpers、BitmapExtensions、WinTrust.AuthenticodeTools
-.Net WPF：ApplicationInitialization、ImageExtensions、SelectorExtensions、TextBoxExtensions、VisualHeplers
-.Net WinForm：ComboBoxExtensions、ControlExtensions、ListViewExtensions
 扩展类型：CryptographyExtensions、DateTimeExtensions、Extensions、FileExtensions、FormatExtensions、LinqExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
 辅助类型：FormatHelpers、HttpClientHelpers、PaginationHelpers、ProcessHelpers、ReleasingMemoryHelpers、StringHelpers
 
@@ -30,7 +24,6 @@
 
 常用字词功能集成
 Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆词和关键词分析提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
@@ -46,33 +39,100 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
     <LangVersion>default</LangVersion>
   </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+    <Reference Include="System.Web" />
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <Reference Include="System.Management" />
     <Reference Include="System.Web" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="NET\MouseHelpers.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="NET\Helpers\MouseHelpers.cs" />
+    <Compile Remove="Cryptography.cs" />
+    <Compile Remove="DateTime.cs" />
+    <Compile Remove="Handlers\Cryptography.cs" />
+    <Compile Remove="Helpers\Format.cs" />
+    <Compile Remove="Helpers\HttpClient.cs" />
+    <Compile Remove="Helpers\Pagination.cs" />
+    <Compile Remove="Helpers\Process.cs" />
+    <Compile Remove="Helpers\ProcessCommunicate.cs" />
+    <Compile Remove="Helpers\ReleasingMemory.cs" />
+    <Compile Remove="Helpers\String.cs" />
+    <Compile Remove="Linq.cs" />
+    <Compile Remove="Word\Pinyin.cs" />
+    <Compile Remove="独立模块\EmailSender.cs" />
+    <Compile Remove="独立模块\PredicateBuilder.cs" />
+    <Compile Remove="第三方SDK\Aliyun\SmsSender.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Api\CosCloud.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Api\SmsSender.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Common\CosParameters.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Common\CosSha1Pure.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Common\Request.cs" />
+    <Compile Remove="第三方SDK\TencentCloud\Common\Sign.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\EncryptProvider.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Exception\OutofMaxlengthException.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\EncryptExtensions.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\Internal\BytesAndStringExtensions.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\Internal\RsaKeyExtensions.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\AESKey.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\MD5Length.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RSAKey.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RsaKeyType.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RSAParametersJson.cs" />
+    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RsaSize.cs" />
+    <Compile Remove="自建模块\GlobalRegion\Continent.cs" />
+    <Compile Remove="自建模块\GlobalRegion\M49.cs" />
+    <Compile Remove="自建模块\GlobalRegion\M49Info.cs" />
+    <Compile Remove="自建模块\GlobalRegion\TimeSpan.cs" />
+    <Compile Remove="自建模块\JsonApi\JsonApiClient.cs" />
+    <Compile Remove="自建模块\JsonApi\JsonApiClient.On.cs" />
+    <Compile Remove="自建模块\JsonApi\Model.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="第三方开源模块\NETCore.Encrypt\" />
+    <None Include="Cryptography.cs" />
+    <None Include="DateTime.cs" />
+    <None Include="Handlers\Cryptography.cs" />
+    <None Include="Helpers\Format.cs" />
+    <None Include="Helpers\HttpClient.cs" />
+    <None Include="Helpers\Pagination.cs" />
+    <None Include="Helpers\Process.cs" />
+    <None Include="Helpers\ProcessCommunicate.cs" />
+    <None Include="Helpers\ReleasingMemory.cs" />
+    <None Include="Helpers\String.cs" />
+    <None Include="Linq.cs" />
+    <None Include="Word\Pinyin.cs" />
+    <None Include="独立模块\EmailSender.cs" />
+    <None Include="独立模块\PredicateBuilder.cs" />
+    <None Include="第三方SDK\Aliyun\SmsSender.cs" />
+    <None Include="第三方SDK\TencentCloud\Api\CosCloud.cs" />
+    <None Include="第三方SDK\TencentCloud\Api\SmsSender.cs" />
+    <None Include="第三方SDK\TencentCloud\Common\CosParameters.cs" />
+    <None Include="第三方SDK\TencentCloud\Common\CosSha1Pure.cs" />
+    <None Include="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
+    <None Include="第三方SDK\TencentCloud\Common\Request.cs" />
+    <None Include="第三方SDK\TencentCloud\Common\Sign.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\EncryptProvider.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Exception\OutofMaxlengthException.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\EncryptExtensions.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\Internal\BytesAndStringExtensions.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\Internal\RsaKeyExtensions.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\AESKey.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\MD5Length.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RSAKey.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RsaKeyType.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RSAParametersJson.cs" />
+    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RsaSize.cs" />
+    <None Include="自建模块\GlobalRegion\Continent.cs" />
+    <None Include="自建模块\GlobalRegion\M49.cs" />
+    <None Include="自建模块\GlobalRegion\M49Info.cs" />
+    <None Include="自建模块\GlobalRegion\TimeSpan.cs" />
+    <None Include="自建模块\JsonApi\JsonApiClient.cs" />
+    <None Include="自建模块\JsonApi\JsonApiClient.On.cs" />
+    <None Include="自建模块\JsonApi\Model.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Word\Pinyin\Resources.Designer.cs">

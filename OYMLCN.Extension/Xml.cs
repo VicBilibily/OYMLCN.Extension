@@ -55,14 +55,22 @@ namespace OYMLCN.Extensions
             return stream;
         }
 
-
-
+#if NET35
+        [Obsolete("NET35支持不完整，默认使用UTF8加载数据流，其他编码请考虑将Stream转换为String类型载入")]
+#endif
         /// <summary>
         /// 将Xml流转成XDocument
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static XDocument ToXDocument(this Stream stream) => XDocument.Load(stream);
+        public static XDocument ToXDocument(this Stream stream)
+        {
+#if NET35
+            return XDocument.Load(stream.ReadToEnd());
+#else
+            return XDocument.Load(stream);
+#endif
+        }
         /// <summary>
         /// 将Xml字符串转成XDocument
         /// </summary>

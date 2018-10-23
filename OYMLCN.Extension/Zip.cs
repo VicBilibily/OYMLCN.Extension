@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
-using System.Linq;
 
 namespace OYMLCN.Extensions
 {
@@ -18,12 +17,12 @@ namespace OYMLCN.Extensions
         /// <param name="compressionLevel">压缩效率</param>
         /// <param name="removeEmpty">移除填充的 = 空符号</param>
         /// <returns>压缩后的Base64编码的字符串</returns>
-        public static string GZipCompressString(this string rawString, CompressionLevel compressionLevel = CompressionLevel.Optimal, bool removeEmpty = true)
+        public static string GZipCompressString(this string rawString, bool removeEmpty = true)
         {
             if (string.IsNullOrEmpty(rawString) || rawString.Length == 0)
                 return "";
             byte[] rawData = Encoding.UTF8.GetBytes(rawString.ToString());
-            byte[] zippedData = GZipCompress(rawData, compressionLevel);
+            byte[] zippedData = GZipCompress(rawData);
             string result = Convert.ToBase64String(zippedData);
             return removeEmpty ? result.TrimEnd('=') : result;
         }
@@ -34,10 +33,14 @@ namespace OYMLCN.Extensions
         /// <param name="rawData"></param>
         /// <param name="compressionLevel">压缩效率</param>
         /// <returns></returns>
-        public static byte[] GZipCompress(this byte[] rawData, CompressionLevel compressionLevel = CompressionLevel.Optimal)
+        public static byte[] GZipCompress(this byte[] rawData)
         {
             MemoryStream ms = new MemoryStream();
-            using (GZipStream compressedzipStream = new GZipStream(ms, compressionLevel, true))
+#if NET35
+            using (GZipStream compressedzipStream = new GZipStream(ms, CompressionMode.Compress, true))
+#else
+            using (GZipStream compressedzipStream = new GZipStream(ms, CompressionLevel.Optimal, true))
+#endif
                 compressedzipStream.Write(rawData, 0, rawData.Length);
             return ms.ToArray();
         }
@@ -124,7 +127,7 @@ namespace OYMLCN.Extensions
         public static void GZipDecompressToFile(this FileInfo file, string fileName) =>
             file.ReadToStream().GZipDecompress().WriteToFile(fileName);
 
-
+#if !NET35
         /// <summary>
         /// 使用指定的文件夹创建Zip压缩文件
         /// </summary>
@@ -139,5 +142,6 @@ namespace OYMLCN.Extensions
         /// <param name="targetPath">文件夹路径</param>
         public static void ExtractZipFile(this FileInfo file, string targetPath) =>
             ZipFile.ExtractToDirectory(file.FullName, targetPath);
+#endif
     }
 }

@@ -48,7 +48,7 @@ namespace OYMLCN.Extensions
         /// 转换JSON字符串为可供查询的Array数组
         /// </summary>
         /// <returns></returns>
-        public static JToken ParseToJToken(this string str) => JToken.Parse(str.IsNullOrWhiteSpace() ? "{}" : str);
+        public static JToken ParseToJToken(this string str) => JToken.Parse(String.IsNullOrWhiteSpace(str) ? "{}" : str);
         /// <summary>
         /// 转换JToken对象为数组
         /// </summary>

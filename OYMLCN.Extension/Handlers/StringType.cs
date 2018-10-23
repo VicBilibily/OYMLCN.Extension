@@ -1,7 +1,6 @@
 ﻿using OYMLCN.Extensions;
 using System;
 using System.Net;
-using System.Numerics;
 
 namespace OYMLCN.Handlers
 {
@@ -88,19 +87,21 @@ namespace OYMLCN.Handlers
                 return Convert.ToInt64(str);
             }
         }
+#if !NET35
         /// <summary>
         /// 转换字符串为可空BigInteger类型
         /// </summary>
-        public BigInteger? NullableBigInteger
+        public System.Numerics.BigInteger? NullableBigInteger
         {
             get
             {
                 string str = IntegerNumeric;
                 if (str.IsNullOrEmpty())
                     return null;
-                return BigInteger.Parse(str);
+                return System.Numerics.BigInteger.Parse(str);
             }
         }
+#endif
 
         /// <summary>
         /// 转换字符串为可空Single/float类型
@@ -163,10 +164,12 @@ namespace OYMLCN.Handlers
         /// 转换字符串为Int64类型
         /// </summary>
         public long Long => NullableLong ?? 0;
+#if !NET35
         /// <summary>
         /// 转换字符串为可空BigInteger类型
         /// </summary>
-        public BigInteger BigInteger => NullableBigInteger ?? 0;
+        public System.Numerics.BigInteger BigInteger => NullableBigInteger ?? 0;
+#endif
 
         /// <summary>
         /// 转换字符串为Single/float类型
