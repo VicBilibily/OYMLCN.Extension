@@ -24,13 +24,15 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static bool IsNull(this object obj) => obj == null;
+        public static bool IsNull(this object obj)
+            => obj == null;
         /// <summary>
         /// 判断是否为非Null
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static bool IsNotNull(this object obj) => obj != null;
+        public static bool IsNotNull(this object obj)
+            => obj != null;
         /// <summary>
         /// 判断集合是否为空或Null
         /// </summary>

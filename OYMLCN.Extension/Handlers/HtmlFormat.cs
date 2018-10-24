@@ -11,7 +11,8 @@ namespace OYMLCN.Handlers
     /// </summary>
     public class HtmlFormatHandler
     {
-        internal HtmlFormatHandler(string html) => Result = html;
+        internal HtmlFormatHandler(string html)
+            => Result = html;
 
         /// <summary>
         /// 被转义HTML的字符串还原

@@ -58,7 +58,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        public static Stream ToStream(this byte[] bytes) => new MemoryStream(bytes);
+        public static Stream ToStream(this byte[] bytes)
+            => new MemoryStream(bytes);
 
 
         /// <summary>

@@ -15,13 +15,15 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public static HtmlFormatHandler AsHtmlFormat(this string html) => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
+        public static HtmlFormatHandler AsHtmlFormat(this string html)
+            => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
         /// <summary>
         /// 将字符串作为URL格式文本处理
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static UrlFormatHandler AsUrlFormat(this string url) => url.IsNotNullOrWhiteSpace() ? new UrlFormatHandler(url) : null;
+        public static UrlFormatHandler AsUrlFormat(this string url)
+            => url.IsNotNullOrWhiteSpace() ? new UrlFormatHandler(url) : null;
 
 
         /// <summary>
@@ -30,14 +32,16 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="enumClass"></param>
         /// <returns></returns>
-        public static string EnumToString(this Enum enumClass) => enumClass.ToString().TrimStart('_');
+        public static string EnumToString(this Enum enumClass)
+            => enumClass.ToString().TrimStart('_');
 
         /// <summary>
         /// 获取Uri的协议域名地址
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public static string GetHost(this Uri uri) => uri.IsNull() ? null : $"{uri.Scheme}://{uri.Host}/";
+        public static string GetHost(this Uri uri)
+            => uri.IsNull() ? null : $"{uri.Scheme}://{uri.Host}/";
 
         /// <summary>
         /// 组装QueryString
@@ -61,9 +65,6 @@ namespace OYMLCN.Extensions
             }
             return sb.ToString();
         }
-
-
-
 
     }
 }

@@ -49,19 +49,8 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Cryptography.cs" />
-    <Compile Remove="DateTime.cs" />
     <Compile Remove="Handlers\Cryptography.cs" />
-    <Compile Remove="Helpers\Format.cs" />
-    <Compile Remove="Helpers\HttpClient.cs" />
-    <Compile Remove="Helpers\Pagination.cs" />
-    <Compile Remove="Helpers\Process.cs" />
-    <Compile Remove="Helpers\ProcessCommunicate.cs" />
-    <Compile Remove="Helpers\ReleasingMemory.cs" />
-    <Compile Remove="Helpers\String.cs" />
-    <Compile Remove="Linq.cs" />
     <Compile Remove="Word\Pinyin.cs" />
-    <Compile Remove="独立模块\EmailSender.cs" />
-    <Compile Remove="独立模块\PredicateBuilder.cs" />
     <Compile Remove="第三方SDK\Aliyun\SmsSender.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Api\CosCloud.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Api\SmsSender.cs" />
@@ -94,19 +83,8 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   </ItemGroup>
   <ItemGroup>
     <None Include="Cryptography.cs" />
-    <None Include="DateTime.cs" />
     <None Include="Handlers\Cryptography.cs" />
-    <None Include="Helpers\Format.cs" />
-    <None Include="Helpers\HttpClient.cs" />
-    <None Include="Helpers\Pagination.cs" />
-    <None Include="Helpers\Process.cs" />
-    <None Include="Helpers\ProcessCommunicate.cs" />
-    <None Include="Helpers\ReleasingMemory.cs" />
-    <None Include="Helpers\String.cs" />
-    <None Include="Linq.cs" />
     <None Include="Word\Pinyin.cs" />
-    <None Include="独立模块\EmailSender.cs" />
-    <None Include="独立模块\PredicateBuilder.cs" />
     <None Include="第三方SDK\Aliyun\SmsSender.cs" />
     <None Include="第三方SDK\TencentCloud\Api\CosCloud.cs" />
     <None Include="第三方SDK\TencentCloud\Api\SmsSender.cs" />

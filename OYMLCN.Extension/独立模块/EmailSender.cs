@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OYMLCN
 {
@@ -25,13 +20,13 @@ namespace OYMLCN
         /// <param name="userName">邮箱地址/用户名</param>
         /// <param name="password">密码</param>
         /// <param name="port">端口（默认25）</param>
-        public EmailSender(string displayName, string smtp, string userName, string password,int port = 25)
+        public EmailSender(string displayName, string smtp, string userName, string password, int port = 25)
         {
-            this.DisplayName = displayName;
-            this.SMTP = smtp;
-            this.UserName = userName;
-            this.Password = password;
-            this.Port = port;
+            DisplayName = displayName;
+            SMTP = smtp;
+            UserName = userName;
+            Password = password;
+            Port = port;
         }
 
         /// <summary>
@@ -64,7 +59,11 @@ namespace OYMLCN
         /// <returns>成功返回true，否则报错</returns>
         public bool SendEmail(string subject, string body, params string[] targets)
         {
+#if NET35
+            SmtpClient client = new SmtpClient();
+#else
             using (SmtpClient client = new SmtpClient())
+#endif
             {
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.Host = SMTP;

@@ -11,7 +11,8 @@ namespace OYMLCN.Handlers
     public class UrlFormatHandler
     {
         private string Url;
-        internal UrlFormatHandler(string url) => Url = url;
+        internal UrlFormatHandler(string url)
+            => Url = url;
 
         /// <summary>
         /// 将URL转义为合法参数地址
@@ -44,12 +45,14 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 将 URL 中的参数名称/值编码为合法的格式。
         /// </summary>
-        public string EncodeAsUrlData => Uri.EscapeDataString(Url);
+        public string EncodeAsUrlData
+            => Uri.EscapeDataString(Url);
 
         /// <summary>
         /// 获取url字符串的的协议域名地址
         /// </summary>
-        public string UrlHost => Url.AsType().Uri.GetHost();
+        public string UrlHost
+            => Url.AsType().Uri.GetHost();
 
     }
 }

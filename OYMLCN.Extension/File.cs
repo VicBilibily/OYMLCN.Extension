@@ -26,7 +26,9 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static FileStream ReadToStream(this FileInfo file) => file?.Exists ?? false ? new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) : null;
+        public static FileStream ReadToStream(this FileInfo file)
+            => file?.Exists ?? false ?
+            new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) : null;
 
 
         /// <summary>
@@ -98,7 +100,7 @@ namespace OYMLCN.Extensions
             if (!file.Exists)
                 return string.Empty;
             return File.ReadAllText(file.FullName);
-        } 
+        }
         #endregion
 
         #region DirectoryInfo
@@ -151,7 +153,7 @@ namespace OYMLCN.Extensions
                 else
                     File.Copy(file, target + Path.GetFileName(file), true);
             }
-        } 
+        }
         #endregion
 
 
@@ -251,7 +253,7 @@ namespace OYMLCN.Extensions
                 if (line.IsNullOrWhiteSpace()) continue;
                 yield return line;
             }
-        } 
+        }
         #endregion
 
     }

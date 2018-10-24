@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace OYMLCN.Helpers
 {
@@ -63,6 +59,7 @@ namespace OYMLCN.Helpers
         /// <summary>
         /// 停止定时释放内存
         /// </summary>
-        public static void StopTimingReleasing() => _ramThread?.Abort();
+        public static void StopTimingReleasing()
+            => _ramThread?.Abort();
     }
 }

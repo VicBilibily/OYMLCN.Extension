@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OYMLCN.Helpers
 {
@@ -51,7 +47,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         /// <param name="length">字符串长度</param>
         /// <returns></returns>
-        public static string RandBlurCode(int length) => RandCode(length, true);
+        public static string RandBlurCode(int length)
+            => RandCode(length, true);
         #endregion
 
     }

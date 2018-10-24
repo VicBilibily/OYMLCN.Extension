@@ -1,3 +1,4 @@
+#if !NET35
 using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,8 @@ namespace OYMLCN.Helpers
         /// <param name="url">请求Url</param>
         /// <param name="decoder">返回数据编码形式（默认为UTF-8）</param>
         /// <returns></returns>
-        public string GetString(string url, Encoding decoder = null) => GetData(url).ReadToEnd(decoder ?? Encoding.UTF8);
+        public string GetString(string url, Encoding decoder = null)
+            => GetData(url).ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpGet获取数据
         /// </summary>
@@ -54,8 +56,8 @@ namespace OYMLCN.Helpers
         /// <param name="queryStr">请求参数字符串</param>
         /// <param name="decoder">返回数据编码形式（默认为UTF-8）</param>
         /// <returns></returns>
-        public string GetString(string url, string queryStr, Encoding decoder = null) =>
-            GetData($"{url}?{queryStr.TrimStart('?')}").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string GetString(string url, string queryStr, Encoding decoder = null)
+            => GetData($"{url}?{queryStr.TrimStart('?')}").ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpGet获取数据
         /// </summary>
@@ -63,8 +65,8 @@ namespace OYMLCN.Helpers
         /// <param name="queryDir">请求参数字典集合</param>
         /// <param name="decoder">返回数据编码形式（默认为UTF-8）</param>
         /// <returns></returns>
-        public string GetString(string url, Dictionary<string, string> queryDir, Encoding decoder = null) =>
-             GetData($"{url}?{queryDir.ToQueryString()}").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string GetString(string url, Dictionary<string, string> queryDir, Encoding decoder = null)
+            => GetData($"{url}?{queryDir.ToQueryString()}").ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpGet获取数据
@@ -87,18 +89,18 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">字符数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PostString(string url, string data, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
-        /// <summary>
-        /// 通过HttpPost提交Json数据
-        /// </summary>
-        /// <param name="url">请求Url</param>
-        /// <param name="obj">提交数据</param>
-        /// <param name="encoder">Json数据编码（默认为UTF-8）</param>
-        /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
-        /// <returns></returns>
-        public string PostJson<T>(string url, T obj, Encoding encoder = null, Encoding decoder = null) where T : class =>
-            PostData(url, obj.ToJsonString(), encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PostString(string url, string data, Encoding encoder = null, Encoding decoder = null)
+            => PostData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
+        ///// <summary>
+        ///// 通过HttpPost提交Json数据
+        ///// </summary>
+        ///// <param name="url">请求Url</param>
+        ///// <param name="str">提交数据</param>
+        ///// <param name="encoder">Json数据编码（默认为UTF-8）</param>
+        ///// <param name="decoder">返回数据编码（默认为UTF-8）</param>
+        ///// <returns></returns>
+        //public string PostJson<T>(string url, T obj, Encoding encoder = null, Encoding decoder = null) where T : class
+        //    => PostData(url, obj.ToJsonString(), encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpPost提交Json数据
@@ -108,8 +110,8 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">Json数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PostJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, json, encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PostJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null)
+            => PostData(url, json, encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPost提交Xml数据
         /// </summary>
@@ -118,8 +120,8 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">Xml数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PostXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null) =>
-            PostData(url, xml, encoder, "text/xml").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PostXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null)
+            => PostData(url, xml, encoder, "text/xml").ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpPost提交数据
@@ -182,8 +184,8 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">字符数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PutString(string url, string data, Encoding encoder = null, Encoding decoder = null) =>
-            PutData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PutString(string url, string data, Encoding encoder = null, Encoding decoder = null)
+            => PutData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPut提交Json数据
         /// </summary>
@@ -192,8 +194,8 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">Json数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PutJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null) =>
-            PutData(url, json, encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PutJsonString(string url, string json, Encoding encoder = null, Encoding decoder = null)
+            => PutData(url, json, encoder, "application/json").ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPut提交Xml数据
         /// </summary>
@@ -202,8 +204,8 @@ namespace OYMLCN.Helpers
         /// <param name="encoder">Xml数据编码（默认为UTF-8）</param>
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
-        public string PutXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null) =>
-            PutData(url, xml, encoder, "text/xml").ReadToEnd(decoder ?? Encoding.UTF8);
+        public string PutXmlString(string url, string xml, Encoding encoder = null, Encoding decoder = null)
+            => PutData(url, xml, encoder, "text/xml").ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpPut提交数据
@@ -313,3 +315,4 @@ namespace OYMLCN.Helpers
 
     }
 }
+#endif

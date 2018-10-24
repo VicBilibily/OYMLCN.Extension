@@ -49,15 +49,16 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="rawData"></param>
         /// <returns></returns>
-        public static byte[] GZipCompress(this Stream rawData) => rawData?.ToBytes().GZipCompress();
+        public static byte[] GZipCompress(this Stream rawData)
+            => rawData?.ToBytes().GZipCompress();
 
         /// <summary>
         /// GZip压缩文件
         /// </summary>
         /// <param name="file"></param>
         /// <param name="fileName"></param>
-        public static void GZipCompressToFile(this FileInfo file, string fileName) =>
-            file.ReadToStream().GZipCompress().WriteToFile(fileName);
+        public static void GZipCompressToFile(this FileInfo file, string fileName)
+            => file.ReadToStream().GZipCompress().WriteToFile(fileName);
 
 
         /// <summary>
@@ -110,22 +111,23 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="zippedData"></param>
         /// <returns></returns>
-        public static byte[] GZipDecompress(this Stream zippedData) => zippedData?.ToBytes().GZipDecompress();
+        public static byte[] GZipDecompress(this Stream zippedData)
+            => zippedData?.ToBytes().GZipDecompress();
 
         /// <summary>
         /// GZip解压文件
         /// </summary>
         /// <param name="zippedData"></param>
         /// <param name="fileName"></param>
-        public static void GZipDecompressToFile(byte[] zippedData, string fileName) =>
-            File.WriteAllBytes(fileName, zippedData.GZipDecompress());
+        public static void GZipDecompressToFile(byte[] zippedData, string fileName)
+            => File.WriteAllBytes(fileName, zippedData.GZipDecompress());
         /// <summary>
         /// GZip解压文件
         /// </summary>
         /// <param name="file"></param>
         /// <param name="fileName"></param>
-        public static void GZipDecompressToFile(this FileInfo file, string fileName) =>
-            file.ReadToStream().GZipDecompress().WriteToFile(fileName);
+        public static void GZipDecompressToFile(this FileInfo file, string fileName)
+            => file.ReadToStream().GZipDecompress().WriteToFile(fileName);
 
 #if !NET35
         /// <summary>
@@ -133,15 +135,15 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="fileName">压缩文件路径</param>
-        public static void CreateZipFile(this DirectoryInfo directory, string fileName) =>
-            ZipFile.CreateFromDirectory(directory.FullName, fileName);
+        public static void CreateZipFile(this DirectoryInfo directory, string fileName)
+            => ZipFile.CreateFromDirectory(directory.FullName, fileName);
         /// <summary>
         /// 解压Zip压缩文件到指定文件夹
         /// </summary>
         /// <param name="file"></param>
         /// <param name="targetPath">文件夹路径</param>
-        public static void ExtractZipFile(this FileInfo file, string targetPath) =>
-            ZipFile.ExtractToDirectory(file.FullName, targetPath);
+        public static void ExtractZipFile(this FileInfo file, string targetPath)
+            => ZipFile.ExtractToDirectory(file.FullName, targetPath);
 #endif
     }
 }

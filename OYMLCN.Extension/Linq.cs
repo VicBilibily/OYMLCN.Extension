@@ -46,6 +46,17 @@ namespace OYMLCN.Extensions
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="page"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        public static IQueryable<TSource> TakePageAuto<TSource>(this IQueryable<TSource> source, int page, int limit = 10)
+            => TakePageAuto(source, page, out PaginationHelpers pagination, limit);
+
+        /// <summary>
+        /// 获取分页页数据（自动获取有效数据）
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="page"></param>
         /// <param name="pagination">分页结果</param>
         /// <param name="limit"></param>
         /// <returns></returns>

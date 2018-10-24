@@ -32,7 +32,7 @@ namespace OYMLCN.Helpers
                     p.Kill();
         }
 
-#if NET461
+#if NET35 || NET461
         /// <summary>
         /// 确定当前主体是否属于具有指定 Administrator 的 Windows 用户组
         /// </summary>
@@ -76,13 +76,15 @@ namespace OYMLCN.Helpers
                 catch { }
             else
             {
-                var startInfo = new ProcessStartInfo();
-                startInfo.UseShellExecute = true;
-                startInfo.WorkingDirectory = file.DirectoryName;
-                startInfo.FileName = file.FullName;
-                startInfo.Arguments = args.Join(" ");
-                //设置启动动作,确保以管理员身份运行
-                startInfo.Verb = "runas";
+                var startInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    WorkingDirectory = file.DirectoryName,
+                    FileName = file.FullName,
+                    Arguments = args.Join(" "),
+                    //设置启动动作,确保以管理员身份运行
+                    Verb = "runas"
+                };
                 try
                 {
                     Process.Start(startInfo);

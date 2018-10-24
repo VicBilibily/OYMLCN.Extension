@@ -20,13 +20,15 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static StringFormatHandler AsFormat(this string str) => new StringFormatHandler(str);
+        public static StringFormatHandler AsFormat(this string str)
+            => new StringFormatHandler(str);
         /// <summary>
         /// 类型相关转换
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static StringTypeHandler AsType(this string str) => new StringTypeHandler(str);
+        public static StringTypeHandler AsType(this string str)
+            => new StringTypeHandler(str);
 
         #region Is对比判断
         /// <summary>
@@ -34,13 +36,15 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
+        public static bool IsNullOrEmpty(this string str)
+            => string.IsNullOrEmpty(str);
         /// <summary>
         /// 判断字符串是否为空
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool IsNotNullOrEmpty(this string str) => !IsNullOrEmpty(str);
+        public static bool IsNotNullOrEmpty(this string str)
+            => !IsNullOrEmpty(str);
 
         /// <summary>
         /// 判断字符串是否为空/空格
@@ -60,7 +64,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool IsNotNullOrWhiteSpace(this string str) => !IsNullOrWhiteSpace(str);
+        public static bool IsNotNullOrWhiteSpace(this string str)
+            => !IsNullOrWhiteSpace(str);
 
         /// <summary>
         /// 对比两个字符串是否相等
@@ -236,7 +241,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string[] SplitByLine(this string str) => str.SplitByMultiSign("\r\n", "\r", "\n");
+        public static string[] SplitByLine(this string str)
+            => str.SplitByMultiSign("\r\n", "\r", "\n");
         #endregion
 
         /// <summary>
@@ -611,7 +617,8 @@ namespace OYMLCN.Extensions
         /// <param name="str"></param>
         /// <param name="encoder">默认使用UTF-8进行编码</param>
         /// <returns></returns>
-        public static Stream StringToStream(this string str, Encoding encoder = null) => new MemoryStream(str.StringToBytes(encoder));
+        public static Stream StringToStream(this string str, Encoding encoder = null)
+            => new MemoryStream(str.StringToBytes(encoder));
 
         /// <summary>
         /// 将字符串填充到byte[]字节流中
@@ -619,7 +626,8 @@ namespace OYMLCN.Extensions
         /// <param name="str"></param>
         /// <param name="encoder">默认使用UTF-8进行编码</param>
         /// <returns></returns>
-        public static byte[] StringToBytes(this string str, Encoding encoder = null) => encoder?.GetBytes(str) ?? Encoding.UTF8.GetBytes(str);
+        public static byte[] StringToBytes(this string str, Encoding encoder = null)
+            => encoder?.GetBytes(str) ?? Encoding.UTF8.GetBytes(str);
 
     }
 }

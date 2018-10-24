@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
 using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace OYMLCN.Extensions
@@ -17,14 +17,16 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="xml">XML字符串</param>
         /// <returns></returns>
-        public static T DeserializeXmlString<T>(this string xml) => (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xml));
+        public static T DeserializeXmlString<T>(this string xml)
+            => (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xml));
 
         /// <summary>
         /// 反序列化
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static T DeserializeXmlString<T>(this Stream stream) => (T)new XmlSerializer(typeof(T)).Deserialize(stream);
+        public static T DeserializeXmlString<T>(this Stream stream)
+            => (T)new XmlSerializer(typeof(T)).Deserialize(stream);
 
         /// <summary>
         /// 序列化到Xml字符串
@@ -32,7 +34,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="obj">对象</param>
         /// <returns></returns>
-        public static string ToXmlString<T>(this T obj) => new StreamReader(obj.ToXmlStream()).ReadToEnd();
+        public static string ToXmlString<T>(this T obj)
+            => new StreamReader(obj.ToXmlStream()).ReadToEnd();
 
         /// <summary>
         /// 序列化到Xml字符串流
@@ -76,7 +79,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public static XDocument ToXDocument(this string xml) => XDocument.Parse(xml);
+        public static XDocument ToXDocument(this string xml)
+            => XDocument.Parse(xml);
 
         /// <summary>
         /// 获取指定名称的元素的值
@@ -84,27 +88,31 @@ namespace OYMLCN.Extensions
         /// <param name="xdoc"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string SelectValue(this XDocument xdoc, string name) => xdoc?.Root?.Element(name)?.Value;
+        public static string SelectValue(this XDocument xdoc, string name)
+            => xdoc?.Root?.Element(name)?.Value;
         /// <summary>
         /// 获取指定名称的元素的值
         /// </summary>
         /// <param name="xdoc"></param>
         /// <param name="name">元素名称</param>
         /// <returns></returns>
-        public static string SelectValue(this XElement xdoc, string name) => xdoc?.Element(name)?.Value;
+        public static string SelectValue(this XElement xdoc, string name)
+            => xdoc?.Element(name)?.Value;
         /// <summary>
         /// 获取元素集合内指定名称的元素的首要值
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="name">元素名称</param>
         /// <returns></returns>
-        public static string SelectValue(this IEnumerable<XElement> nodes, string name) => nodes?.Elements(name)?.FirstOrDefault()?.Value;
+        public static string SelectValue(this IEnumerable<XElement> nodes, string name)
+            => nodes?.Elements(name)?.FirstOrDefault()?.Value;
         /// <summary>
         /// 获取元素集合内指定名称的元素的所有值
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static string[] SelectValues(this IEnumerable<XElement> nodes, string name) => nodes?.Elements(name)?.Select(d => d.Value).ToArray();
+        public static string[] SelectValues(this IEnumerable<XElement> nodes, string name)
+            => nodes?.Elements(name)?.Select(d => d.Value).ToArray();
     }
 }

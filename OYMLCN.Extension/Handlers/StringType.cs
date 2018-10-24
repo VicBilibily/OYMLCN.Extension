@@ -17,8 +17,10 @@ namespace OYMLCN.Handlers
             stringFormatHandler = new StringFormatHandler(str);
         }
 
-        private string Numeric => stringFormatHandler.Numeric;
-        private string IntegerNumeric => stringFormatHandler.IntegerNumeric;
+        private string Numeric
+            => stringFormatHandler.Numeric;
+        private string IntegerNumeric
+            => stringFormatHandler.IntegerNumeric;
 
         #region 数字的转换
         /// <summary>
@@ -147,23 +149,28 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 转换数字字符串为SByte类型
         /// </summary>
-        public sbyte SByte => NullableSByte ?? 0;
+        public sbyte SByte
+            => NullableSByte ?? 0;
         /// <summary>
         /// 转换数字字符串为Byte类型
         /// </summary>
-        public byte Byte => NullableByte ?? 0;
+        public byte Byte
+            => NullableByte ?? 0;
         /// <summary>
         /// 转换字符串为Int16类型
         /// </summary>
-        public short Short => NullableShort ?? 0;
+        public short Short
+            => NullableShort ?? 0;
         /// <summary>
         /// 转换字符串为Int32类型
         /// </summary>
-        public int Int => NullableInt ?? 0;
+        public int Int
+            => NullableInt ?? 0;
         /// <summary>
         /// 转换字符串为Int64类型
         /// </summary>
-        public long Long => NullableLong ?? 0;
+        public long Long
+            => NullableLong ?? 0;
 #if !NET35
         /// <summary>
         /// 转换字符串为可空BigInteger类型
@@ -174,21 +181,25 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 转换字符串为Single/float类型
         /// </summary>
-        public float Float => NullableFloat ?? 0;
+        public float Float
+            => NullableFloat ?? 0;
         /// <summary>
         /// 转换字符串为Double类型
         /// </summary>
-        public double Double => NullableDouble ?? 0;
+        public double Double
+            => NullableDouble ?? 0;
         /// <summary>
         /// 转换字符串为Decimal类型
         /// </summary>
-        public decimal Decimal => NullableDecimal ?? 0;
+        public decimal Decimal
+            => NullableDecimal ?? 0;
         #endregion
 
         /// <summary>
         /// 转换字符串为Datetime类型
         /// </summary>
-        public DateTime Datetime => Convert.ToDateTime(Str);
+        public DateTime Datetime
+            => Convert.ToDateTime(Str);
         /// <summary>
         /// 转换字符串为可空Datetime类型，转换失败返回Null
         /// </summary>
@@ -235,7 +246,8 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 将字符串转换为Boolean类型（当字符串是“true/1/yes/checked/是/对”(不区分大小写)时返回true）
         /// </summary>
-        public bool Boolean => Str.IsEqualIgnoreCase(new string[] { "1", "true", "yes", "checked", "是", "对" });
+        public bool Boolean
+            => Str.IsEqualIgnoreCase(new string[] { "1", "true", "yes", "checked", "是", "对" });
         /// <summary>
         /// 将字符串转换为可空Boolean类型（当字符串中包含“是/对”时返回true）
         /// </summary>

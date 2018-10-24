@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Web;
 
 namespace OYMLCN.Helpers
 {
@@ -35,11 +36,21 @@ namespace OYMLCN.Helpers
         public static Dictionary<string, string> QueryStringToDictionary(string queryString)
         {
             var dic = new Dictionary<string, string>();
-            queryString = WebUtility.HtmlDecode(queryString).SplitThenGetLast("?");
+#if NET35
+            queryString = HttpUtility.HtmlDecode(queryString);
+#else
+            queryString = WebUtility.HtmlDecode(queryString);
+#endif
+            queryString = queryString.SplitThenGetLast("?");
             foreach (var item in queryString.SplitBySign("&"))
             {
                 var key = item.SplitThenGetFirst("=");
-                var value = WebUtility.UrlDecode(item.SubString(key.Length + 1));
+                var value = item.SubString(key.Length + 1);
+#if NET35
+                value = HttpUtility.UrlDecode(value);
+#else
+                value = WebUtility.UrlDecode(value);
+#endif
                 dic.Add(key, value);
             }
             return dic;
@@ -84,38 +95,44 @@ namespace OYMLCN.Helpers
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToKB(ulong length) => Math.Round(length / Convert.ToDecimal(1000), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToKB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1000), 2, MidpointRounding.AwayFromZero);
         /// <summary>
         /// 字节总量转换为MB标识
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToMB(ulong length) => Math.Round(length / Convert.ToDecimal(1000 * 1000), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToMB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1000 * 1000), 2, MidpointRounding.AwayFromZero);
         /// <summary>
         /// 字节总量转换为GB标识
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToGB(ulong length) => Math.Round(length / Convert.ToDecimal(1000 * 1000 * 1000), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToGB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1000 * 1000 * 1000), 2, MidpointRounding.AwayFromZero);
 
         /// <summary>
         /// 字节总量转换为KiB标识
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToKiB(ulong length) => Math.Round(length / Convert.ToDecimal(1024), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToKiB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1024), 2, MidpointRounding.AwayFromZero);
         /// <summary>
         /// 字节总量转换为MiB标识
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToMiB(ulong length) => Math.Round(length / Convert.ToDecimal(1024 * 1024), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToMiB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1024 * 1024), 2, MidpointRounding.AwayFromZero);
         /// <summary>
         /// 字节总量转换为GiB标识
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public static decimal BytesLengthToGiB(ulong length) => Math.Round(length / Convert.ToDecimal(1024 * 1024 * 1024), 2, MidpointRounding.AwayFromZero);
+        public static decimal BytesLengthToGiB(ulong length)
+            => Math.Round(length / Convert.ToDecimal(1024 * 1024 * 1024), 2, MidpointRounding.AwayFromZero);
         #endregion
 
     }

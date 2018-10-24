@@ -11,7 +11,8 @@ namespace OYMLCN.Handlers
     public class StringFormatHandler
     {
         private string Str;
-        internal StringFormatHandler(string str) => Str = str;
+        internal StringFormatHandler(string str)
+            => Str = str;
 
         #region Unicode
         /// <summary>
@@ -94,30 +95,36 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// 判断字符是不是汉字
         /// </summary>
-        public bool IsChineseRegString => Regex.IsMatch(Str, @"[\u4e00-\u9fbb]+$");
+        public bool IsChineseRegString
+            => Regex.IsMatch(Str, @"[\u4e00-\u9fbb]+$");
         #endregion
 
         #region 数字的判断
         /// <summary>
         /// 判断文本是否为数字
         /// </summary>
-        public bool IsNumeric => Regex.IsMatch(Str, @"^[+-]?\d*[.]?\d*$", RegexOptions.Compiled);
+        public bool IsNumeric
+            => Regex.IsMatch(Str, @"^[+-]?\d*[.]?\d*$", RegexOptions.Compiled);
         /// <summary>
         /// 判断文本是否为整数
         /// </summary>
-        public bool IsInteger => Regex.IsMatch(Str, @"^[+-]?\d*$", RegexOptions.Compiled);
+        public bool IsInteger
+            => Regex.IsMatch(Str, @"^[+-]?\d*$", RegexOptions.Compiled);
         /// <summary>
         /// 判断文本是否为正数
         /// </summary>
-        public bool IsUnsignNumeric => Regex.IsMatch(Str, @"^\d*[.]?\d*$", RegexOptions.Compiled);
+        public bool IsUnsignNumeric
+            => Regex.IsMatch(Str, @"^\d*[.]?\d*$", RegexOptions.Compiled);
         /// <summary>
         /// 获取文本中的数字
         /// </summary>
-        public string Numeric => Str.IsNullOrEmpty() ? null : Regex.Match(Str, @"[+-]?\d+(\.\d+)?", RegexOptions.Compiled).Value;
+        public string Numeric
+            => Str.IsNullOrEmpty() ? null : Regex.Match(Str, @"[+-]?\d+(\.\d+)?", RegexOptions.Compiled).Value;
         /// <summary>
         /// 获取文本中的整数部分
         /// </summary>
-        public string IntegerNumeric => Numeric?.SplitThenGetFirst(".");
+        public string IntegerNumeric
+            => Numeric?.SplitThenGetFirst(".");
         #endregion
 
     }
