@@ -48,9 +48,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Cryptography.cs" />
-    <Compile Remove="Handlers\Cryptography.cs" />
-    <Compile Remove="Word\Pinyin.cs" />
     <Compile Remove="第三方SDK\Aliyun\SmsSender.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Api\CosCloud.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Api\SmsSender.cs" />
@@ -59,21 +56,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <Compile Remove="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Common\Request.cs" />
     <Compile Remove="第三方SDK\TencentCloud\Common\Sign.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\EncryptProvider.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Exception\OutofMaxlengthException.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\EncryptExtensions.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\Internal\BytesAndStringExtensions.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Extensions\Internal\RsaKeyExtensions.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\AESKey.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\MD5Length.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RSAKey.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RsaKeyType.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RSAParametersJson.cs" />
-    <Compile Remove="第三方开源模块\NETCore.Encrypt\Internal\RsaSize.cs" />
-    <Compile Remove="自建模块\GlobalRegion\Continent.cs" />
-    <Compile Remove="自建模块\GlobalRegion\M49.cs" />
-    <Compile Remove="自建模块\GlobalRegion\M49Info.cs" />
-    <Compile Remove="自建模块\GlobalRegion\TimeSpan.cs" />
     <Compile Remove="自建模块\JsonApi\JsonApiClient.cs" />
     <Compile Remove="自建模块\JsonApi\JsonApiClient.On.cs" />
     <Compile Remove="自建模块\JsonApi\Model.cs" />
@@ -82,9 +64,6 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Cryptography.cs" />
-    <None Include="Handlers\Cryptography.cs" />
-    <None Include="Word\Pinyin.cs" />
     <None Include="第三方SDK\Aliyun\SmsSender.cs" />
     <None Include="第三方SDK\TencentCloud\Api\CosCloud.cs" />
     <None Include="第三方SDK\TencentCloud\Api\SmsSender.cs" />
@@ -93,37 +72,9 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <None Include="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
     <None Include="第三方SDK\TencentCloud\Common\Request.cs" />
     <None Include="第三方SDK\TencentCloud\Common\Sign.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\EncryptProvider.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Exception\OutofMaxlengthException.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\EncryptExtensions.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\Internal\BytesAndStringExtensions.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Extensions\Internal\RsaKeyExtensions.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\AESKey.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\MD5Length.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RSAKey.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RsaKeyType.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RSAParametersJson.cs" />
-    <None Include="第三方开源模块\NETCore.Encrypt\Internal\RsaSize.cs" />
-    <None Include="自建模块\GlobalRegion\Continent.cs" />
-    <None Include="自建模块\GlobalRegion\M49.cs" />
-    <None Include="自建模块\GlobalRegion\M49Info.cs" />
-    <None Include="自建模块\GlobalRegion\TimeSpan.cs" />
     <None Include="自建模块\JsonApi\JsonApiClient.cs" />
     <None Include="自建模块\JsonApi\JsonApiClient.On.cs" />
     <None Include="自建模块\JsonApi\Model.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Word\Pinyin\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Word\Pinyin\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <PackageId>OYMLCN.Extension</PackageId>

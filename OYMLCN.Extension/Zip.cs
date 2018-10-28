@@ -14,7 +14,6 @@ namespace OYMLCN.Extensions
         /// 将传入字符串以GZip算法压缩后，返回Base64编码字符
         /// </summary>
         /// <param name="rawString">需要压缩的字符串</param>
-        /// <param name="compressionLevel">压缩效率</param>
         /// <param name="removeEmpty">移除填充的 = 空符号</param>
         /// <returns>压缩后的Base64编码的字符串</returns>
         public static string GZipCompressString(this string rawString, bool removeEmpty = true)
@@ -31,7 +30,6 @@ namespace OYMLCN.Extensions
         /// GZip压缩
         /// </summary>
         /// <param name="rawData"></param>
-        /// <param name="compressionLevel">压缩效率</param>
         /// <returns></returns>
         public static byte[] GZipCompress(this byte[] rawData)
         {

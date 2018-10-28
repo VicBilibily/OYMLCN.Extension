@@ -1,5 +1,4 @@
-﻿using NETCore.Encrypt;
-using OYMLCN.Extensions;
+﻿using OYMLCN.Extensions;
 using System;
 using System.IO;
 using System.Linq;
@@ -239,14 +238,14 @@ namespace OYMLCN.Handlers
         {
             get
             {
-#if NET461
+#if NET35 || NET461
                 var rsa = new RSACryptoServiceProvider();
                 rsa.FromXmlString(PublicKey ?? Key);
                 var cipherbytes = rsa.Encrypt(Encoding.UTF8.GetBytes(Str), false);
 
                 return Convert.ToBase64String(cipherbytes);
 #else
-                return EncryptProvider.RSAEncrypt(PublicKey ?? Key, Str);
+                return NETCore.Encrypt.EncryptProvider.RSAEncrypt(PublicKey ?? Key, Str);
 #endif
             }
         }
@@ -258,14 +257,14 @@ namespace OYMLCN.Handlers
         {
             get
             {
-#if NET461
+#if NET35 || NET461
                 var rsa = new RSACryptoServiceProvider();
                 rsa.FromXmlString(Key);
                 var cipherbytes = rsa.Decrypt(Convert.FromBase64String(Str), false);
 
                 return Encoding.UTF8.GetString(cipherbytes);
 #else
-                return EncryptProvider.RSADecrypt(Key, Str);
+                return NETCore.Encrypt.EncryptProvider.RSADecrypt(Key, Str);
 #endif
             }
         }

@@ -1,10 +1,13 @@
 // 引用开源库自 https://github.com/myloveCc/NETCore.Encrypt
 // 已核查变更至 2.0.7 Date 2018.07.23
 
+#if !NET35
 using NETCore.Encrypt;
 using NETCore.Encrypt.Extensions.Internal;
 using NETCore.Encrypt.Internal;
+#endif
 using OYMLCN.Handlers;
+using OYMLCN.Extensions;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -54,6 +57,7 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static CryptographyHandler AsCryptography(this string str, string keyOrPrivateKey, string publicKey = null) => new CryptographyHandler(str, keyOrPrivateKey, publicKey);
 
+#if !NET35
         /// <summary>
         /// 生成 RSA 公钥和私钥
         /// </summary>
@@ -73,6 +77,7 @@ namespace OYMLCN.Extensions
             return EncryptProvider.CreateRsaKey(rsaSize);
 #endif
         }
+#endif
 
     }
 }
