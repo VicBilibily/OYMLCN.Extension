@@ -48,33 +48,12 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="第三方SDK\Aliyun\SmsSender.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Api\CosCloud.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Api\SmsSender.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Common\CosParameters.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Common\CosSha1Pure.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Common\Request.cs" />
-    <Compile Remove="第三方SDK\TencentCloud\Common\Sign.cs" />
-    <Compile Remove="自建模块\JsonApi\JsonApiClient.cs" />
-    <Compile Remove="自建模块\JsonApi\JsonApiClient.On.cs" />
-    <Compile Remove="自建模块\JsonApi\Model.cs" />
+    <Compile Remove="自建模块\**" />
+    <EmbeddedResource Remove="自建模块\**" />
+    <None Remove="自建模块\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="第三方SDK\Aliyun\SmsSender.cs" />
-    <None Include="第三方SDK\TencentCloud\Api\CosCloud.cs" />
-    <None Include="第三方SDK\TencentCloud\Api\SmsSender.cs" />
-    <None Include="第三方SDK\TencentCloud\Common\CosParameters.cs" />
-    <None Include="第三方SDK\TencentCloud\Common\CosSha1Pure.cs" />
-    <None Include="第三方SDK\TencentCloud\Common\HttpUtils.cs" />
-    <None Include="第三方SDK\TencentCloud\Common\Request.cs" />
-    <None Include="第三方SDK\TencentCloud\Common\Sign.cs" />
-    <None Include="自建模块\JsonApi\JsonApiClient.cs" />
-    <None Include="自建模块\JsonApi\JsonApiClient.On.cs" />
-    <None Include="自建模块\JsonApi\Model.cs" />
   </ItemGroup>
   <PropertyGroup>
     <PackageId>OYMLCN.Extension</PackageId>
