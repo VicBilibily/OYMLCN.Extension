@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
-    <SignAssembly>false</SignAssembly>
+    <TargetFrameworks>net35;net461</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
@@ -10,10 +10,10 @@
     <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
-    <PackageReference Include="NETCore.Encrypt">
-      <Version>2.0.7</Version>
-    </PackageReference>
+  <ItemGroup>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+
 
 </Project>

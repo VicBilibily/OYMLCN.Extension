@@ -78,8 +78,8 @@ namespace OYMLCN.Handlers
         public HtmlFormatHandler RemoveSpace(bool keepOneSpace = true)
         {
             Result = Result.SplitByMultiSign("　", " ", "&nbsp;", "&ensp;", "&emsp;", "&thinsp;", "&zwnj;", "&zwj;", "\t")
-                       .Where(d => !d.Trim().IsNullOrEmpty())
-                       .Join(keepOneSpace ? " " : string.Empty);
+                           .Where(d => !d.Trim().IsNullOrEmpty())
+                           .Join(keepOneSpace ? " " : string.Empty);
             return this;
         }
 

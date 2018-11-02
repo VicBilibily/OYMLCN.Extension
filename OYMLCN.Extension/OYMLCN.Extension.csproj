@@ -39,18 +39,11 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
     <LangVersion>default</LangVersion>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net461'">
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <Reference Include="System.Web" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="自建模块\**" />
-    <EmbeddedResource Remove="自建模块\**" />
-    <None Remove="自建模块\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />

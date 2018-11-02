@@ -1,5 +1,4 @@
-﻿#if NET461
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -11,9 +10,13 @@ namespace OYMLCN.Helpers
     public static class CloseWindowHelpers
     {
         static int GetWindowFromPoint(int xPoint, int yPoint) =>
-              Environment.Is64BitProcess ?
-                  WindowFromPoint(new POINT() { x = xPoint, y = yPoint })
-                  : WindowFromPoint(xPoint, yPoint);
+#if NET35
+            false ?
+#else
+            Environment.Is64BitProcess ?
+#endif
+            WindowFromPoint(new POINT() { x = xPoint, y = yPoint }) :
+            WindowFromPoint(xPoint, yPoint);
 
         [DllImport("user32", EntryPoint = "WindowFromPoint")]//指定坐标处窗体句柄
         static extern int WindowFromPoint(int xPoint, int yPoint);
@@ -101,4 +104,3 @@ namespace OYMLCN.Helpers
     }
 
 }
-#endif

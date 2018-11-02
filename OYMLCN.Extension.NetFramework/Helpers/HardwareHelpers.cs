@@ -1,4 +1,3 @@
-#if NET461
 using System;
 using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
@@ -265,4 +264,3 @@ namespace OYMLCN.Helpers
         }
     }
 }
-#endif

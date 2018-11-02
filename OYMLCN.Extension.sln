@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.Test", "OY
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Net", "OYMLCN.Extension.Net\OYMLCN.Extension.Net.csproj", "{FF5D91A8-3E20-4EE6-8348-AC1FE1C6BB7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Json", "OYMLCN.Extension.Json\OYMLCN.Extension.Json.csproj", "{B08AAD09-71F2-40B0-9FC4-A7ABFFDEC472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Encrypt", "OYMLCN.Extension.Encrypt\OYMLCN.Extension.Encrypt.csproj", "{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.Encrypt", "OYMLCN.Extension.Encrypt\OYMLCN.Extension.Encrypt.csproj", "{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.NetFramework", "OYMLCN.Extension.NetFramework\OYMLCN.Extension.NetFramework.csproj", "{D604DCD5-AF9C-407A-BFBE-42BF4F3BF1B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,14 @@ Global
 		{FF5D91A8-3E20-4EE6-8348-AC1FE1C6BB7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF5D91A8-3E20-4EE6-8348-AC1FE1C6BB7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF5D91A8-3E20-4EE6-8348-AC1FE1C6BB7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B08AAD09-71F2-40B0-9FC4-A7ABFFDEC472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B08AAD09-71F2-40B0-9FC4-A7ABFFDEC472}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B08AAD09-71F2-40B0-9FC4-A7ABFFDEC472}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B08AAD09-71F2-40B0-9FC4-A7ABFFDEC472}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D5DC4D-0D8A-4F5E-8E96-8195968834CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D604DCD5-AF9C-407A-BFBE-42BF4F3BF1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D604DCD5-AF9C-407A-BFBE-42BF4F3BF1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D604DCD5-AF9C-407A-BFBE-42BF4F3BF1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D604DCD5-AF9C-407A-BFBE-42BF4F3BF1B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -202,7 +202,8 @@ namespace OYMLCN.Helpers
             /// 发送消息
             /// </summary>
             /// <param name="text"></param>
-            public static void ClientSend(string text) => sw.WriteLine(text);
+            public static void ClientSend(string text) 
+				=> sw.WriteLine(text);
         }
     }
 }

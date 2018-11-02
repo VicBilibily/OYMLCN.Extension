@@ -1,4 +1,3 @@
-#if NET461
 using Microsoft.Win32;
 using OYMLCN.Extensions;
 using System;
@@ -195,4 +194,3 @@ namespace OYMLCN.Helpers
 
     }
 }
-#endif

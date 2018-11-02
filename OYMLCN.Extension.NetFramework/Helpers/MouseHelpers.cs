@@ -1,4 +1,3 @@
-#if NET461
 using System.Runtime.InteropServices;
 
 namespace OYMLCN.Helpers
@@ -99,4 +98,3 @@ namespace OYMLCN.Helpers
 
     }
 }
-#endif

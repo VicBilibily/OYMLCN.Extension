@@ -1,4 +1,3 @@
-#if NET461
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -57,4 +56,3 @@ namespace OYMLCN.Helpers
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
     }
 }
-#endif

@@ -1,13 +1,9 @@
-// 引用开源库自 https://github.com/myloveCc/NETCore.Encrypt
-// 已核查变更至 2.0.7 Date 2018.07.23
-
 #if !NET35
 using NETCore.Encrypt;
 using NETCore.Encrypt.Extensions.Internal;
 using NETCore.Encrypt.Internal;
 #endif
 using OYMLCN.Handlers;
-using OYMLCN.Extensions;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -46,7 +42,8 @@ namespace OYMLCN.Extensions
         /// <param name="str"></param>
         /// <param name="key">HMAC加密需要提供密钥</param>
         /// <returns></returns>
-        public static EncryptHandler AsEncrypt(this string str, string key = null) => new EncryptHandler(str, key);
+        public static EncryptHandler AsEncrypt(this string str, string key = null)
+            => new EncryptHandler(str, key);
 
         /// <summary>
         /// 转向可以加密字符串处理
@@ -55,7 +52,8 @@ namespace OYMLCN.Extensions
         /// <param name="keyOrPrivateKey">16/24/32长度密钥或RSA私/公钥</param>
         /// <param name="publicKey">RSA公钥</param>
         /// <returns></returns>
-        public static CryptographyHandler AsCryptography(this string str, string keyOrPrivateKey, string publicKey = null) => new CryptographyHandler(str, keyOrPrivateKey, publicKey);
+        public static CryptographyHandler AsCryptography(this string str, string keyOrPrivateKey, string publicKey = null)
+            => new CryptographyHandler(str, keyOrPrivateKey, publicKey);
 
 #if !NET35
         /// <summary>

@@ -24,69 +24,84 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// SHA1加密值
         /// </summary>
-        public string SHA1 => System.Security.Cryptography.SHA1.Create().Encoder(Str);
+        public string SHA1 
+            => System.Security.Cryptography.SHA1.Create().Encoder(Str);
         /// <summary>
         /// HMACSHA1加密值
         /// </summary>
-        public string HMACSHA1 => new HMACSHA1().Encoder(Key, Str);
+        public string HMACSHA1 
+            => new HMACSHA1().Encoder(Key, Str);
         /// <summary>
         /// HMACSHA1加密值(base64结果)
         /// </summary>
-        public string HMACSHA1Base64 => new HMACSHA1().Base64Encoder(Key, Str);
+        public string HMACSHA1Base64 
+            => new HMACSHA1().Base64Encoder(Key, Str);
 
 
         /// <summary>
         /// SHA256加密值
         /// </summary>
-        public string SHA256 => System.Security.Cryptography.SHA256.Create().Encoder(Str);
+        public string SHA256 
+            => System.Security.Cryptography.SHA256.Create().Encoder(Str);
         /// <summary>
         /// HMACSHA256加密值
         /// </summary>
-        public string HMACSHA256 => new HMACSHA256().Encoder(Key, Str);
+        public string HMACSHA256 
+            => new HMACSHA256().Encoder(Key, Str);
         /// <summary>
         /// HMACSHA256加密值(base64结果)
         /// </summary>
-        public string HMACSHA256Base64 => new HMACSHA256().Base64Encoder(Key, Str);
+        public string HMACSHA256Base64
+            => new HMACSHA256().Base64Encoder(Key, Str);
 
 
         /// <summary>
         /// SHA384加密值
         /// </summary>
-        public string SHA384 => System.Security.Cryptography.SHA384.Create().Encoder(Str);
+        public string SHA384 
+            => System.Security.Cryptography.SHA384.Create().Encoder(Str);
         /// <summary>
         /// HMACSHA384加密值
         /// </summary>
-        public string HMACSHA384 => new HMACSHA384().Encoder(Key, Str);
+        public string HMACSHA384 
+            => new HMACSHA384().Encoder(Key, Str);
         /// <summary>
         /// HMACSHA384加密值(base64结果)
         /// </summary>
-        public string HMACSHA384Base64 => new HMACSHA384().Base64Encoder(Key, Str);
+        public string HMACSHA384Base64 
+            => new HMACSHA384().Base64Encoder(Key, Str);
 
         /// <summary>
         /// SHA512加密值
         /// </summary>
-        public string SHA512 => System.Security.Cryptography.SHA512.Create().Encoder(Str);
+        public string SHA512 
+            => System.Security.Cryptography.SHA512.Create().Encoder(Str);
         /// <summary>
         /// HMACSHA512加密值
         /// </summary>
-        public string HMACSHA512 => new HMACSHA512().Encoder(Key, Str);
+        public string HMACSHA512 
+            => new HMACSHA512().Encoder(Key, Str);
         /// <summary>
         /// HMACSHA512加密值(base64结果)
         /// </summary>
-        public string HMACSHA512Base64 => new HMACSHA512().Base64Encoder(Key, Str);
+        public string HMACSHA512Base64
+            => new HMACSHA512().Base64Encoder(Key, Str);
 
         /// <summary>
         /// MD5加密值
         /// </summary>
-        public string MD5 => System.Security.Cryptography.MD5.Create().Encoder(Str);
+        public string MD5 
+            => System.Security.Cryptography.MD5.Create().Encoder(Str);
         /// <summary>
         /// HMACMD5加密值
         /// </summary>
-        public string HMACMD5 => new HMACMD5().Encoder(Key, Str);
+        public string HMACMD5
+            => new HMACMD5().Encoder(Key, Str);
         /// <summary>
         /// HMACMD5加密值(base64结果)
         /// </summary>
-        public string HMACMD5Base64 => new HMACMD5().Base64Encoder(Key, Str);
+        public string HMACMD5Base64
+            => new HMACMD5().Base64Encoder(Key, Str);
 
     }
 
@@ -108,11 +123,13 @@ namespace OYMLCN.Handlers
         /// <summary>
         /// Base64加密
         /// </summary>
-        public string EncodeToBase64 => Convert.ToBase64String(Encoding.UTF8.GetBytes(Str));
+        public string EncodeToBase64 
+            => Convert.ToBase64String(Encoding.UTF8.GetBytes(Str));
         /// <summary>
         /// Base64解密
         /// </summary>
-        public string DecodeFromBase64 => Encoding.UTF8.GetString(Convert.FromBase64String(Str));
+        public string DecodeFromBase64
+            => Encoding.UTF8.GetString(Convert.FromBase64String(Str));
 
         /// <summary>
         /// 原明文字符串转成二进制字符串

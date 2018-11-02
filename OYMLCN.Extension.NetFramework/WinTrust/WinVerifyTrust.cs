@@ -1,5 +1,4 @@
-﻿#if NET461
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace OYMLCN.WinTrust
@@ -163,4 +162,3 @@ namespace OYMLCN.WinTrust
         private WinTrust() { }
     }
 }
-#endif

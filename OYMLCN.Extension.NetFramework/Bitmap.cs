@@ -1,4 +1,3 @@
-#if NET461
 using OYMLCN.Handlers;
 using System;
 using System.Drawing;
@@ -115,4 +114,3 @@ namespace OYMLCN.Extensions
         }
     }
 }
-#endif

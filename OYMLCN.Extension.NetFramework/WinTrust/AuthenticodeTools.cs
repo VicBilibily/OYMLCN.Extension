@@ -1,5 +1,4 @@
-﻿#if NET461
-//using System.Diagnostics;
+﻿//using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -85,4 +84,3 @@ namespace OYMLCN.WinTrust
 
     }
 }
-#endif
