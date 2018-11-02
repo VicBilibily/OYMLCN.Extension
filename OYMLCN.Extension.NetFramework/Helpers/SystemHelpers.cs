@@ -24,20 +24,22 @@ namespace OYMLCN.Helpers
                 X64
             }
 
-            static readonly Dictionary<RegistryHive, UIntPtr> _hiveKeys = new Dictionary<RegistryHive, UIntPtr> {
-                { RegistryHive.ClassesRoot, new UIntPtr(0x80000000u) },
-                { RegistryHive.CurrentConfig, new UIntPtr(0x80000005u) },
-                { RegistryHive.CurrentUser, new UIntPtr(0x80000001u) },
-                { RegistryHive.DynData, new UIntPtr(0x80000006u) },
-                { RegistryHive.LocalMachine, new UIntPtr(0x80000002u) },
-                { RegistryHive.PerformanceData, new UIntPtr(0x80000004u) },
-                { RegistryHive.Users, new UIntPtr(0x80000003u) }
-            };
+            static readonly Dictionary<RegistryHive, UIntPtr> _hiveKeys =
+                new Dictionary<RegistryHive, UIntPtr> {
+                    { RegistryHive.ClassesRoot, new UIntPtr(0x80000000u) },
+                    { RegistryHive.CurrentConfig, new UIntPtr(0x80000005u) },
+                    { RegistryHive.CurrentUser, new UIntPtr(0x80000001u) },
+                    { RegistryHive.DynData, new UIntPtr(0x80000006u) },
+                    { RegistryHive.LocalMachine, new UIntPtr(0x80000002u) },
+                    { RegistryHive.PerformanceData, new UIntPtr(0x80000004u) },
+                    { RegistryHive.Users, new UIntPtr(0x80000003u) }
+                };
 
-            static readonly Dictionary<RegistryHiveType, RegistryAccessMask> _accessMasks = new Dictionary<RegistryHiveType, RegistryAccessMask> {
-                { RegistryHiveType.X64, RegistryAccessMask.Wow6464 },
-                { RegistryHiveType.X86, RegistryAccessMask.WoW6432 }
-            };
+            static readonly Dictionary<RegistryHiveType, RegistryAccessMask> _accessMasks =
+                new Dictionary<RegistryHiveType, RegistryAccessMask> {
+                    { RegistryHiveType.X64, RegistryAccessMask.Wow6464 },
+                    { RegistryHiveType.X86, RegistryAccessMask.WoW6432 }
+                };
 
             [Flags]
             public enum RegistryAccessMask
@@ -57,12 +59,7 @@ namespace OYMLCN.Helpers
             }
 
             [DllImport("advapi32.dll", CharSet = CharSet.Auto)]
-            public static extern int RegOpenKeyEx(
-              UIntPtr hKey,
-              string subKey,
-              uint ulOptions,
-              uint samDesired,
-              out IntPtr hkResult);
+            public static extern int RegOpenKeyEx(UIntPtr hKey, string subKey, uint ulOptions, uint samDesired, out IntPtr hkResult);
 
             public static RegistryKey OpenBaseKey(RegistryHive registryHive, RegistryHiveType registryType)
             {
@@ -113,12 +110,15 @@ namespace OYMLCN.Helpers
 
         private delegate bool IsWow64ProcessDelegate([In] IntPtr handle, [Out] out bool isWow64Process);
 
-        internal static bool IsOS64Bit()
+        internal static bool IsOS64Bit
         {
-            if (IntPtr.Size == 8 || (IntPtr.Size == 4 && Is32BitProcessOn64BitProcessor()))
-                return true;
-            else
-                return false;
+            get
+            {
+                if (IntPtr.Size == 8 || (IntPtr.Size == 4 && Is32BitProcessOn64BitProcessor))
+                    return true;
+                else
+                    return false;
+            }
         }
 
         private static IsWow64ProcessDelegate GetIsWow64ProcessDelegate()
@@ -136,19 +136,22 @@ namespace OYMLCN.Helpers
             return null;
         }
 
-        private static bool Is32BitProcessOn64BitProcessor()
+        private static bool Is32BitProcessOn64BitProcessor
         {
-            IsWow64ProcessDelegate fnDelegate = GetIsWow64ProcessDelegate();
+            get
+            {
+                IsWow64ProcessDelegate fnDelegate = GetIsWow64ProcessDelegate();
 
-            if (fnDelegate == null)
-                return false;
+                if (fnDelegate == null)
+                    return false;
 
-            bool retVal = fnDelegate.Invoke(Process.GetCurrentProcess().Handle, out bool isWow64);
+                bool retVal = fnDelegate.Invoke(Process.GetCurrentProcess().Handle, out bool isWow64);
 
-            if (retVal == false)
-                return false;
+                if (retVal == false)
+                    return false;
 
-            return isWow64;
+                return isWow64;
+            }
         }
         #endregion
 #endif
@@ -167,7 +170,7 @@ namespace OYMLCN.Helpers
 #if NET35
                 return RegistryExtensions.OpenBaseKey(
                     hive,
-                    IsOS64Bit() ? RegistryExtensions.RegistryHiveType.X64 : RegistryExtensions.RegistryHiveType.X86
+                    IsOS64Bit ? RegistryExtensions.RegistryHiveType.X64 : RegistryExtensions.RegistryHiveType.X86
                     ).OpenSubKey(name, writable);
 #else
                 return RegistryKey.OpenBaseKey(
@@ -248,15 +251,18 @@ namespace OYMLCN.Helpers
             /// <summary>
             /// 使用自动代理设置
             /// </summary>
-            public void SetWithAutoConfig() => SetProxy(true, false);
+            public void SetWithAutoConfig()
+                => SetProxy(true, false);
             /// <summary>
             /// 使用全局代理设置
             /// </summary>
-            public void SetGlobalProxy() => SetProxy(true, true);
+            public void SetGlobalProxy()
+                => SetProxy(true, true);
             /// <summary>
             /// 禁用系统代理设置
             /// </summary>
-            public void DisableProxy() => SetProxy(false, false);
+            public void DisableProxy()
+                => SetProxy(false, false);
 
         }
 
@@ -269,7 +275,8 @@ namespace OYMLCN.Helpers
             /// 注册启动项到注册表
             /// </summary>
             /// <param name="procotol"></param>
-            public static void Reg(string procotol) => Reg(procotol, ExecutablePath);
+            public static void Reg(string procotol)
+                => Reg(procotol, ExecutablePath);
             /// <summary>
             /// 注册启动项到注册表
             /// </summary>
@@ -291,9 +298,9 @@ namespace OYMLCN.Helpers
             /// 取消注册
             /// </summary>
             /// <param name="procotol"></param>
-            public static void UnReg(string procotol) =>
+            public static void UnReg(string procotol)
                 //直接删除节点
-                Registry.ClassesRoot.DeleteSubKeyTree(procotol);
+                => Registry.ClassesRoot.DeleteSubKeyTree(procotol);
         }
 
         /// <summary>
@@ -306,7 +313,8 @@ namespace OYMLCN.Helpers
             /// 将启动程序的主程序设置为开机启动项目（仅当前用户）
             /// </summary>
             /// <param name="programKey">程序集唯一标识</param>
-            public AutoStartup(string programKey) => Key = programKey;
+            public AutoStartup(string programKey)
+                => Key = programKey;
 
             /// <summary>
             /// 注册开机启动

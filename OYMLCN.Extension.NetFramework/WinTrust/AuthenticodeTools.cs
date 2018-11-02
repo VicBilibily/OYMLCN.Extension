@@ -20,13 +20,15 @@ namespace OYMLCN.WinTrust
         /// 本程序集路径
         /// </summary>
         ///<returns></returns>
-        static string AssemblyPath => Assembly.GetExecutingAssembly().CodeBase.Substring(8);
+        static string AssemblyPath 
+            => Assembly.GetExecutingAssembly().CodeBase.Substring(8);
 
         /// <summary>
         /// 检查执行程序签名
         /// </summary>
         /// <returns>如通过则返回证书信息，否则为Null</returns>
-        public static X509Certificate2 CheckEXE() => CheckDLL(Helpers.SystemHelpers.ExecutablePath);
+        public static X509Certificate2 CheckEXE()
+            => CheckDLL(Helpers.SystemHelpers.ExecutablePath);
 
         /// <summary>
         /// 检查指定程序集签名

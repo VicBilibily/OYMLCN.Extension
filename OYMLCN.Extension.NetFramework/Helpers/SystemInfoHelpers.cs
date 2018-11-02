@@ -31,7 +31,8 @@ namespace OYMLCN.Helpers
             private static extern void GlobalMemoryStatus(ref MEMORY_INFO meminfo);
 
             private MEMORY_INFO MemInfo = new MEMORY_INFO();
-            internal Memory() => GlobalMemoryStatus(ref MemInfo);
+            internal Memory()
+                => GlobalMemoryStatus(ref MemInfo);
 
 
             internal uint PhysicalMemorySize = 0, FreePhysicalMemory = 0,
@@ -41,31 +42,38 @@ namespace OYMLCN.Helpers
             /// <summary>
             /// 正在使用的内存百分比
             /// </summary>
-            public uint UsedPercent => MemInfo.dwMemoryLoad;
+            public uint UsedPercent
+                => MemInfo.dwMemoryLoad;
             /// <summary>
             /// 安装的物理内存总量
             /// </summary>
-            public uint Total => PhysicalMemorySize > 0 ? PhysicalMemorySize : MemInfo.dwTotalPhys / 1024;
+            public uint Total
+                => PhysicalMemorySize > 0 ? PhysicalMemorySize : MemInfo.dwTotalPhys / 1024;
             /// <summary>
             /// 可使用的物理内存
             /// </summary>
-            public uint Availale => FreePhysicalMemory > 0 ? FreePhysicalMemory : MemInfo.dwAvailPhys / 1024;
+            public uint Availale
+                => FreePhysicalMemory > 0 ? FreePhysicalMemory : MemInfo.dwAvailPhys / 1024;
             /// <summary>
             /// 交换文件总大小
             /// </summary>
-            public uint TotalSwap => TotalSwapSpaceSize > 0 ? TotalSwapSpaceSize : MemInfo.dwTotalPageFile / 1024;
+            public uint TotalSwap
+                => TotalSwapSpaceSize > 0 ? TotalSwapSpaceSize : MemInfo.dwTotalPageFile / 1024;
             /// <summary>
             /// 尚可交换文件大小为
             /// </summary>
-            public uint AvailableSwap => FreeSpaceInPagingFiles > 0 ? FreeSpaceInPagingFiles : MemInfo.dwAvailPageFile / 1024;
+            public uint AvailableSwap
+                => FreeSpaceInPagingFiles > 0 ? FreeSpaceInPagingFiles : MemInfo.dwAvailPageFile / 1024;
             /// <summary>
             /// 总虚拟内存
             /// </summary>
-            public uint TotalVirtual => VirtualMemorySize > 0 ? VirtualMemorySize : MemInfo.dwTotalVirtual / 1024;
+            public uint TotalVirtual
+                => VirtualMemorySize > 0 ? VirtualMemorySize : MemInfo.dwTotalVirtual / 1024;
             /// <summary>
             /// 可用虚拟内存
             /// </summary>
-            public uint AvailableVirtual => FreeVirtualMemory > 0 ? FreeVirtualMemory : MemInfo.dwAvailVirtual / 1024;
+            public uint AvailableVirtual
+                => FreeVirtualMemory > 0 ? FreeVirtualMemory : MemInfo.dwAvailVirtual / 1024;
         }
         private static Memory _memoryInfo;
         /// <summary>
@@ -114,41 +122,50 @@ namespace OYMLCN.Helpers
             /// 要正确获取Win10及Win8.1的版本号
             /// 请参考http://www.cnblogs.com/chihirosan/p/5139078.html
             /// </summary>
-            public static string Version => Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
+            public static string Version
+                => Environment.OSVersion.Version.Major + "." + Environment.OSVersion.Version.Minor;
 
             /// <summary>
             /// 判断系统是否为Windows Server2008
             /// </summary>
-            public static bool IsWindows2008 => Version == "6.0";
+            public static bool IsWindows2008
+                => Version == "6.0";
             /// <summary>
             /// 判断系统是否为Windows7/Server2012 R2
             /// </summary>
-            public static bool IsWindows7 => Version == "6.1";
+            public static bool IsWindows7
+                => Version == "6.1";
             /// <summary>
             /// 判断系统是否为Windows8/Server2012
             /// </summary>
-            public static bool IsWindows8 => Version == "6.2";
+            public static bool IsWindows8
+                => Version == "6.2";
             /// <summary>
             /// 判断系统是否为Windows8.1/Server2012 R2
             /// </summary>
-            public static bool IsWindows81 => Version == "6.3";
+            public static bool IsWindows81
+                => Version == "6.3";
             /// <summary>
             /// 判断系统是否为Windows10/Server2016
             /// </summary>
-            public static bool IsWindows10 => Environment.OSVersion.Version.Major == 10;
+            public static bool IsWindows10
+                => Environment.OSVersion.Version.Major == 10;
 
             /// <summary>
             /// 判断系统版本是否高于或是Windows Server2008
             /// </summary>
-            public static bool IsWindows2008OrHigher => Environment.OSVersion.Version.Major >= 6;
+            public static bool IsWindows2008OrHigher
+                => Environment.OSVersion.Version.Major >= 6;
             /// <summary>
             /// 判断系统版本是否高于或是Windows7/Server2012 R2
             /// </summary>
-            public static bool IsWindows7OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1 || Environment.OSVersion.Version.Major > 6;
+            public static bool IsWindows7OrHigher
+                => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1 || Environment.OSVersion.Version.Major > 6;
             /// <summary>
             /// 判断系统版本是否高于或是Windows7/Server2012 R2
             /// </summary>
-            public static bool IsWindows8OrHigher => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2 || Environment.OSVersion.Version.Major > 6;
+            public static bool IsWindows8OrHigher
+                => Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2 || Environment.OSVersion.Version.Major > 6;
 
         }
 

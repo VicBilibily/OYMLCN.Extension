@@ -1,5 +1,4 @@
-﻿#if NET461
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace OYMLCN.WinForm.Extensions
 {
@@ -56,4 +55,3 @@ namespace OYMLCN.WinForm.Extensions
         }
     }
 }
-#endif

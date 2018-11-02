@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OYMLCN.Extension.WinForm</name>
+    </assembly>
+    <members>
+        <member name="T:OYMLCN.WinForm.Extensions.ComboBoxExtensions">
+            <summary>
+            ComboBoxExtension
+            </summary>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.ClearItems(System.Windows.Forms.ComboBox)">
+            <summary>
+            清空选项
+            </summary>
+            <param name="cb"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.SelectItem(System.Windows.Forms.ComboBox,System.Object,System.Object)">
+            <summary>
+            选中指定选项
+            </summary>
+            <param name="cb"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.AddItem(System.Windows.Forms.ComboBox,System.Object,System.Object)">
+            <summary>
+            添加选项
+            </summary>
+            <param name="cb"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.GetSelectedItem(System.Windows.Forms.ComboBox)">
+            <summary>
+            获取选中项
+            </summary>
+            <param name="cb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.GetSelectedItemKey``1(System.Windows.Forms.ComboBox)">
+            <summary>
+            获取选中项的键
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="cb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.GetSelectedItemValue``1(System.Windows.Forms.ComboBox)">
+            <summary>
+            获取选中项的值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="cb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ComboBoxExtensions.Default(System.Windows.Forms.ComboBox)">
+            <summary>
+            设置默认参数
+            </summary>
+            <param name="cb"></param>
+        </member>
+        <member name="T:OYMLCN.WinForm.Extensions.ControlExtensions">
+            <summary>
+            ControlExtension
+            </summary>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ControlExtensions.GetChildControls``1(System.Windows.Forms.Control)">
+            <summary>
+            获取全部子控件
+            </summary>
+            <typeparam name="TControl"></typeparam>
+            <param name="control"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ControlExtensions.SetNotifyIconText(System.Windows.Forms.NotifyIcon,System.String)">
+            <summary>
+            设置任务栏图标提示文字
+            </summary>
+            <param name="ni"></param>
+            <param name="text"></param>
+        </member>
+        <member name="T:OYMLCN.WinForm.Extensions.ListViewExtensions">
+            <summary>
+            ListViewExtension
+            </summary>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ListViewExtensions._1_BeginUpdate(System.Windows.Forms.ListView)">
+            <summary>
+            1.开始更新
+            </summary>
+            <param name="view"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ListViewExtensions._2_AddHeader(System.Windows.Forms.ListView,System.String,System.Int32)">
+            <summary>
+            2.添加标题
+            </summary>
+            <param name="view"></param>
+            <param name="title"></param>
+            <param name="width"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ListViewExtensions._3_AddData(System.Windows.Forms.ListView,System.Object[])">
+            <summary>
+            3.添加数据
+            </summary>
+            <param name="view"></param>
+            <param name="data"></param>
+        </member>
+        <member name="M:OYMLCN.WinForm.Extensions.ListViewExtensions._4_EndUpdate(System.Windows.Forms.ListView)">
+            <summary>
+            4.更新完毕
+            </summary>
+            <param name="view"></param>
+        </member>
+    </members>
+</doc>

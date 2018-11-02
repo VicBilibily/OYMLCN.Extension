@@ -1,5 +1,4 @@
-﻿#if NET461
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -36,7 +35,7 @@ namespace OYMLCN.WPF.Heplers
             encoder.Save(stream);
             if (saveBmpInDesktop)
                 stream.WriteToFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), Guid.NewGuid() + ".bmp"));
-            return (new Bitmap(stream)).ToBytes().ToBitmapImage();
+            return new Bitmap(stream).ToBytes().ToBitmapImage();
         }
         /// <summary>
         /// 获取元素屏幕截图
@@ -59,4 +58,3 @@ namespace OYMLCN.WPF.Heplers
         }
     }
 }
-#endif

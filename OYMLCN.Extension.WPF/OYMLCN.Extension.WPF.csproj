@@ -4,7 +4,7 @@
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
     <Description>
-      包含已使用到的加解密操作扩展，若需使用，请到GitHub查看源码以做了解。
+      包含已使用到的用于 WPF 的扩展，若需使用，请到GitHub查看源码以做了解。
       不排除大版本更新会大改而不做向前兼容。
     </Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
@@ -16,27 +16,25 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
+    <TargetFrameworks>net35;net461</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension.Encrypt\OYMLCN.Extension.Encrypt.xml</DocumentationFile>
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension.WPF\OYMLCN.Extension.WPF.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension.Encrypt\OYMLCN.Extension.Encrypt.xml</DocumentationFile>
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension.WPF\OYMLCN.Extension.WPF.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
+    <ProjectReference Include="..\OYMLCN.Extension.NetFramework\OYMLCN.Extension.NetFramework.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
-    <PackageReference Include="NETCore.Encrypt">
-      <Version>2.0.7</Version>
-    </PackageReference>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
-
+  
 </Project>

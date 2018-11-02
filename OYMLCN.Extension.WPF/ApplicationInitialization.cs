@@ -73,7 +73,8 @@ namespace OYMLCN.WPF
         /// <summary>
         /// 杀掉程序主线程
         /// </summary>
-        public static void KillMainProcess() => Process.GetCurrentProcess().Kill();
+        public static void KillMainProcess()
+            => Process.GetCurrentProcess().Kill();
 
 
         /// <summary>

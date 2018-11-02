@@ -1,44 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
   <PropertyGroup>
-    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>包含多个项目集合合并，若需了解使用，请到GitHub查看源码以做了解。
-不排除大版本更新会大改而不做向前兼容。</Description>
+    <Description>
+      包含已使用到的基本扩展，若需使用，请到GitHub查看源码以做了解。
+      不排除大版本更新会大改而不做向前兼容。
+    </Description>
     <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.4.7</Version>
+    <Version>2.0.0</Version>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>http://www.wtfpl.net/</PackageLicenseUrl>
-    <PackageReleaseNotes>常用类型方法扩展封装
-扩展类型：CryptographyExtensions、DateTimeExtensions、Extensions、FileExtensions、FormatExtensions、LinqExtensions、StreamExtensions、StringExtensions、WebClientExtensions、XmlExtensions、ZipExtensions
-辅助类型：FormatHelpers、HttpClientHelpers、PaginationHelpers、ProcessHelpers、ReleasingMemoryHelpers、StringHelpers
+  </PropertyGroup>
 
-常见第三方扩展：NewtonsoftJsonExtensions
-第三方SDK：Aliyun.SmsSender | TencentCloud.CosCloud、TencentCloud.SmsSender
-内置第三方开源模块：NETCore.Encrypt
-独立模块：EmailSender、PredicateBuilder
-自建模块：GlobalRegion
-
-常用字词功能集成
-Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆词和关键词分析提取请使用主库OYMLCN.Word。</PackageReleaseNotes>
+  <PropertyGroup>
+    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DocumentationFile>bin\Release\net461\OYMLCN.Extension.xml</DocumentationFile>
-    <LangVersion>7.3</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\OYMLCN.Extension.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net461'">
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -48,7 +33,12 @@ Word：中文字词处理，本库仅包含拼音PinYin(PinYinExtensions)，拆�
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
-  <PropertyGroup>
-    <PackageId>OYMLCN.Extension</PackageId>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>

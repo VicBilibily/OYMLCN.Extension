@@ -9,14 +9,15 @@ namespace OYMLCN.Helpers
     /// </summary>
     public static class CloseWindowHelpers
     {
-        static int GetWindowFromPoint(int xPoint, int yPoint) =>
+        static int GetWindowFromPoint(int xPoint, int yPoint)
+            =>
 #if NET35
-            false ?
+                SystemHelpers.IsOS64Bit ?
 #else
-            Environment.Is64BitProcess ?
+                Environment.Is64BitProcess ?
 #endif
-            WindowFromPoint(new POINT() { x = xPoint, y = yPoint }) :
-            WindowFromPoint(xPoint, yPoint);
+                    WindowFromPoint(new POINT() { x = xPoint, y = yPoint }) :
+                    WindowFromPoint(xPoint, yPoint);
 
         [DllImport("user32", EntryPoint = "WindowFromPoint")]//指定坐标处窗体句柄
         static extern int WindowFromPoint(int xPoint, int yPoint);

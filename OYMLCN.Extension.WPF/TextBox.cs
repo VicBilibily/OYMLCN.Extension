@@ -1,8 +1,4 @@
-﻿#if NET461
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -56,8 +52,7 @@ namespace OYMLCN.WPF.Extensions
             int offset = change[0].Offset;
             if (change[0].AddedLength > 0)
             {
-                double num = 0;
-                if (!Double.TryParse(textBox.Text, out num))
+                if (!double.TryParse(textBox.Text, out double num))
                 {
                     textBox.Text = textBox.Text.Remove(offset, change[0].AddedLength);
                     textBox.Select(offset, 0);
@@ -67,4 +62,3 @@ namespace OYMLCN.WPF.Extensions
 
     }
 }
-#endif

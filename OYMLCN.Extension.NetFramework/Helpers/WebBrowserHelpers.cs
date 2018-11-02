@@ -12,7 +12,7 @@ namespace OYMLCN.Helpers
     /// </summary>
     public static class WebBrowserHelpers
     {
-        static string appName = Process.GetCurrentProcess().ProcessName + ".exe";
+        static readonly string appName = Process.GetCurrentProcess().ProcessName + ".exe";
         #region SetIEKeyforWebBrowserControl
         static void SetIEKeyforWebBrowserControl(string verKey)
         {
@@ -45,51 +45,60 @@ namespace OYMLCN.Helpers
         /// 设置WebBrowser调用 IE11 默认模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE11WebBrowser() => SetIEKeyforWebBrowserControl("11000");
+        public static void UseIE11WebBrowser()
+            => SetIEKeyforWebBrowserControl("11000");
         /// <summary>
         /// 设置WebBrowser调用 IE11 Edge模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE11EdgeWebBrowser() => SetIEKeyforWebBrowserControl("11001");
+        public static void UseIE11EdgeWebBrowser()
+            => SetIEKeyforWebBrowserControl("11001");
         /// <summary>
         /// 设置WebBrowser调用 IE10 默认模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE10WebBrowser() => SetIEKeyforWebBrowserControl("10000");
+        public static void UseIE10WebBrowser()
+            => SetIEKeyforWebBrowserControl("10000");
         /// <summary>
         /// 设置WebBrowser调用 IE10 Standards模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE10StandardsWebBrowser() => SetIEKeyforWebBrowserControl("10001");
+        public static void UseIE10StandardsWebBrowser()
+            => SetIEKeyforWebBrowserControl("10001");
         /// <summary>
         /// 设置WebBrowser调用 IE9 默认模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE9WebBrowser() => SetIEKeyforWebBrowserControl("9000");
+        public static void UseIE9WebBrowser()
+            => SetIEKeyforWebBrowserControl("9000");
         /// <summary>
         /// 设置WebBrowser调用 IE9 Standards模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE9StandardsWebBrowser() => SetIEKeyforWebBrowserControl("9999");
+        public static void UseIE9StandardsWebBrowser()
+            => SetIEKeyforWebBrowserControl("9999");
         /// <summary>
         /// 设置WebBrowser调用 IE8 默认模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE8WebBrowser() => SetIEKeyforWebBrowserControl("8000");
+        public static void UseIE8WebBrowser()
+            => SetIEKeyforWebBrowserControl("8000");
         /// <summary>
         /// 设置WebBrowser调用 IE8 Standards模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE8StandardsWebBrowser() => SetIEKeyforWebBrowserControl("8888");
+        public static void UseIE8StandardsWebBrowser()
+            => SetIEKeyforWebBrowserControl("8888");
         /// <summary>
         /// 设置WebBrowser调用 IE7 模式
         /// <para>需要使用管理员权限</para>
         /// </summary>
-        public static void UseIE7WebBrowser() => SetIEKeyforWebBrowserControl("7000");
+        public static void UseIE7WebBrowser()
+            => SetIEKeyforWebBrowserControl("7000");
         #endregion
 
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool InternetGetCookieEx(string pchURL, string pchCookieName, StringBuilder pchCookieData, ref System.UInt32 pcchCookieData, int dwFlags, IntPtr lpReserved);
+        static extern bool InternetGetCookieEx(string pchURL, string pchCookieName, StringBuilder pchCookieData, ref uint pcchCookieData, int dwFlags, IntPtr lpReserved);
         /// <summary>
         /// 获取指定地址的Cookies
         /// </summary>
@@ -140,7 +149,7 @@ namespace OYMLCN.Helpers
             Struct_INTERNET_PROXY_INFO struct_IPI;
 
             //Filling in structure 
-            if ((strProxy =  strProxy.Trim()).IsNullOrEmpty())
+            if ((strProxy = strProxy.Trim()).IsNullOrEmpty())
                 struct_IPI.dwAccessType = INTERNET_OPEN_TYPE_DIRECT;
             else
                 struct_IPI.dwAccessType = INTERNET_OPEN_TYPE_PROXY;
@@ -164,18 +173,21 @@ namespace OYMLCN.Helpers
         /// </summary>
         /// <param name="strProxy">代理连接</param>
         /// <returns></returns>
-        public static bool SetIEProxy(string strProxy) => InternetSetOption(strProxy);
+        public static bool SetIEProxy(string strProxy)
+            => InternetSetOption(strProxy);
         /// <summary>
         /// 设置代理
         /// </summary>
         /// <param name="port">本地代理端口</param>
         /// <returns></returns>
-        public static bool SetIEProxy(int port) => InternetSetOption("127.0.0.1:" + port.ToString());
+        public static bool SetIEProxy(int port)
+            => InternetSetOption("127.0.0.1:" + port.ToString());
         /// <summary>
         /// 取消代理
         /// </summary>
         /// <returns></returns>
-        public static bool DisableIEProxy() => InternetSetOption(string.Empty);
+        public static bool DisableIEProxy()
+            => InternetSetOption(string.Empty);
         #endregion
 
         const int INTERNET_OPTION_SUPPRESS_BEHAVIOR = 81;

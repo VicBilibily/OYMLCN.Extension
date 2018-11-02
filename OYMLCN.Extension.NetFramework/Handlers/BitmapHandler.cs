@@ -20,7 +20,8 @@ namespace OYMLCN.Handlers
         /// 图片识别处理净化
         /// </summary>
         /// <param name="pic"></param>
-        public BitmapHandler(Bitmap pic) => bmp = new Bitmap(pic);  //转换为Format32bppRgb
+        public BitmapHandler(Bitmap pic) 
+            => bmp = new Bitmap(pic);  //转换为Format32bppRgb
 
         /// <summary>
         /// 缩放图片

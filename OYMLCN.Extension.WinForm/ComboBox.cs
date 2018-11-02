@@ -1,5 +1,4 @@
-﻿#if NET461
-using System.Collections;
+﻿using System.Collections;
 using System.Windows.Forms;
 
 namespace OYMLCN.WinForm.Extensions
@@ -24,7 +23,8 @@ namespace OYMLCN.WinForm.Extensions
         /// <param name="cb"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void SelectItem(this ComboBox cb, object key, object value) => cb.SelectedItem = new DictionaryEntry(key, value);
+        public static void SelectItem(this ComboBox cb, object key, object value) 
+            => cb.SelectedItem = new DictionaryEntry(key, value);
 
         /// <summary>
         /// 添加选项
@@ -32,7 +32,8 @@ namespace OYMLCN.WinForm.Extensions
         /// <param name="cb"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public static void AddItem(this ComboBox cb, object key, object value)=> cb.Items.Add(new DictionaryEntry(key, value));
+        public static void AddItem(this ComboBox cb, object key, object value)
+            => cb.Items.Add(new DictionaryEntry(key, value));
 
         /// <summary>
         /// 获取选中项
@@ -82,4 +83,3 @@ namespace OYMLCN.WinForm.Extensions
         }
     }
 }
-#endif
