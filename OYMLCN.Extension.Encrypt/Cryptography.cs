@@ -1,7 +1,5 @@
-#if !NET35
+#if NETSTANDARD2_0
 using NETCore.Encrypt;
-using NETCore.Encrypt.Extensions.Internal;
-using NETCore.Encrypt.Internal;
 #endif
 using OYMLCN.Handlers;
 using System;
@@ -55,6 +53,27 @@ namespace OYMLCN.Extensions
         public static CryptographyHandler AsCryptography(this string str, string keyOrPrivateKey, string publicKey = null)
             => new CryptographyHandler(str, keyOrPrivateKey, publicKey);
 
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
+        public enum RsaSize
+        {
+            R2048 = 2048,
+            R3072 = 3072,
+            R4096 = 4096
+        }
+#if !NETSTANDARD2_0
+        public class RSAKey
+        {
+            public string PublicKey { get; set; }
+            public string PrivateKey { get; set; }
+            public string Exponent { get; set; }
+            public string Modulus { get; set; }
+        }
+#else
+        public class RSAKey : NETCore.Encrypt.Internal.RSAKey { }
+#endif
+#pragma warning restore CS1591
+
+
 #if !NET35
         /// <summary>
         /// 生成 RSA 公钥和私钥
@@ -72,7 +91,7 @@ namespace OYMLCN.Extensions
                     Modulus = rsa.ExportParameters(false).Modulus.ToHexString()
                 };
 #else
-            return EncryptProvider.CreateRsaKey(rsaSize);
+            return (RSAKey)EncryptProvider.CreateRsaKey((NETCore.Encrypt.RsaSize)rsaSize);
 #endif
         }
 #endif

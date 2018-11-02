@@ -17,7 +17,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
@@ -33,10 +33,8 @@
     <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
-    <PackageReference Include="NETCore.Encrypt">
-      <Version>2.0.7</Version>
-    </PackageReference>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
   </ItemGroup>
 
 </Project>
