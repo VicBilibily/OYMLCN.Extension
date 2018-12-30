@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
+using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -216,6 +217,30 @@ namespace OYMLCN.Helpers
                 _autoConfigPath = autoConfigPath;
             }
 
+            private static readonly string[] _lanIP = {
+                "<local>",
+                "localhost",
+                "127.*",
+                "10.*",
+                "172.16.*",
+                "172.17.*",
+                "172.18.*",
+                "172.19.*",
+                "172.20.*",
+                "172.21.*",
+                "172.22.*",
+                "172.23.*",
+                "172.24.*",
+                "172.25.*",
+                "172.26.*",
+                "172.27.*",
+                "172.28.*",
+                "172.29.*",
+                "172.30.*",
+                "172.31.*",
+                "192.168.*"
+            };
+
             /// <summary>
             /// 设置代理
             /// </summary>
@@ -236,7 +261,7 @@ namespace OYMLCN.Helpers
                             setting.SetValue("AutoConfigURL", $"http://{_host}:{_port.ToString()}/{_autoConfigPath}?t={DateTime.Now.ToString("yyyyMMddHHmmssfff")}");
                         else
                         {
-                            setting.SetValue("ProxyOverride", "<local>;localhost;127.*;10.*;172.16.*;172.17.*;172.18.*;172.19.*;172.20.*;172.21.*;172.22.*;172.23.*;172.24.*;172.25.*;172.26.*;172.27.*;172.28.*;172.29.*;172.30.*;172.31.*;192.168.*");
+                            setting.SetValue("ProxyOverride", _lanIP.Join(";"));
                             setting.SetValue("ProxyServer", $"{_host}:{_port.ToString()}");
                             setting.SetValue("ProxyEnable", 1);
                         }
