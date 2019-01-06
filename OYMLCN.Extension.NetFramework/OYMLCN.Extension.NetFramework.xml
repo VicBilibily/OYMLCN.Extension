@@ -582,12 +582,6 @@
             数字证书签名验证工具
             </summary>
         </member>
-        <member name="P:OYMLCN.WinTrust.AuthenticodeTools.AssemblyPath">
-             <summary>
-             本程序集路径
-             </summary>
-            <returns></returns>
-        </member>
         <member name="M:OYMLCN.WinTrust.AuthenticodeTools.CheckEXE">
             <summary>
             检查执行程序签名
@@ -600,13 +594,6 @@
             </summary>
             <param name="filepath">文件路径</param>
             <returns>如通过则返回证书信息，否则为Null</returns>
-        </member>
-        <member name="M:OYMLCN.WinTrust.AuthenticodeTools.CheckEXEAndDLLSignWithSameCodeSigningCertificate(System.String)">
-            <summary>
-            检查执行程序签名是否与指定程序集签名相同
-            </summary>
-            <param name="filepath"></param>
-            <returns></returns>
         </member>
         <member name="P:OYMLCN.WinTrust.AuthenticodeTools.CurrentUserCertificates">
             <summary>
