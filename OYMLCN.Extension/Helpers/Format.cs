@@ -36,21 +36,13 @@ namespace OYMLCN.Helpers
         public static Dictionary<string, string> QueryStringToDictionary(string queryString)
         {
             var dic = new Dictionary<string, string>();
-#if NET35
-            queryString = HttpUtility.HtmlDecode(queryString);
-#else
             queryString = WebUtility.HtmlDecode(queryString);
-#endif
             queryString = queryString.SplitThenGetLast("?");
             foreach (var item in queryString.SplitBySign("&"))
             {
                 var key = item.SplitThenGetFirst("=");
                 var value = item.SubString(key.Length + 1);
-#if NET35
-                value = HttpUtility.UrlDecode(value);
-#else
                 value = WebUtility.UrlDecode(value);
-#endif
                 dic.Add(key, value);
             }
             return dic;

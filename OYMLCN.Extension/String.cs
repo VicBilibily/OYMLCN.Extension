@@ -52,13 +52,7 @@ namespace OYMLCN.Extensions
         /// <param name="str"></param>
         /// <returns></returns>
         public static bool IsNullOrWhiteSpace(this string str)
-        {
-#if NET35
-            return string.IsNullOrEmpty(str.Trim());
-#else
-            return string.IsNullOrWhiteSpace(str);
-#endif
-        }
+            => string.IsNullOrWhiteSpace(str);
         /// <summary>
         /// 判断字符串是否为空/空格
         /// </summary>
@@ -574,7 +568,7 @@ namespace OYMLCN.Extensions
         #endregion
 
         #region 简繁体转换
-#if NET35 || NET461
+#if NET461
         /// <summary>
         /// 中文字符工具类
         /// </summary>

@@ -34,11 +34,7 @@ namespace OYMLCN.Extensions
         public static byte[] GZipCompress(this byte[] rawData)
         {
             MemoryStream ms = new MemoryStream();
-#if NET35
-            using (GZipStream compressedzipStream = new GZipStream(ms, CompressionMode.Compress, true))
-#else
             using (GZipStream compressedzipStream = new GZipStream(ms, CompressionLevel.Optimal, true))
-#endif
                 compressedzipStream.Write(rawData, 0, rawData.Length);
             return ms.ToArray();
         }
@@ -127,7 +123,7 @@ namespace OYMLCN.Extensions
         public static void GZipDecompressToFile(this FileInfo file, string fileName)
             => file.ReadToStream().GZipDecompress().WriteToFile(fileName);
 
-#if !NET35
+#if NET35
         /// <summary>
         /// 使用指定的文件夹创建Zip压缩文件
         /// </summary>

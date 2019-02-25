@@ -1,4 +1,3 @@
-#if !NET35
 using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
@@ -315,4 +314,3 @@ namespace OYMLCN.Helpers
 
     }
 }
-#endif

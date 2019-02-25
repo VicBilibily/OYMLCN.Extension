@@ -16,7 +16,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <TargetFrameworks>net35;net461</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>

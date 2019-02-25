@@ -19,11 +19,7 @@ namespace OYMLCN.Handlers
         /// </summary>
         public HtmlFormatHandler HtmlDecode()
         {
-#if NET35
-            Result = HttpUtility.HtmlDecode(Result);
-#else
             Result = WebUtility.HtmlDecode(Result);
-#endif
             return this;
         }
         /// <summary>
@@ -33,11 +29,7 @@ namespace OYMLCN.Handlers
         {
             get
             {
-#if NET35
-                return HttpUtility.HtmlEncode(Result);
-#else
                 return WebUtility.HtmlEncode(Result);
-#endif
             }
         }
 

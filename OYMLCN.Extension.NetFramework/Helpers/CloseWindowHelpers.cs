@@ -11,11 +11,7 @@ namespace OYMLCN.Helpers
     {
         static int GetWindowFromPoint(int xPoint, int yPoint)
             =>
-#if NET35
-                SystemHelpers.IsOS64Bit ?
-#else
                 Environment.Is64BitProcess ?
-#endif
                     WindowFromPoint(new POINT() { x = xPoint, y = yPoint }) :
                     WindowFromPoint(xPoint, yPoint);
 

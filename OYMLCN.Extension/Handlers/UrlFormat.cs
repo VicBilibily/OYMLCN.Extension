@@ -1,7 +1,6 @@
 ﻿using OYMLCN.Extensions;
 using System;
 using System.Net;
-using System.Web;
 
 namespace OYMLCN.Handlers
 {
@@ -18,30 +17,12 @@ namespace OYMLCN.Handlers
         /// 将URL转义为合法参数地址
         /// </summary>
         public string UrlEncode
-        {
-            get
-            {
-#if NET35
-                return HttpUtility.UrlEncode(Url);
-#else
-                return WebUtility.UrlEncode(Url);
-#endif
-            }
-        }
+            => WebUtility.UrlEncode(Url);
         /// <summary>
         /// 被转义的URL字符串还原
         /// </summary>
         public string UrlDecode
-        {
-            get
-            {
-#if NET35
-                return HttpUtility.UrlDecode(Url);
-#else
-                return WebUtility.UrlDecode(Url);
-#endif
-            }
-        }
+            => WebUtility.UrlDecode(Url);
         /// <summary>
         /// 将 URL 中的参数名称/值编码为合法的格式。
         /// </summary>

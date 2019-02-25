@@ -32,7 +32,7 @@ namespace OYMLCN.Helpers
                     p.Kill();
         }
 
-#if NET35 || NET461
+#if NET461
         /// <summary>
         /// 确定当前主体是否属于具有指定 Administrator 的 Windows 用户组
         /// </summary>

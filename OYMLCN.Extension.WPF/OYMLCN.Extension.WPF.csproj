@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net461</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

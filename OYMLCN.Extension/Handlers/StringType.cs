@@ -89,7 +89,6 @@ namespace OYMLCN.Handlers
                 return Convert.ToInt64(str);
             }
         }
-#if !NET35
         /// <summary>
         /// 转换字符串为可空BigInteger类型
         /// </summary>
@@ -103,7 +102,6 @@ namespace OYMLCN.Handlers
                 return System.Numerics.BigInteger.Parse(str);
             }
         }
-#endif
 
         /// <summary>
         /// 转换字符串为可空Single/float类型
@@ -171,12 +169,10 @@ namespace OYMLCN.Handlers
         /// </summary>
         public long Long
             => NullableLong ?? 0;
-#if !NET35
         /// <summary>
         /// 转换字符串为可空BigInteger类型
         /// </summary>
         public System.Numerics.BigInteger BigInteger => NullableBigInteger ?? 0;
-#endif
 
         /// <summary>
         /// 转换字符串为Single/float类型

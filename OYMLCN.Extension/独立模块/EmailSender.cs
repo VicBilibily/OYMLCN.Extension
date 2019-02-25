@@ -59,11 +59,7 @@ namespace OYMLCN
         /// <returns>成功返回true，否则报错</returns>
         public bool SendEmail(string subject, string body, params string[] targets)
         {
-#if NET35
-            SmtpClient client = new SmtpClient();
-#else
             using (SmtpClient client = new SmtpClient())
-#endif
             {
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.Host = SMTP;

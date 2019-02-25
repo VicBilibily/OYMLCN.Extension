@@ -143,13 +143,7 @@ namespace OYMLCN.Extensions
         /// <param name="separator"></param>
         /// <returns></returns>
         public static string Join(this IEnumerable<string> list, string separator = "")
-        {
-#if NET35
-            return string.Join(separator, list.ToArray());
-#else
-            return string.Join(separator, list);
-#endif
-        }
+            => string.Join(separator, list);
         /// <summary>
         /// 搜索字符串数组
         /// </summary>

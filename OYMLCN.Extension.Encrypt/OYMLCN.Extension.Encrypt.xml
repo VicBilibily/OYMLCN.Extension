@@ -26,6 +26,12 @@
             <param name="publicKey">RSA公钥</param>
             <returns></returns>
         </member>
+        <member name="M:OYMLCN.Extensions.CryptographyExtensions.GenerateRSAKeys(OYMLCN.Extensions.CryptographyExtensions.RsaSize)">
+            <summary>
+            生成 RSA 公钥和私钥
+            </summary>
+            <param name="rsaSize">密钥长度</param>
+        </member>
         <member name="T:OYMLCN.Handlers.EncryptHandler">
             <summary>
             加密处理

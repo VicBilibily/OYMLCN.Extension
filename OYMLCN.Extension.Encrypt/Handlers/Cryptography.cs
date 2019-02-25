@@ -255,7 +255,7 @@ namespace OYMLCN.Handlers
         {
             get
             {
-#if NET35 || NET461
+#if NET461
                 var rsa = new RSACryptoServiceProvider();
                 rsa.FromXmlString(PublicKey ?? Key);
                 var cipherbytes = rsa.Encrypt(Encoding.UTF8.GetBytes(Str), false);
@@ -274,7 +274,7 @@ namespace OYMLCN.Handlers
         {
             get
             {
-#if NET35 || NET461
+#if NET461
                 var rsa = new RSACryptoServiceProvider();
                 rsa.FromXmlString(Key);
                 var cipherbytes = rsa.Decrypt(Convert.FromBase64String(Str), false);

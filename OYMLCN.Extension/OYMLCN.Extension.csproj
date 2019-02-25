@@ -17,17 +17,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net461'">
-    <Reference Include="System.Web" />
-  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <Reference Include="System.Web" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>

@@ -74,7 +74,6 @@ namespace OYMLCN.Extensions
 #pragma warning restore CS1591
 
 
-#if !NET35
         /// <summary>
         /// 生成 RSA 公钥和私钥
         /// </summary>
@@ -94,7 +93,6 @@ namespace OYMLCN.Extensions
             return (RSAKey)EncryptProvider.CreateRsaKey((NETCore.Encrypt.RsaSize)rsaSize);
 #endif
         }
-#endif
 
     }
 }
