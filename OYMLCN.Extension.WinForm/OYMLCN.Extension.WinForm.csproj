@@ -3,16 +3,14 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>
-      包含已使用到的用于 WinFrom 的扩展，若需使用，请到GitHub查看源码以做了解。
-      不排除大版本更新会大改而不做向前兼容。
-    </Description>
-    <Copyright>base OYMLCN with WTFPL</Copyright>
-    <Version>1.0.0-alpha1</Version>
-    <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+    <Description>包含已使用到的用于 WinFrom 的扩展，若需使用，请到GitHub查看源码以做了解。
+不排除大版本更新会大改而不做向前兼容。</Description>
+    <Copyright>The MIT License</Copyright>
+    <Version>1.0.0</Version>
+    <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
+    <RepositoryUrl>ssh://git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicenseUrl>http://www.wtfpl.net/</PackageLicenseUrl>
+    <PackageLicenseUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/raw/branch/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup>

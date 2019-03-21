@@ -2168,39 +2168,3 @@
         </member>
     </members>
 </doc>
-.Func{``0,System.Boolean}})">
-            <summary>
-            创建条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="predicate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合And条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Or条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Not``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Not条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="expression"></param>
-            <returns></returns>
-        </member>
-    </members>
-</doc>
