@@ -7,9 +7,9 @@
     <Description>包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
-    <RepositoryUrl>ssh://git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+    <RepositoryUrl>git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/raw/branch/master/LICENSE.txt</PackageLicenseUrl>
   </PropertyGroup>

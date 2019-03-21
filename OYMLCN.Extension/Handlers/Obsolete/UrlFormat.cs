@@ -1,4 +1,4 @@
-﻿using OYMLCN.Extensions;
+using OYMLCN.Extensions;
 using System;
 using System.Net;
 
@@ -33,7 +33,7 @@ namespace OYMLCN.Handlers
         /// 获取url字符串的的协议域名地址
         /// </summary>
         public string UrlHost
-            => Url.AsType().Uri.GetHost();
+            => Url.ConvertToUri().GetHost();
 
     }
 }

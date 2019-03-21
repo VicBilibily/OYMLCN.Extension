@@ -16,10 +16,26 @@ namespace OYMLCN.Extensions
     public static partial class StringExtensions
     {
         /// <summary>
+        /// 将字符串作为HTML格式文本处理
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        public static HtmlFormatHandler AsHtmlFormat(this string html)
+            => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
+        /// <summary>
+        /// 将字符串作为URL格式文本处理
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        [Obsolete("此扩展即将弃用，请使用Url_扩展")]
+        public static UrlFormatHandler AsUrlFormat(this string url)
+            => url.IsNotNullOrWhiteSpace() ? new UrlFormatHandler(url) : null;
+        /// <summary>
         /// 格式判断或格式化
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
+        [Obsolete("此扩展即将弃用，请使用To_/FormatIs_/FormatAs_扩展")]
         public static StringFormatHandler AsFormat(this string str)
             => new StringFormatHandler(str);
         /// <summary>
@@ -27,6 +43,7 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
+        [Obsolete("此扩展即将弃用，请使用ConvertTo_扩展")]
         public static StringTypeHandler AsType(this string str)
             => new StringTypeHandler(str);
 
@@ -149,33 +166,7 @@ namespace OYMLCN.Extensions
             }
             return attrs.Distinct().Join(splitKey);
         }
-
-
-        /// <summary>
-        /// 根据占位符紧接多个字符串 即string.Format
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        public static string StringFormat(this string str, params string[] param)
-            => string.Format(str, param);
-        /// <summary>
-        /// 分割字符串未每一个单字
-        /// </summary>
-        /// <param name="str">待分割字符串</param>
-        /// <returns></returns>
-        public static string[] StringToArray(this string str)
-            => str?.Select(x => x.ToString()).ToArray() ?? new string[0];
-
-        /// <summary>
-        /// 将Boolean转换为Yes是或No否
-        /// </summary>
-        /// <param name="boolean"></param>
-        /// <param name="cnString">是否返回中文是/否</param>
-        /// <returns></returns>
-        public static string ToYesOrNo(this bool boolean, bool cnString = true)
-            => cnString ? boolean ? "是" : "否" : boolean ? "Yes" : "No";
-
+       
 
         #region 字符串分割
         /// <summary>
@@ -259,85 +250,7 @@ namespace OYMLCN.Extensions
             return word.SplitBySign(stop, StringSplitOptions.RemoveEmptyEntries).Join(wrap);
         }
 
-        #region 编码转换
-        /// <summary>
-        /// 转化为半角字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string ToDBC(this string str)
-        {
-            var c = str.ToCharArray();
-            for (int i = 0; i < c.Length; i++)
-            {
-                // 全角空格为12288，半角空格为32
-                if (c[i] == 12288)
-                {
-                    c[i] = (char)32;
-                    continue;
-                }
-                // 其他字符半角(33-126)与全角(65281-65374)的对应关系是：均相差65248
-                if (c[i] > 65280 && c[i] < 65375)
-                    c[i] = (char)(c[i] - 65248);
-            }
-            return new string(c);
-        }
-        /// <summary>
-        /// 转化为全角字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string ToSBC(this string str)
-        {
-            var c = str.ToCharArray();
-            for (int i = 0; i < c.Length; i++)
-            {
-                if (c[i] == 32)
-                {
-                    c[i] = (char)12288;
-                    continue;
-                }
-                if (c[i] > 32 && c[i] < 127)
-                    c[i] = (char)(c[i] + 65248);
-            }
-            return new string(c);
-        }
-        /// <summary>
-        /// ASCII转小写
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string ToLowerForASCII(this string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-                return value;
-            var sb = new StringBuilder(value.Length);
-            foreach (var c in value)
-                if (c < 'A' || c > 'Z')
-                    sb.Append(c);
-                else
-                    sb.Append((char)(c + 0x20));
-            return sb.ToString();
-        }
-        /// <summary>
-        /// ASCII转大写
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns> 
-        public static string ToUpperForASCII(this string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-                return value;
-            var sb = new StringBuilder(value.Length);
-            foreach (var c in value)
-                if (c < 'a' || c > 'z')
-                    sb.Append(c);
-                else
-                    sb.Append((char)(c - 0x20));
-            return sb.ToString();
-        }
-        #endregion
-
+       
         /// <summary>
         /// 正则匹配所有结果
         /// </summary>
@@ -604,53 +517,5 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-
-        /// <summary>
-        /// 将字符串填充到Steam中
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="encoder">默认使用UTF-8进行编码</param>
-        /// <returns></returns>
-        public static Stream StringToStream(this string str, Encoding encoder = null)
-            => new MemoryStream(str.StringToBytes(encoder));
-
-        /// <summary>
-        /// 将字符串填充到byte[]字节流中
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="encoder">默认使用UTF-8进行编码</param>
-        /// <returns></returns>
-        public static byte[] StringToBytes(this string str, Encoding encoder = null)
-            => encoder?.GetBytes(str) ?? Encoding.UTF8.GetBytes(str);
-
-        /// <summary>
-        /// 16进制字符串转换
-        /// </summary>
-        /// <param name="hex"></param>
-        /// <returns></returns>
-        public static byte[] HexToBytes(this string hex)
-        {
-            if (hex.Length == 0)
-                return new byte[] { 0 };
-            if (hex.Length % 2 == 1)
-                hex = "0" + hex;
-            byte[] result = new byte[hex.Length / 2];
-            for (int i = 0; i < hex.Length / 2; i++)
-                result[i] = byte.Parse(hex.Substring(2 * i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
-            return result;
-        }
-
-        /// <summary>
-        /// 16进制字符串转换
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        public static string ToHexString(this byte[] bytes)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-                sb.Append(bytes[i].ToString("X2"));
-            return sb.ToString();
-        }
     }
 }

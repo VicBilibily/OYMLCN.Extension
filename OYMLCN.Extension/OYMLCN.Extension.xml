@@ -16,14 +16,130 @@
             <param name="dt"></param>
             <returns></returns>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToTimestamp(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetGetYearStart(System.DateTime)">
+            <summary>
+            年 开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetYearEnd(System.DateTime)">
+            <summary>
+            年 结束时间
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetMonthStart(System.DateTime)">
+            <summary>
+            月 开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetMonthEnd(System.DateTime)">
+            <summary>
+            月 结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetWeekStart(System.DateTime)">
+            <summary>
+            周(日)开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetWeekEnd(System.DateTime)">
+            <summary>
+            周(日)结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetWeekStartByMonday(System.DateTime)">
+            <summary>
+            周(一)开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetWeekEndByMonday(System.DateTime)">
+            <summary>
+            周(一)结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDayStart(System.DateTime)">
+            <summary>
+            天 开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDayEnd(System.DateTime)">
+            <summary>
+            天 结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetHourStart(System.DateTime)">
+            <summary>
+            时 开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetHourEnd(System.DateTime)">
+            <summary>
+            时 结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetMinuteStart(System.DateTime)">
+            <summary>
+            分 开始时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetGetMinuteEnd(System.DateTime)">
+            <summary>
+            分 结束时间
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.IsToday(System.DateTime)">
+            <summary>
+            判断是否是当天
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnMonthString(System.DateTime)">
+            <summary>
+            日期转换为中文 年月
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnDatetimeString(System.DateTime,System.Boolean)">
+            <summary>
+            时间转换为中文 年月日时分
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetMonthString(System.DateTime)">
+            <summary>
+            时间转字符 年-月
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDateString(System.DateTime)">
+            <summary>
+            时间转字符 年-月-日
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDatetimeString(System.DateTime,System.Boolean)">
+            <summary>
+            时间转字符 年-月-日 时:分:秒
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetTimeString(System.DateTime,System.Boolean)">
+            <summary>
+            时间转换 时:分
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDayTimeString(System.DateTime,System.Boolean)">
+            <summary>
+            时间转换 日 时:分
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnIntervalString(System.DateTime)">
+            <summary>
+            与现在时间的间隔（中文） --前/后
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToTimestampInt64(System.DateTime)">
             <summary>
             将Datetime转换成时间戳（1970-1-1 00:00:00至target的总秒数）
             </summary>
             <param name="dateTime">DateTime</param>
             <returns>时间戳（1970-1-1 00:00:00至target的总秒数）</returns>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToTimestampInt32(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToTimestamp(System.DateTime)">
             <summary>
             将Datetime转换成时间戳（1970-1-1 00:00:00至target的总秒数）
             </summary>
@@ -326,20 +442,6 @@
             FormatExtension
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.FormatExtensions.AsHtmlFormat(System.String)">
-            <summary>
-            将字符串作为HTML格式文本处理
-            </summary>
-            <param name="html"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.FormatExtensions.AsUrlFormat(System.String)">
-            <summary>
-            将字符串作为URL格式文本处理
-            </summary>
-            <param name="url"></param>
-            <returns></returns>
-        </member>
         <member name="M:OYMLCN.Extensions.FormatExtensions.EnumToString(System.Enum)">
             <summary>
             将枚举值转换为字符串值（替换 _ 标头）
@@ -521,6 +623,26 @@
             <summary>
             StringExtension
             </summary>
+            <summary>
+            StringExtension
+            </summary>
+            <summary>
+            StringExtension
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.AsHtmlFormat(System.String)">
+            <summary>
+            将字符串作为HTML格式文本处理
+            </summary>
+            <param name="html"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.AsUrlFormat(System.String)">
+            <summary>
+            将字符串作为URL格式文本处理
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
         </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.AsFormat(System.String)">
             <summary>
@@ -627,29 +749,6 @@
             <param name="onEnd">新增属性位置</param>
             <returns></returns>
         </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.StringFormat(System.String,System.String[])">
-            <summary>
-            根据占位符紧接多个字符串 即string.Format
-            </summary>
-            <param name="str"></param>
-            <param name="param"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.StringToArray(System.String)">
-            <summary>
-            分割字符串未每一个单字
-            </summary>
-            <param name="str">待分割字符串</param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToYesOrNo(System.Boolean,System.Boolean)">
-            <summary>
-            将Boolean转换为Yes是或No否
-            </summary>
-            <param name="boolean"></param>
-            <param name="cnString">是否返回中文是/否</param>
-            <returns></returns>
-        </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.SplitBySign(System.String,System.String,System.StringSplitOptions)">
             <summary>
             根据标志分割字符串
@@ -715,34 +814,6 @@
             <param name="text"></param>
             <param name="keep">文本中保留的换行符最大数量（文本末尾的换行将不会保留）</param>
             <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToDBC(System.String)">
-            <summary>
-            转化为半角字符串
-            </summary>
-            <param name="str"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToSBC(System.String)">
-            <summary>
-            转化为全角字符串
-            </summary>
-            <param name="str"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToLowerForASCII(System.String)">
-            <summary>
-            ASCII转小写
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToUpperForASCII(System.String)">
-            <summary>
-            ASCII转大写
-            </summary>
-            <param name="value"></param>
-            <returns></returns> 
         </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.RegexMatches(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
             <summary>
@@ -925,6 +996,154 @@
             <param name="str"></param>
             <returns></returns>
         </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToUnicode(System.String)">
+            <summary>
+            普通字符串转Unicode字符串
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.UnicodeToString(System.String)">
+            <summary>
+            Unicode字符串转普通字符串
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsChineseIDCard(System.String)">
+            <summary>
+            验证居民身份证号码
+            验证支持：GB11643-1989、GB11643-1999
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsEmailAddress(System.String)">
+            <summary>
+            判断字符串是否是邮箱地址
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsMobilePhoneNumber(System.String)">
+            <summary>
+            判断字符串是否是手机号码
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsChineseRegString(System.String)">
+            <summary>
+            判断字符是不是汉字
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsNumeric(System.String)">
+            <summary>
+            判断文本是否为数字
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsInteger(System.String)">
+            <summary>
+            判断文本是否为整数
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsUnsignNumeric(System.String)">
+            <summary>
+            判断文本是否为正数
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsNumeric(System.String)">
+            <summary>
+            获取文本中的数字（包括小数）
+            </summar��是不是汉字
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsNumeric(System.String)">
+            <summary>
+            判断文本是否为数字
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsInteger(System.String)">
+            <summary>
+            判断文本是否为整数
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsUnsignNumeric(System.String)">
+            <summary>
+            判断文本是否为正数
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsNumeric(System.String)">
+            <summary>
+            获取文本中的数字（包括小数）
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsIntegerNumeric(System.String)">
+            <summary>
+            获取文本中的整数部分
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToDBC(System.String)">
+            <summary>
+            转化为半角字符串
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToSBC(System.String)">
+            <summary>
+            转化为全角字符串
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToLowerForASCII(System.String)">
+            <summary>
+            ASCII转小写
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToUpperForASCII(System.String)">
+            <summary>
+            ASCII转大写
+            </summary>
+            <param name="value"></param>
+            <returns></returns> 
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.UrlEncode(System.String)">
+            <summary>
+            将URL转义为合法参数地址
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.UrlDecode(System.String)">
+            <summary>
+            被转义的URL字符串还原
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.UrlDataEncode(System.String)">
+            <summary>
+            将 URL 中的参数名称/值编码为合法的格式。
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.UrlHost(System.String)">
+            <summary>
+            获取url字符串的的协议域名地址
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.StringFormat(System.String,System.String[])">
+            <summary>
+            根据占位符紧接多个字符串 即string.Format
+            </summary>
+            <param name="str"></param>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.StringToArray(System.String)">
+            <summary>
+            分割字符串未每一个单字
+            </summary>
+            <param name="str">待分割字符串</param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ToYesOrNo(System.Boolean,System.Boolean)">
+            <summary>
+            将Boolean转换为Yes是或No否
+            </summary>
+            <param name="boolean"></param>
+            <param name="cnString">是否返回中文是/否</param>
+            <returns></returns>
+        </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.StringToStream(System.String,System.Text.Encoding)">
             <summary>
             将字符串填充到Steam中
@@ -954,6 +1173,136 @@
             </summary>
             <param name="bytes"></param>
             <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableSByte(System.String)">
+            <summary>
+            转换数字字符串为可空SByte类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableByte(System.String)">
+            <summary>
+            转换数字字符串为可空Byte类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableShort(System.String)">
+            <summary>
+            转换字符串为可空Int16类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableInt(System.String)">
+            <summary>
+            转换字符串为可空Int32类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableLong(System.String)">
+            <summary>
+            转换字符串为可空Int64类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableBigInteger(System.String)">
+            <summary>
+            转换字符串为可空BigInteger类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableFloat(System.String)">
+            <summary>
+            转换字符串为可空Single/float类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableDouble(System.String)">
+            <summary>
+            转换字符串为可空Double类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableDecimal(System.String)">
+            <summary>
+            转换字符串为可空Decimal类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToSByte(System.String)">
+            <summary>
+            转换数字字符串为SByte类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToByte(System.String)">
+            <summary>
+            转换数字字符串为Byte类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToShort(System.String)">
+            <summary>
+            转换字符串为Int16类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToInt(System.String)">
+            <summary>
+            转换字符串为Int32类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToLong(System.String)">
+            <summary>
+            转换字符串为Int64类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToBigInteger(System.String)">
+            <summary>
+            转换字符串为可空BigInteger类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToFloat(System.String)">
+            <summary>
+            转换字符串为Single/float类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToDouble(System.String)">
+            <summary>
+            转换字符串为Double类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToDecimal(System.String)">
+            <summary>
+            转换字符串为Decimal类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToDatetime(System.String)">
+            <summary>
+            转换字符串为Datetime类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToDatetime(System.String,System.DateTime)">
+            <summary>
+            转换字符串为Datetime类型（失败时返回默认值）
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableDatetime(System.String)">
+            <summary>
+            转换字符串为可空Datetime类型，转换失败返回Null
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToUri(System.String)">
+            <summary>
+            转换网页地址为Uri(失败返回null)
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToBoolean(System.String)">
+            <summary>
+            将字符串转换为Boolean类型（当字符串是“true/1/yes/checked/是/对”(不区分大小写)时返回true）
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToNullableBoolean(System.String)">
+            <summary>
+            将字符串转换为可空Boolean类型（当字符串中包含“true/1/yes/checked/是/对”时返回true，为空时返回null）
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToCookie(System.String)">
+            <summary>
+            将单个Cookie字符串转换为Cookie类型
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.StringExtensions.ConvertToCookieCollection(System.String)">
+            <summary>
+            将Cookies字符串转换为CookieCollection集合
+            </summary>
         </member>
         <member name="T:OYMLCN.Extensions.WebClientExtensions">
             <summary>
@@ -1172,6 +1521,47 @@
             <param name="file"></param>
             <param name="fileName"></param>
         </member>
+        <member name="T:OYMLCN.Handlers.HtmlFormatHandler">
+            <summary>
+            HTML格式处理
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.HtmlDecode">
+            <summary>
+            被转义HTML的字符串还原
+            </summary>
+        </member>
+        <member name="P:OYMLCN.Handlers.HtmlFormatHandler.HtmlEncode">
+            <summary>
+            HTML转义为数据库合法模式
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveHtml(System.Int32)">
+            <summary>
+            使用正则表达式删除Html标签
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveScript">
+            <summary>
+            使用正则表达式删除Script标签
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.ReplaceHtmlBr">
+            <summary>
+            替换换行Br为换行符
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveSpace(System.Boolean)">
+            <summary>
+            字符串去除 &amp;nbsp;/&amp;ensp;/&amp;emsp;/&amp;thinsp;/&amp;zwnj;/&amp;zwj; 空格符 制表符 
+            </summary>
+            <param name="keepOneSpace">保留一个空格</param>
+        </member>
+        <member name="P:OYMLCN.Handlers.HtmlFormatHandler.Result">
+            <summary>
+            处理结果
+            </summary>
+        </member>
         <member name="T:OYMLCN.Handlers.DateTimeFormatHandler">
             <summary>
             时间相关值以及判断
@@ -1238,31 +1628,7 @@
             时 结束时间
             </summary>
         </member>
-        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.MinuteStart">
-            <summary>
-            分 开始时间
-            </summary>
-        </member>
-        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.GetMinuteEnd">
-            <summary>
-            分 结束时间
-            </summary>
-        </member>
-        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.IsToday">
-            <summary>
-            判断是否是当天
-            </summary>
-        </member>
-        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnMonthString">
-            <summary>
-            日期转换为中文 年月
-            </summary>
-        </member>
-        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnDateString">
-            <summary>
-            日期转换为中文 年月日
-            </summary>
-        </member>
+        <member name="P:OYMLCN.Han>
         <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnDatetimeString">
             <summary>
             时间转换为中文 年月日时分
@@ -1316,47 +1682,6 @@
         <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnIntervalString">
             <summary>
             与现在时间的间隔（中文） --前/后
-            </summary>
-        </member>
-        <member name="T:OYMLCN.Handlers.HtmlFormatHandler">
-            <summary>
-            HTML格式处理
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.HtmlDecode">
-            <summary>
-            被转义HTML的字符串还原
-            </summary>
-        </member>
-        <member name="P:OYMLCN.Handlers.HtmlFormatHandler.HtmlEncode">
-            <summary>
-            HTML转义为数据库合法模式
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveHtml(System.Int32)">
-            <summary>
-            使用正则表达式删除Html标签
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveScript">
-            <summary>
-            使用正则表达式删除Script标签
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.ReplaceHtmlBr">
-            <summary>
-            替换换行Br为换行符
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Handlers.HtmlFormatHandler.RemoveSpace(System.Boolean)">
-            <summary>
-            字符串去除 &amp;nbsp;/&amp;ensp;/&amp;emsp;/&amp;thinsp;/&amp;zwnj;/&amp;zwj; 空格符 制表符 
-            </summary>
-            <param name="keepOneSpace">保留一个空格</param>
-        </member>
-        <member name="P:OYMLCN.Handlers.HtmlFormatHandler.Result">
-            <summary>
-            处理结果
             </summary>
         </member>
         <member name="T:OYMLCN.Handlers.StringFormatHandler">
@@ -2133,6 +2458,42 @@
             <returns></returns>
         </member>
         <member name="M:OYMLCN.PredicateBuilder.Create``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            创建条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.PredicateBuilder.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            组合And条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.PredicateBuilder.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            组合Or条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="first"></param>
+            <param name="second"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.PredicateBuilder.Not``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            组合Not条件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
+.Func{``0,System.Boolean}})">
             <summary>
             创建条件
             </summary>

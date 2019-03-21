@@ -11,22 +11,6 @@ namespace OYMLCN.Extensions
     public static class FormatExtensions
     {
         /// <summary>
-        /// 将字符串作为HTML格式文本处理
-        /// </summary>
-        /// <param name="html"></param>
-        /// <returns></returns>
-        public static HtmlFormatHandler AsHtmlFormat(this string html)
-            => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
-        /// <summary>
-        /// 将字符串作为URL格式文本处理
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static UrlFormatHandler AsUrlFormat(this string url)
-            => url.IsNotNullOrWhiteSpace() ? new UrlFormatHandler(url) : null;
-
-
-        /// <summary>
         /// 将枚举值转换为字符串值（替换 _ 标头）
         /// 用于部分不能使用数字作为枚举值 用 _ 作为开头（某些较旧的源码里有这种习惯……）
         /// </summary>
@@ -59,7 +43,7 @@ namespace OYMLCN.Extensions
             foreach (var kv in formData)
             {
                 i++;
-                sb.AppendFormat("{0}={1}", kv.Key, kv.Value?.ToString().AsUrlFormat().EncodeAsUrlData);
+                sb.AppendFormat("{0}={1}", kv.Key, kv.Value?.ToString().UrlDataEncode());
                 if (i < formData.Count)
                     sb.Append("&");
             }
