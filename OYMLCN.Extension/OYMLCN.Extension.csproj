@@ -7,7 +7,7 @@
     <Description>包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
     <RepositoryUrl>git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -22,19 +22,20 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="System.Web" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-  </ItemGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
-  </PropertyGroup>
+  </ItemGroup> 
 
 </Project>

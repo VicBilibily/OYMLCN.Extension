@@ -99,54 +99,64 @@ namespace OYMLCN.Extensions
         #endregion
 
         /// <summary>
+        /// 判断是否是昨天
+        /// </summary>
+        public static bool IsYesterday(this DateTime dt)
+            => dt.Date == DateTime.Now.Date.AddDays(-1);
+        /// <summary>
         /// 判断是否是当天
         /// </summary>
         public static bool IsToday(this DateTime dt)
             => dt.Date == DateTime.Now.Date;
+        /// <summary>
+        /// 判断是否是明天
+        /// </summary>
+        public static bool IsTomorrow(this DateTime dt)
+            => dt.Date == DateTime.Now.Date.AddDays(1);
 
         #region DateTimeToString
         /// <summary>
         /// 日期转换为中文 年月
         /// </summary>
-        public static string GetCnMonthString(this DateTime dt)
+        public static string ToCnMonthString(this DateTime dt)
             => dt.ToString("yyyy年MM月");
         /// <summary>
         /// 时间转换为中文 年月日时分
         /// </summary>
-        public static string GetCnDatetimeString(this DateTime dt, bool second = false)
+        public static string ToCnDatetimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"yyyy年MM月dd日 HH:mm:ss") : dt.ToString($"yyyy年MM月dd日 HH:mm");
 
         /// <summary>
         /// 时间转字符 年-月
         /// </summary>
-        public static string GetMonthString(this DateTime dt)
+        public static string ToMonthString(this DateTime dt)
             => dt.ToString("yyyy-MM");
         /// <summary>
         /// 时间转字符 年-月-日
         /// </summary>
-        public static string GetDateString(this DateTime dt)
+        public static string ToDateString(this DateTime dt)
             => dt.ToString("yyyy-MM-dd");
         /// <summary>
         /// 时间转字符 年-月-日 时:分:秒
         /// </summary>
-        public static string GetDatetimeString(this DateTime dt, bool second = false)
+        public static string ToDatetimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"yyyy-MM-dd HH:mm:ss") : dt.ToString($"yyyy-MM-dd HH:mm");
 
         /// <summary>
         /// 时间转换 时:分
         /// </summary>
-        public static string GetTimeString(this DateTime dt, bool second = false)
+        public static string ToTimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"HH:mm:ss") : dt.ToString($"HH:mm");
         /// <summary>
         /// 时间转换 日 时:分
         /// </summary>
-        public static string GetDayTimeString(this DateTime dt, bool second = false)
+        public static string ToDayTimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"dd HH:mm:ss") : dt.ToString($"dd HH:mm");
 
         /// <summary>
         /// 与现在时间的间隔（中文） --前/后
         /// </summary>
-        public static string GetCnIntervalString(this DateTime dt)
+        public static string ToCnIntervalString(this DateTime dt)
         {
             var interval = dt - DateTime.Now;
             var endStr = interval > TimeSpan.Parse("0") ? "后" : "前";

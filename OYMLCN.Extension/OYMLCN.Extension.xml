@@ -87,47 +87,57 @@
             分 结束时间
             </summary>
         </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.IsYesterday(System.DateTime)">
+            <summary>
+            判断是否是昨天
+            </summary>
+        </member>
         <member name="M:OYMLCN.Extensions.DateTimeExtensions.IsToday(System.DateTime)">
             <summary>
             判断是否是当天
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnMonthString(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.IsTomorrow(System.DateTime)">
+            <summary>
+            判断是否是明天
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToCnMonthString(System.DateTime)">
             <summary>
             日期转换为中文 年月
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnDatetimeString(System.DateTime,System.Boolean)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToCnDatetimeString(System.DateTime,System.Boolean)">
             <summary>
             时间转换为中文 年月日时分
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetMonthString(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToMonthString(System.DateTime)">
             <summary>
             时间转字符 年-月
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDateString(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToDateString(System.DateTime)">
             <summary>
             时间转字符 年-月-日
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDatetimeString(System.DateTime,System.Boolean)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToDatetimeString(System.DateTime,System.Boolean)">
             <summary>
             时间转字符 年-月-日 时:分:秒
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetTimeString(System.DateTime,System.Boolean)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToTimeString(System.DateTime,System.Boolean)">
             <summary>
             时间转换 时:分
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetDayTimeString(System.DateTime,System.Boolean)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToDayTimeString(System.DateTime,System.Boolean)">
             <summary>
             时间转换 日 时:分
             </summary>
         </member>
-        <member name="M:OYMLCN.Extensions.DateTimeExtensions.GetCnIntervalString(System.DateTime)">
+        <member name="M:OYMLCN.Extensions.DateTimeExtensions.ToCnIntervalString(System.DateTime)">
             <summary>
             与现在时间的间隔（中文） --前/后
             </summary>
@@ -1045,27 +1055,6 @@
         <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsNumeric(System.String)">
             <summary>
             获取文本中的数字（包括小数）
-            </summar��是不是汉字
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsNumeric(System.String)">
-            <summary>
-            判断文本是否为数字
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsInteger(System.String)">
-            <summary>
-            判断文本是否为整数
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.FormatIsUnsignNumeric(System.String)">
-            <summary>
-            判断文本是否为正数
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsNumeric(System.String)">
-            <summary>
-            获取文本中的数字（包括小数）
             </summary>
         </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.FormatAsIntegerNumeric(System.String)">
@@ -1628,7 +1617,31 @@
             时 结束时间
             </summary>
         </member>
-        <member name="P:OYMLCN.Han>
+        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.MinuteStart">
+            <summary>
+            分 开始时间
+            </summary>
+        </member>
+        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.GetMinuteEnd">
+            <summary>
+            分 结束时间
+            </summary>
+        </member>
+        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.IsToday">
+            <summary>
+            判断是否是当天
+            </summary>
+        </member>
+        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnMonthString">
+            <summary>
+            日期转换为中文 年月
+            </summary>
+        </member>
+        <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnDateString">
+            <summary>
+            日期转换为中文 年月日
+            </summary>
+        </member>
         <member name="P:OYMLCN.Handlers.DateTimeFormatHandler.CnDatetimeString">
             <summary>
             时间转换为中文 年月日时分
@@ -2458,42 +2471,6 @@
             <returns></returns>
         </member>
         <member name="M:OYMLCN.PredicateBuilder.Create``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            创建条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="predicate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合And条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Or条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Not``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Not条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="expression"></param>
-            <returns></returns>
-        </member>
-    </members>
-</doc>
-.Func{``0,System.Boolean}})">
             <summary>
             创建条件
             </summary>
