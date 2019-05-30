@@ -7,7 +7,7 @@
 不排除大版本更新会大改而不做向前兼容。
 </Description>
     <Copyright>The MIT License</Copyright>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
     <RepositoryUrl>git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -28,12 +28,12 @@
     <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension.Encrypt\OYMLCN.Extension.Encrypt.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="NETCore.Encrypt" Version="2.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OYMLCN.Extension" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
