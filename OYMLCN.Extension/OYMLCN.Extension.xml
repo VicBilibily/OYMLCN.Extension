@@ -1016,25 +1016,6 @@
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="F:OYMLCN.Extensions.StringExtensions.LOCALE_SYSTEM_DEFAULT">
-            <summary>
-            中文字符工具类
-            </summary>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToSimplifiedChinese(System.String)">
-            <summary>
-            将字符转换成简体中文
-            </summary>
-            <param name="source">输入要转换的字符串</param>
-            <returns>转换完成后的字符串</returns>
-        </member>
-        <member name="M:OYMLCN.Extensions.StringExtensions.ToTraditionalChinese(System.String)">
-            <summary>
-            将字符转换为繁体中文
-            </summary>
-            <param name="source">输入要转换的字符串</param>
-            <returns>转换完成后的字符串</returns>
-        </member>
         <member name="M:OYMLCN.Extensions.StringExtensions.ToUnicode(System.String)">
             <summary>
             普通字符串转Unicode字符串
@@ -2290,19 +2271,6 @@
             </summary>
             <param name="processName">程序名称</param>
         </member>
-        <member name="P:OYMLCN.Helpers.ProcessHelpers.IsAdministrator">
-            <summary>
-            确定当前主体是否属于具有指定 Administrator 的 Windows 用户组
-            </summary>
-            <returns>如果当前主体是指定的 Administrator 用户组的成员，则为 true；否则为 false。</returns>
-        </member>
-        <member name="M:OYMLCN.Helpers.ProcessHelpers.RunAsAdministrator(System.IO.FileInfo,System.String[])">
-            <summary>
-            以管理员身份执行程序
-            </summary>
-            <param name="file"></param>
-            <param name="args"></param>
-        </member>
         <member name="T:OYMLCN.Helpers.ReleasingMemoryHelpers">
             <summary>
             内存释放辅助方法
@@ -2319,7 +2287,45 @@
             开启定时释放内存
             </summary>
         </member>
-        Checker.IsNotEmpty(System.String,System.String)">
+        <member name="M:OYMLCN.Helpers.ReleasingMemoryHelpers.StopTimingReleasing">
+            <summary>
+            停止定时释放内存
+            </summary>
+        </member>
+        <member name="T:OYMLCN.Helpers.StringHelpers">
+            <summary>
+            字符串相关辅助
+            </summary>
+        </member>
+        <member name="M:OYMLCN.Helpers.StringHelpers.RandCode(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            生成随机字符
+            </summary>
+            <param name="length">字符串长度</param>
+            <param name="blur">是否包含特殊符号</param>
+            <param name="onlyNumber">只生成数字字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:OYMLCN.Helpers.StringHelpers.RandBlurCode(System.Int32)">
+            <summary>
+            生成带特殊符号的随机字符串
+            </summary>
+            <param name="length">字符串长度</param>
+            <returns></returns>
+        </member>
+        <member name="T:OYMLCN.ArgumentChecker">
+            <summary>
+            参数有效性验证
+            </summary>
+        </member>
+        <member name="M:OYMLCN.ArgumentChecker.IsNotEmpty(System.Guid,System.String)">
+            <summary>
+            非空判断
+            </summary>
+            <param name="argument"></param>
+            <param name="argumentName"></param>
+        </member>
+        <member name="M:OYMLCN.ArgumentChecker.IsNotEmpty(System.String,System.String)">
             <summary>
             非空判断
             </summary>
@@ -2538,42 +2544,6 @@
             <returns></returns>
         </member>
         <member name="M:OYMLCN.PredicateBuilder.Create``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            创建条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="predicate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.And``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合And条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Or``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Or条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="first"></param>
-            <param name="second"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OYMLCN.PredicateBuilder.Not``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            组合Not条件
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="expression"></param>
-            <returns></returns>
-        </member>
-    </members>
-</doc>
-.Func{``0,System.Boolean}})">
             <summary>
             创建条件
             </summary>

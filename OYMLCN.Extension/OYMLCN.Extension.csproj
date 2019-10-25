@@ -4,8 +4,10 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
-不排除大版本更新会大改而不做向前兼容。</Description>
+    <Description>
+      包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
+      不排除大版本更新会大改而不做向前兼容。
+    </Description>
     <Copyright>The MIT License</Copyright>
     <Version>2.0.3</Version>
     <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
@@ -22,14 +24,8 @@
     <DelaySign>false</DelaySign>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>V:\OYMLCN\OYMLCN.Extension\OYMLCN.Extension\OYMLCN.Extension.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='net461'">bin\xml\NET461\OYMLCN.Extension.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
@@ -44,6 +40,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup> 
+  </ItemGroup>
 
 </Project>
