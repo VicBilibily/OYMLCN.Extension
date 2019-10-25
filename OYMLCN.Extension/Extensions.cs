@@ -53,6 +53,34 @@ namespace OYMLCN.Extensions
 
         #region IDictionary
         /// <summary>
+        /// 判断两个字典集合是否完全相等
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict1"></param>
+        /// <param name="dict2"></param>
+        /// <returns></returns>
+        public static bool IsFullEqual<TKey, TValue>(this IDictionary<TKey, TValue> dict1, IDictionary<TKey, TValue> dict2)
+        {
+            if (dict1.Count != dict2.Count)
+                return false;
+            Dictionary<TKey, TValue>
+                _d1 = dict1.OrderBy(v => v.Key).ToDictionary(v => v.Key, v => v.Value),
+                _d2 = dict2.OrderBy(v => v.Key).ToDictionary(v => v.Key, v => v.Value);
+            foreach (var item in dict1)
+            {
+                TValue v1 = item.Value, v2;
+                if (_d2.TryGetValue(item.Key, out v2))
+                {
+                    if (v1.Equals(v2) == false)
+                        return false;
+                }
+                else
+                    return false;
+            }
+            return true;
+        }
+        /// <summary>
         /// 增加或更新字典
         /// </summary>
         /// <typeparam name="TKey"></typeparam>

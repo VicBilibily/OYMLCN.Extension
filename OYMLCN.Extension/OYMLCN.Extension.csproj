@@ -7,11 +7,11 @@
     <Description>包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
 不排除大版本更新会大改而不做向前兼容。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
     <RepositoryUrl>git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageLicenseUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/raw/branch/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -20,6 +20,8 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -36,6 +38,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup> 
 
 </Project>
