@@ -10,8 +10,8 @@
     </Description>
     <Copyright>The MIT License</Copyright>
     <Version>2.0.4</Version>
-    <PackageProjectUrl>https://git.oyml.cn/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
-    <RepositoryUrl>git@git.oyml.cn/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
   </PropertyGroup>
