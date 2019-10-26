@@ -56,7 +56,7 @@ namespace OYMLCN.Helpers
         /// <summary>
         /// 是否显示下一页
         /// </summary>
-        public bool ShowPrev => Page > 2 && Pages > 1;
+        public bool ShowPrev => Page > 1 && Pages > 1;
         /// <summary>
         /// 是否显示下一页
         /// </summary>

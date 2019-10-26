@@ -1,3 +1,4 @@
+#if !NETCOREAPP3_0
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -65,3 +66,4 @@ namespace OYMLCN.Extensions
         }
     }
 }
+#endif
