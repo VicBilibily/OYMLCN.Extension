@@ -192,6 +192,14 @@ namespace OYMLCN.Extensions
         #endregion
 
         /// <summary>
+        /// 将字符数组转换拼接为字符串
+        /// </summary>
+        /// <param name="chars"></param>
+        /// <returns></returns>
+        public static string ConvertToString(this char[] chars) => new string(chars);
+
+
+        /// <summary>
         /// 转换字符串为Datetime类型
         /// </summary>
         public static DateTime ConvertToDatetime(this string str)
