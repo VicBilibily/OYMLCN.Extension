@@ -121,7 +121,12 @@ namespace OYMLCN.Extensions
         public static string ToCnMonthString(this DateTime dt)
             => dt.ToString("yyyy年MM月");
         /// <summary>
-        /// 时间转换为中文 年月日时分
+        /// 日期转换为中文 年月日
+        /// </summary>
+        public static string ToCnDateString(this DateTime dt)
+            => dt.ToString("yyyy年MM月dd日");
+        /// <summary>
+        /// 时间转换为中文 年月日 时:分:秒
         /// </summary>
         public static string ToCnDatetimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"yyyy年MM月dd日 HH:mm:ss") : dt.ToString($"yyyy年MM月dd日 HH:mm");
