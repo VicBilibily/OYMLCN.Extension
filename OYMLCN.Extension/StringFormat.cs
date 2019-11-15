@@ -131,9 +131,9 @@ namespace OYMLCN.Extensions
             //else
             return str.FormatAsSecretSymbolStartString(length, symbolLength);
         }
-    
+
         /// <summary>
-        /// 保留指定长度的字符，其余均屏蔽
+        /// 保留指定长度的字符，其余均屏蔽（如果字符串长度小于指定长度，则保留源字符串的一半长度）
         /// </summary>
         /// <param name="str"></param>
         /// <param name="length">开头字符长度</param>
@@ -141,7 +141,7 @@ namespace OYMLCN.Extensions
         /// <param name="symbol">屏蔽区域字符</param>
         /// <returns></returns>
         public static string FormatAsSecretSymbolStartString(this string str, int length, int symbolLength = 4, char symbol = '*')
-            => str.IsNullOrWhiteSpace() ? str : str.Take(length).ToArray().ConvertToString() + GetSymbolCharacter(symbolLength, symbol);
+            => str.IsNullOrWhiteSpace() ? str : str.Take(str.Length > length ? length : str.Length / 2).ToArray().ConvertToString() + GetSymbolCharacter(symbolLength, symbol);
         /// <summary>
         /// 保留指定长度的字符，其余均屏蔽
         /// </summary>
