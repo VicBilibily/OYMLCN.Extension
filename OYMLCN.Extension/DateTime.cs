@@ -15,7 +15,7 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         [Obsolete("此扩展即将弃用，请使用相关扩展")]
         public static DateTimeFormatHandler AsFormat(this DateTime dt)
-     => new DateTimeFormatHandler(dt);
+            => new DateTimeFormatHandler(dt);
 
 
         #region DateTime
@@ -126,10 +126,25 @@ namespace OYMLCN.Extensions
         public static string ToCnDateString(this DateTime dt)
             => dt.ToString("yyyy年MM月dd日");
         /// <summary>
+        /// 时间转字符 月日
+        /// </summary>
+        public static string ToCNMonthDayString(this DateTime dt)
+            => dt.ToString("MM月dd日");
+        /// <summary>
         /// 时间转换为中文 年月日 时:分:秒
         /// </summary>
         public static string ToCnDatetimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"yyyy年MM月dd日 HH:mm:ss") : dt.ToString($"yyyy年MM月dd日 HH:mm");
+        private static readonly string[] WeekdayFullCN = new[] { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        private static readonly string[] WeekdayShortCN = new[] { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
+        /// <summary>
+        /// 时间转换 星期一至日（默认全称，可输出缩写）
+        /// eg： 星期日 / 周日
+        /// </summary>
+        /// <returns></returns>
+        public static string ToCNWeekdayString(this DateTime dt, bool @short = false)
+            => (@short ? WeekdayShortCN : WeekdayFullCN)[(int)dt.DayOfWeek];
+
 
         /// <summary>
         /// 时间转字符 年-月
@@ -141,6 +156,11 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static string ToDateString(this DateTime dt)
             => dt.ToString("yyyy-MM-dd");
+        /// <summary>
+        /// 时间转字符 月-日
+        /// </summary>
+        public static string ToMonthDayString(this DateTime dt)
+            => dt.ToString("MM-dd");
         /// <summary>
         /// 时间转字符 年-月-日 时:分:秒
         /// </summary>
@@ -157,6 +177,17 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static string ToDayTimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"dd HH:mm:ss") : dt.ToString($"dd HH:mm");
+
+        private static readonly string[] WeekdayFullEN = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        private static readonly string[] WeekdayShortEN = new[] { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+        /// <summary>
+        /// 时间转换 星期一至日（默认全称，可输出缩写）
+        /// eg： Sunday / SUN
+        /// </summary>
+        /// <returns></returns>
+        public static string ToWeekdayString(this DateTime dt, bool @short = false)
+            => (@short ? WeekdayShortEN : WeekdayFullEN)[(int)dt.DayOfWeek];
+
 
         /// <summary>
         /// 与现在时间的间隔（中文） --前/后

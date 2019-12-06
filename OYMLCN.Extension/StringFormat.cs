@@ -39,6 +39,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static bool FormatIsChineseIDCard(this string str)
         {
+            if (str.IsNullOrEmpty()) return false;
+
             string address = "11,12,13,14,15,21,22,23,31,32,33,34,35,36,37,41,42,43,44,45,46,51,52,53,54,50,61,62,63,64,65,71,81,82";
             long n = 0;
 
@@ -205,17 +207,17 @@ namespace OYMLCN.Extensions
         /// 判断文本是否为数字
         /// </summary>
         public static bool FormatIsNumeric(this string str)
-            => Regex.IsMatch(str, @"^[+-]?\d*[.]?\d*$", RegexOptions.Compiled);
+            => str.IsNullOrEmpty() ? false : Regex.IsMatch(str, @"^[+-]?\d*[.]?\d*$", RegexOptions.Compiled);
         /// <summary>
         /// 判断文本是否为整数
         /// </summary>
         public static bool FormatIsInteger(this string str)
-            => Regex.IsMatch(str, @"^[+-]?\d*$", RegexOptions.Compiled);
+            => str.IsNullOrEmpty() ? false : Regex.IsMatch(str, @"^[+-]?\d*$", RegexOptions.Compiled);
         /// <summary>
         /// 判断文本是否为正数
         /// </summary>
         public static bool FormatIsUnsignNumeric(this string str)
-            => Regex.IsMatch(str, @"^\d*[.]?\d*$", RegexOptions.Compiled);
+            => str.IsNullOrEmpty() ? false : Regex.IsMatch(str, @"^\d*[.]?\d*$", RegexOptions.Compiled);
         #endregion
 
         #region 字符串数字的转换
