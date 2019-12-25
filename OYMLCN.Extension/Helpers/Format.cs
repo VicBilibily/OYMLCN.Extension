@@ -1,7 +1,10 @@
 ﻿using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 
 namespace OYMLCN.Helpers
@@ -18,6 +21,7 @@ namespace OYMLCN.Helpers
         /// <typeparam name="T"></typeparam>
         /// <param name="enumClass"></param>
         /// <returns></returns>
+        [Obsolete("请使用EnumToDictionary(typeof(Enum))，方法将于下一主要版本移除")]
         public static Dictionary<string, T> EnumToKeyValues<T>(T enumClass)
         {
             var reuslt = new Dictionary<string, T>();
@@ -26,6 +30,49 @@ namespace OYMLCN.Helpers
             foreach (T value in Enum.GetValues(enumClass.GetType()))
                 reuslt[value.ToString()] = value;
             return reuslt;
+        }
+
+        /// <summary>
+        /// 将枚举类型转换为Name/Enum字典
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static Dictionary<TName, TEnum> EnumToDictionary<TName, TEnum>(Type enumType)
+        {
+            if (enumType.BaseType != typeof(Enum))
+                throw new ArgumentException("参数基类型并非类型System.Enum");
+            Type typeFromHandle = typeof(TName);
+            var reuslt = new Dictionary<TName, TEnum>();
+            foreach (TEnum value in Enum.GetValues(enumType))
+                if (typeFromHandle == typeof(string))
+                    reuslt[(TName)(object)value.ToString()] = value;
+                else
+                    reuslt[(TName)Convert.ChangeType(value, typeFromHandle)] = value;
+            return reuslt;
+        }
+        /// <summary>
+        /// 将枚举类型转换为Int/Description字典
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static Dictionary<int, string> EnumToIntDescription(Type enumType)
+        {
+            if (enumType.BaseType != typeof(Enum))
+                throw new ArgumentException("参数基类型并非类型System.Enum");
+            Array values = Enum.GetValues(enumType);
+            string[] names = Enum.GetNames(enumType);
+            Dictionary<int, string> dictionary = new Dictionary<int, string>();
+            for (int i = 0; i < values.Length; i++)
+            {
+                FieldInfo field = enumType.GetField(names[i]);
+                DescriptionAttribute attribute = AttributeHelper.GetAttribute<DescriptionAttribute>(field);
+                if (attribute == null)
+                    dictionary.Add((int)values.GetValue(i), names[i]);
+                else
+                    dictionary.Add((int)values.GetValue(i), attribute.Description);
+            }
+            return dictionary;
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Mail;
 
@@ -27,6 +28,16 @@ namespace OYMLCN
             UserName = userName;
             Password = password;
             Port = port;
+            if (string.IsNullOrWhiteSpace(DisplayName))
+                throw new Exception("邮件配置错误：From（DisplayName）未配置");
+            if (string.IsNullOrWhiteSpace(SMTP))
+                throw new Exception("邮件配置错误：SMTP节点未配置");
+            if (string.IsNullOrWhiteSpace(UserName))
+                throw new Exception("邮件配置错误：Username节点未配置");
+            if (string.IsNullOrWhiteSpace(Password))
+                throw new Exception("邮件配置错误：Password节点未配置");
+            if (Port <= 0)
+                throw new Exception("邮件配置错误：Port节点配置错误");
         }
 
         /// <summary>

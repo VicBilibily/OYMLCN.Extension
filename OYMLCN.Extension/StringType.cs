@@ -281,5 +281,33 @@ namespace OYMLCN.Extensions
                 result.Add(cookie.ConvertToCookie());
             return result;
         }
+
+        /// <summary>
+        /// 把以英文逗号(,)分割的ID字符串提取为ID数组
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="idStr"></param>
+        /// <returns></returns>
+        public static T[] ConvertToIdArray<T>(this string idStr)
+        {
+            if (string.IsNullOrEmpty(idStr)) return new T[0];
+            string[] array = idStr.Split(new char[] { ',' });
+            List<T> list = new List<T>();
+            Type typeFromHandle = typeof(T);
+            foreach (string value in array)
+            {
+                try
+                {
+                    list.Add((T)Convert.ChangeType(value, typeFromHandle));
+                }
+                catch (InvalidCastException)
+                {
+                }
+                catch (FormatException)
+                {
+                }
+            }
+            return list.ToArray();
+        }
     }
 }

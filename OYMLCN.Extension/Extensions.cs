@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,6 +106,41 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static TValue SelectValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
             => dict.ContainsKey(key) ? dict[key] : defaultValue;
+        /// <summary>
+        /// 获取字典值，如果为空则设置为默认值
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static TValue GetValueOrSetDefaultFunc<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
+        {
+            TValue tvalue = defaultValue;
+            if (!dict.TryGetValue(key, out tvalue))
+                dict.Add(key, tvalue);
+            return tvalue;
+        }
+        /// <summary>
+        /// 获取字典值，如果为空则按照委托方法返回值设为默认值
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="setValue"></param>
+        /// <returns></returns>
+        public static TValue GetValueOrSetDefaultFunc<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> setValue)
+        {
+            TValue tvalue = default(TValue);
+            if (!dict.TryGetValue(key, out tvalue))
+            {
+                tvalue = setValue(key);
+                dict.Add(key, tvalue);
+            }
+            return tvalue;
+        }
 
         /// <summary>
         /// 追加合并字典
@@ -196,6 +232,22 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static IEnumerable<string> SelectEndWith(this IEnumerable<string> list, string word)
             => list?.Where(d => d.EndsWith(word)) ?? new string[0];
+        /// <summary>
+        /// 匿名方法遍历列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (T t in source)
+            {
+                T obj = t;
+                action(obj);
+            }
+            return source;
+        }
         #endregion
 
         /// <summary>
