@@ -16,39 +16,27 @@ namespace OYMLCN.Helpers
     {
         /// <summary>
         /// 将枚举类型转换为Key/Value数组
-        /// 必须为enum枚举的任意值，其他类型将返回Null
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="enumClass"></param>
         /// <returns></returns>
-        [Obsolete("请使用EnumToDictionary(typeof(Enum))，方法将于下一主要版本移除")]
+        //[Obsolete("请使用EnumToDictionary<TEnum>(typeof(Enum))，方法将于下一主要版本移除")]
         public static Dictionary<string, T> EnumToKeyValues<T>(T enumClass)
-        {
-            var reuslt = new Dictionary<string, T>();
-            if (enumClass.GetType().BaseType != typeof(Enum))
-                throw new ArgumentException("参数基类型并非类型System.Enum");
-            foreach (T value in Enum.GetValues(enumClass.GetType()))
-                reuslt[value.ToString()] = value;
-            return reuslt;
-        }
+            => EnumToDictionary<T>(typeof(T));
 
         /// <summary>
         /// 将枚举类型转换为Name/Enum字典
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TEnum"></typeparam>
         /// <param name="enumType"></param>
         /// <returns></returns>
-        public static Dictionary<TName, TEnum> EnumToDictionary<TName, TEnum>(Type enumType)
+        public static Dictionary<string, TEnum> EnumToDictionary<TEnum>(Type enumType)
         {
             if (enumType.BaseType != typeof(Enum))
                 throw new ArgumentException("参数基类型并非类型System.Enum");
-            Type typeFromHandle = typeof(TName);
-            var reuslt = new Dictionary<TName, TEnum>();
+            var reuslt = new Dictionary<string, TEnum>();
             foreach (TEnum value in Enum.GetValues(enumType))
-                if (typeFromHandle == typeof(string))
-                    reuslt[(TName)(object)value.ToString()] = value;
-                else
-                    reuslt[(TName)Convert.ChangeType(value, typeFromHandle)] = value;
+                reuslt[value.ToString()] = value;
             return reuslt;
         }
         /// <summary>

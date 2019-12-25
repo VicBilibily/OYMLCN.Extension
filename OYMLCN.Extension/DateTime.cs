@@ -8,16 +8,6 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class DateTimeExtensions
     {
-        /// <summary>
-        /// 时间相关值以及判断操作
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        [Obsolete("此扩展即将弃用，请使用相关扩展")]
-        public static DateTimeFormatHandler AsFormat(this DateTime dt)
-            => new DateTimeFormatHandler(dt);
-
-
         #region DateTime
         /// <summary>
         /// 年 开始时间

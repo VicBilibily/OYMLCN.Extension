@@ -80,14 +80,7 @@ namespace OYMLCN.Helpers
             Pages = Convert.ToInt32(Total / Limit + (Total % Limit == 0 ? 0 : 1)); ;
             GetValidPage(page);
             GetPaginationArray(length);
-            var willDelete = MaxPagination;
         }
-
-        /// <summary>
-        /// 最大页码
-        /// </summary>
-        [Obsolete("please use Pages, will be delete in next main version.")]
-        public int MaxPagination => Pages;
 
         /// <summary>
         /// 获取有效页码

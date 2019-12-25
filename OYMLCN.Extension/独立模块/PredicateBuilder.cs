@@ -16,16 +16,14 @@ namespace OYMLCN
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static Expression<Func<T, bool>> True<T>()
-            => param => true;
+        public static Expression<Func<T, bool>> True<T>() => param => true;
 
         /// <summary>
         /// 起始条件为False
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static Expression<Func<T, bool>> False<T>()
-            => param => false;
+        public static Expression<Func<T, bool>> False<T>() => param => false;
 
         /// <summary>
         /// 创建条件
@@ -33,8 +31,7 @@ namespace OYMLCN
         /// <typeparam name="T"></typeparam>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public static Expression<Func<T, bool>> Create<T>(Expression<Func<T, bool>> predicate)
-            => predicate;
+        public static Expression<Func<T, bool>> Create<T>(Expression<Func<T, bool>> predicate) => predicate;
         /// <summary>
         /// 组合And条件
         /// </summary>
@@ -62,11 +59,7 @@ namespace OYMLCN
         /// <param name="expression"></param>
         /// <returns></returns>
         public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expression)
-        {
-            var negated = Expression.Not(expression.Body);
-            return Expression.Lambda<Func<T, bool>>(negated, expression.Parameters);
-        }
-
+            => Expression.Lambda<Func<T, bool>>(Expression.Not(expression.Body), expression.Parameters);
 
         static Expression<T> Compose<T>(this Expression<T> first, Expression<T> second, Func<Expression, Expression, Expression> merge)
         {
@@ -86,21 +79,15 @@ namespace OYMLCN
             readonly Dictionary<ParameterExpression, ParameterExpression> map;
 
             ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
-            {
-                this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
-            }
+                => this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
 
             public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map, Expression exp)
-            {
-                return new ParameterRebinder(map).Visit(exp);
-            }
+                => new ParameterRebinder(map).Visit(exp);
 
             protected override Expression VisitParameter(ParameterExpression p)
             {
-
                 if (map.TryGetValue(p, out ParameterExpression replacement))
                     p = replacement;
-
                 return base.VisitParameter(p);
             }
         }

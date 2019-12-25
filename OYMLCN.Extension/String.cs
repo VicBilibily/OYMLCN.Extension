@@ -22,30 +22,6 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static HtmlFormatHandler AsHtmlFormat(this string html)
             => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
-        /// <summary>
-        /// 将字符串作为URL格式文本处理
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        [Obsolete("此扩展即将弃用，请使用Url_扩展")]
-        public static UrlFormatHandler AsUrlFormat(this string url)
-            => url.IsNotNullOrWhiteSpace() ? new UrlFormatHandler(url) : null;
-        /// <summary>
-        /// 格式判断或格式化
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        [Obsolete("此扩展即将弃用，请使用To_/FormatIs_/FormatAs_扩展")]
-        public static StringFormatHandler AsFormat(this string str)
-            => new StringFormatHandler(str);
-        /// <summary>
-        /// 类型相关转换
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        [Obsolete("此扩展即将弃用，请使用ConvertTo_扩展")]
-        public static StringTypeHandler AsType(this string str)
-            => new StringTypeHandler(str);
 
         #region Is对比判断
         /// <summary>
