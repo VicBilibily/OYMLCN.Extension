@@ -1,5 +1,7 @@
 using OYMLCN.Handlers;
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace OYMLCN.Extensions
 {
@@ -10,16 +12,55 @@ namespace OYMLCN.Extensions
     {
         #region DateTime
         /// <summary>
+        /// 本年有多少天
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <returns>本年的天数</returns>
+        public static int GetDaysOfYear(this DateTime dt, int year = 0)
+            => IsLeapYear(dt, year) ? 366 : 365;
+        private static readonly int[] m31d = new[] { 1, 3, 5, 7, 8, 10, 12 };
+        /// <summary>
+        /// 本月有多少天
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年</param>
+        /// <param name="month">月</param>
+        /// <returns>天数</returns>
+        public static int GetDaysOfMonth(this DateTime dt, int year = 0, int month = 0)
+        {
+            year = year > 0 ? year : dt.Year;
+            month = month > 0 ? month : dt.Month;
+            int days = 30;
+            if (month == 2)
+                days = IsLeapYear(dt, year) ? 29 : 28;
+            else if (m31d.Contains(month))
+                days = 31;
+            return days;
+        }
+        /// <summary>
+        /// 判断当前年份是否是闰年
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <returns>是闰年：true ，不是闰年：false</returns>
+        public static bool IsLeapYear(this DateTime dt, int year = 0)
+        {
+            year = year > 0 ? year : dt.Year;
+            return year % 400 == 0 || year % 4 == 0 && year % 100 != 0;
+        }
+
+        /// <summary>
         /// 年 开始时间
         /// </summary>
-        public static DateTime GetGetYearStart(this DateTime dt)
+        public static DateTime GetYearStart(this DateTime dt)
             => new DateTime(dt.Year, 1, 1);
         /// <summary>
-        /// 年 结束时间
+        /// 次年 开始时间
         /// </summary>
         /// <returns></returns>
-        public static DateTime GetYearEnd(this DateTime dt)
-            => dt.GetGetYearStart().AddYears(1);
+        public static DateTime GetNextYearStart(this DateTime dt)
+            => dt.GetYearStart().AddYears(1);
 
         /// <summary>
         /// 月 开始时间
@@ -27,31 +68,196 @@ namespace OYMLCN.Extensions
         public static DateTime GetMonthStart(this DateTime dt)
             => new DateTime(dt.Year, dt.Month, 1);
         /// <summary>
-        /// 月 结束时间
+        /// 次月 开始时间
         /// </summary>
-        public static DateTime GetMonthEnd(this DateTime dt)
+        public static DateTime GetNextMonthStart(this DateTime dt)
             => dt.GetMonthStart().AddMonths(1);
 
         /// <summary>
-        /// 周(日)开始时间
+        /// 周 开始时间（周日为第一天）
         /// </summary>
         public static DateTime GetWeekStart(this DateTime dt)
             => dt.Date.AddDays(-(int)dt.DayOfWeek);
         /// <summary>
-        /// 周(日)结束时间
+        /// 下周 开始时间（周日为第一天）
         /// </summary>
-        public static DateTime GetWeekEnd(this DateTime dt)
+        public static DateTime GetNextWeekStart(this DateTime dt)
             => dt.GetWeekStart().AddDays(7);
         /// <summary>
-        /// 周(一)开始时间
+        /// 周 开始时间（周一为第一天）
         /// </summary>
-        public static DateTime GetWeekStartByMonday(this DateTime dt)
+        public static DateTime GetWeekStartFromMonday(this DateTime dt)
             => dt.Date.AddDays(-(int)dt.DayOfWeek + 1);
         /// <summary>
-        /// 周(一)结束时间
+        /// 下周 开始时间（周一为第一天）
         /// </summary>
-        public static DateTime GetWeekEndByMonday(this DateTime dt)
-            => dt.GetWeekStartByMonday().AddDays(7);
+        public static DateTime GetNextWeekStartFromMonday(this DateTime dt)
+            => dt.GetWeekStartFromMonday().AddDays(7);
+
+        private static readonly GregorianCalendar gc = new GregorianCalendar();
+        /// <summary>
+        /// 获取当年或指定年份有多少周（默认星期日是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="firstDayOfWeek">表示一周的第一天的枚举值（默认星期日）</param>
+        /// <returns>该年周数</returns>
+        public static int GetWeekAmount(this DateTime dt, int year = 0, DayOfWeek firstDayOfWeek = DayOfWeek.Sunday)
+        {
+            var end = new DateTime(year > 0 ? year : dt.Year, 12, 31); //该年最后一天
+            return gc.GetWeekOfYear(end, CalendarWeekRule.FirstDay, firstDayOfWeek);
+        }
+        /// <summary>
+        /// 获取当年或指定年份有多少周
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <returns>该年周数</returns>
+        public static int GetWeekAmountFromMonday(this DateTime dt, int year = 0)
+            => dt.GetWeekAmount(year, DayOfWeek.Monday);
+
+        /// <summary>
+        /// 年度第几个星期（星期日是第一天）
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>该日周数</returns>
+        public static int GetWeekOfYear(this DateTime date)
+            => gc.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Sunday);
+        /// <summary>
+        /// 年度第几个星期（星期一是第一天）
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>该日周数</returns>
+        public static int GetWeekOfYearFromMonday(this DateTime date)
+            => gc.GetWeekOfYear(date, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+
+        #region GetWeekTime/GetWeekTimeFromMonday
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周（为0时从dt获取）</param>
+        /// <param name="dtStart">开始日期</param>
+        /// <param name="dtEnd">结束日期</param>
+        public static void GetWeekTime(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
+        {
+            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + 1);
+            dtEnd = date.AddDays(7 - (int)date.DayOfWeek);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart">开始日期</param>
+        /// <param name="dtEnd">结束日期</param>
+        public static void GetWeekTime(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
+            => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear(), out dtStart, out dtEnd);
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周</param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt, int year, int week)
+        {
+            DateTime dtStart, dtEnd;
+            GetWeekTime(dt, year, week, out dtStart, out dtEnd);
+            return (dtStart, dtEnd);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt)
+            => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear());
+
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周（为0时从dt获取）</param>
+        /// <param name="dtStart">开始日期</param>
+        /// <param name="dtEnd">结束日期</param>
+        public static void GetWeekTimeFromMonday(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
+        {
+            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart">开始日期</param>
+        /// <param name="dtEnd">结束日期</param>
+        public static void GetWeekTimeFromMonday(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
+            => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday(), out dtStart, out dtEnd);
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周</param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt, int year, int week)
+        {
+            DateTime dtStart, dtEnd;
+            GetWeekTimeFromMonday(dt, year, week, out dtStart, out dtEnd);
+            return (dtStart, dtEnd);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt)
+            => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday());
+        #endregion
+
+        #region GetWeekWorkTime
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周</param>
+        /// <param name="dtStart">开始日期</param>
+        /// <param name="dtEnd">结束日期</param>
+        public static void GetWeekWorkTime(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
+        {
+            var date = new DateTime(year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1).AddDays(-2);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="year">年份</param>
+        /// <param name="week">第几周</param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt, int year, int week)
+        {
+            DateTime dtStart, dtEnd;
+            GetWeekWorkTime(dt, year, week, out dtStart, out dtEnd);
+            return (dtStart, dtEnd);
+        }
+        /// <summary>
+        /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt)
+            => GetWeekWorkTime(dt, dt.Year, dt.GetWeekOfYearFromMonday()); 
+        #endregion
 
         /// <summary>
         /// 天 开始时间
@@ -59,9 +265,9 @@ namespace OYMLCN.Extensions
         public static DateTime GetDayStart(this DateTime dt)
             => new DateTime(dt.Year, dt.Month, dt.Day);
         /// <summary>
-        /// 天 结束时间
+        /// 明天 开始时间
         /// </summary>
-        public static DateTime GetDayEnd(this DateTime dt)
+        public static DateTime GetNextDayStart(this DateTime dt)
             => dt.GetDayStart().AddDays(1);
 
         /// <summary>
@@ -70,9 +276,9 @@ namespace OYMLCN.Extensions
         public static DateTime GetHourStart(this DateTime dt)
             => new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, 0, 0);
         /// <summary>
-        /// 时 结束时间
+        /// 下一小时 开始时间
         /// </summary>
-        public static DateTime GetHourEnd(this DateTime dt)
+        public static DateTime GetNextHourStart(this DateTime dt)
             => dt.GetHourStart().AddHours(1);
 
         /// <summary>
@@ -81,11 +287,10 @@ namespace OYMLCN.Extensions
         public static DateTime GetMinuteStart(this DateTime dt)
             => new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0);
         /// <summary>
-        /// 分 结束时间
+        /// 下一分钟 开始时间
         /// </summary>
-        public static DateTime GetGetMinuteEnd(this DateTime dt)
+        public static DateTime GetNextMinuteStart(this DateTime dt)
             => dt.GetMinuteStart().AddMinutes(1);
-
         #endregion
 
         /// <summary>
@@ -156,6 +361,20 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static string ToDatetimeString(this DateTime dt, bool second = false)
             => second ? dt.ToString($"yyyy-MM-dd HH:mm:ss") : dt.ToString($"yyyy-MM-dd HH:mm");
+        /// <summary>
+        /// 标准时间格式 年-月-日 时:分:秒.毫秒
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string ToDatetimeMsString(this DateTime dt)
+            => dt.ToString($"yyyy-MM-dd HH:mm:ss.fff");
+        /// <summary>
+        /// 标准时间格式 年-月-日 时:分:秒.微秒
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static string ToDatetimeUsString(this DateTime dt)
+            => dt.ToString($"yyyy-MM-dd HH:mm:ss.ffffff");
 
         /// <summary>
         /// 时间转换 时:分
@@ -247,13 +466,14 @@ namespace OYMLCN.Extensions
         public static int ToTimestamp(this DateTime dateTime)
             => (int)dateTime.ToTimestampInt64();
 
+        private static readonly DateTime Start1970 = new DateTime(1970, 1, 1);
         /// <summary>
         /// 将时间戳（1970-1-1 00:00:00至target的总秒数）转换成Datetime
         /// </summary>
         /// <param name="timestamp"></param>
         /// <returns></returns>
         public static DateTime TimestampToDateTime(this long timestamp)
-            => new DateTime(1970, 1, 1).AddTicks((timestamp + 8 * 60 * 60) * 10000000);
+            => Start1970.AddTicks((timestamp + 8 * 60 * 60) * 10000000);
         /// <summary>
         /// 将时间戳（1970-1-1 00:00:00至target的总秒数）转换成Datetime
         /// </summary>

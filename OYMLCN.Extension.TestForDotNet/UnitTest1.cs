@@ -9,7 +9,7 @@ namespace OYMLCN.Extension.TestForDotNet
         [TestMethod]
         public void TestMethod1()
         {
-           var dev = OYMLCN.WinTrust.AuthenticodeTools.IsDevelopmentEnvironmentWithCodeSigningCertificate;
+           var dev = Extensions.DateTimeExtensions.GetWeekWorkTime(DateTime.Now);
         }
     }
 }

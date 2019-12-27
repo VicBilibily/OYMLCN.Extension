@@ -6,7 +6,10 @@ using System.Threading;
 
 namespace OYMLCN.Helpers
 {
-    internal static class CallContext
+    /// <summary>
+    /// 取线程内唯一对象
+    /// </summary>
+    public static class CallContext
     {
         static ConcurrentDictionary<string, AsyncLocal<object>> state = new ConcurrentDictionary<string, AsyncLocal<object>>();
 
