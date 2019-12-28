@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.Extension.Test
 {
@@ -53,21 +54,24 @@ namespace OYMLCN.Extension.Test
 
             var datetime = new DateTime(2018, 1, 1, 0, 0, 0);
             Assert.AreEqual(datetime.GetYearStart(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetYearEnd(), new DateTime(2019, 1, 1));
+            Assert.AreEqual(datetime.GetNextYearStart(), new DateTime(2019, 1, 1));
             Assert.AreEqual(datetime.GetMonthStart(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetMonthEnd(), new DateTime(2018, 2, 1));
+            Assert.AreEqual(datetime.GetNextMonthStart(), new DateTime(2018, 2, 1));
             Assert.AreEqual(datetime.GetWeekStart(), new DateTime(2017, 12, 31));
-            Assert.AreEqual(datetime.GetWeekEnd(), new DateTime(2018, 1, 7));
-            Assert.AreEqual(datetime.GetWeekStartByMon(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetWeekEndByMon(), new DateTime(2018, 1, 8));
+            Assert.AreEqual(datetime.GetNextWeekStart(), new DateTime(2018, 1, 7));
+            Assert.AreEqual(datetime.GetWeekStartFromMonday(), new DateTime(2018, 1, 1));
+            Assert.AreEqual(datetime.GetNextWeekStartFromMonday(), new DateTime(2018, 1, 8));
 
+            var dtYSE = DateTimeExtensions.GetYearStartAndEndDate(datetime);
+            var dtWWT = DateTimeExtensions.GetWeekWorkTime(datetime);
+            var dtTD = DateTimeExtensions.GetTimeDelay(datetime, datetime.AddHours(-1).AddMinutes(10).AddSeconds(10));
 
             Assert.AreEqual(datetime.GetDayStart(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetDayEnd(), new DateTime(2018, 1, 2));
+            Assert.AreEqual(datetime.GetNextDayStart(), new DateTime(2018, 1, 2));
             Assert.AreEqual(datetime.GetHourStart(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetHourEnd(), new DateTime(2018, 1, 1, 1, 0, 0));
+            Assert.AreEqual(datetime.GetNextHourStart(), new DateTime(2018, 1, 1, 1, 0, 0));
             Assert.AreEqual(datetime.GetMinuteStart(), new DateTime(2018, 1, 1));
-            Assert.AreEqual(datetime.GetMinuteEnd(), new DateTime(2018, 1, 1, 0, 1, 0));
+            Assert.AreEqual(datetime.GetNextMinuteStart(), new DateTime(2018, 1, 1, 0, 1, 0));
 
             Assert.IsTrue(now.IsToday());
         }

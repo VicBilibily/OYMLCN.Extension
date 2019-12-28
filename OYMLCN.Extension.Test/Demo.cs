@@ -12,7 +12,9 @@ namespace OYMLCN.Extension.Test
         [TestMethod]
         public void DemoTestMethod()
         {
-            string publicKey, privateKey;
+            var calendar = new ChineseCalendar(new DateTime(2020, 1, 6));
+            var d1 = calendar.ChineseTwentyFourPrevDay;
+            var d2 = calendar.ChineseTwentyFourNextDay;
         }
     }
 }

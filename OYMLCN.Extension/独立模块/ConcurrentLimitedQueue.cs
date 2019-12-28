@@ -13,7 +13,10 @@ namespace OYMLCN
     /// <typeparam name="T"></typeparam>
     public class ConcurrentLimitedQueue<T> : ConcurrentQueue<T>
     {
-        public int Limit { get; set; }
+        /// <summary>
+        /// 队列长度
+        /// </summary>
+        protected int Limit { get; set; }
         /// <summary>
         /// 定长队列
         /// </summary>

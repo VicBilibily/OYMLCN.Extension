@@ -263,5 +263,13 @@ namespace OYMLCN.Extensions
         /// <returns></returns>s
         public static char ToChar(this int i) => (char)i;
 
+        /// <summary>
+        /// 把秒转换成分钟
+        /// </summary>
+        /// <param name="second">秒数</param>
+        /// <returns>分钟数</returns>
+        public static int SecondToMinute(this int second)
+            => Convert.ToInt32(Math.Ceiling(second / (decimal)60));
+
     }
 }

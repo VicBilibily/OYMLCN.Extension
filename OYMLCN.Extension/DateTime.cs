@@ -10,6 +10,13 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class DateTimeExtensions
     {
+        /// <summary>
+        /// 中国农历信息
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static ChineseCalendar AsChineseCalendar(this DateTime dt) => new ChineseCalendar(dt);
+
         #region DateTime
         /// <summary>
         /// 本年有多少天
@@ -50,6 +57,7 @@ namespace OYMLCN.Extensions
             return year % 400 == 0 || year % 4 == 0 && year % 100 != 0;
         }
 
+        #region GetYearXXX
         /// <summary>
         /// 年 开始时间
         /// </summary>
@@ -61,7 +69,42 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static DateTime GetNextYearStart(this DateTime dt)
             => dt.GetYearStart().AddYears(1);
+        /// <summary>
+        /// 年 最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime GetYearLastDate(this DateTime dt)
+            => dt.GetNextYearStart().AddSeconds(-1).Date;
 
+        /// <summary>
+        /// 年 第一天日期/最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        public static void GetYearStartAndEndDate(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
+        {
+            dtStart = dt.GetYearStart().Date;
+            dtEnd = dt.GetYearLastDate();
+        }
+#if NETSTANDARD2_1
+        /// <summary>
+        /// 年 第一天日期/最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        public static (DateTime dtStart, DateTime dtEnd) GetYearStartAndEndDate(this DateTime dt)
+        {
+            DateTime dtStart, dtEnd;
+            GetYearStartAndEndDate(dt, out dtStart, out dtEnd);
+            return (dtStart, dtEnd);
+        }
+#endif
+        #endregion
+
+        #region GetMonthXXX
         /// <summary>
         /// 月 开始时间
         /// </summary>
@@ -72,7 +115,42 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static DateTime GetNextMonthStart(this DateTime dt)
             => dt.GetMonthStart().AddMonths(1);
+        /// <summary>
+        /// 月 最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime GetMonthLastDate(this DateTime dt)
+            => dt.GetNextMonthStart().AddSeconds(-1).Date;
+        /// <summary>
+        /// 月 第一天日期/最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        public static void GetMonthStartAndEndDate(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
+        {
+            dtStart = dt.GetMonthStart().Date;
+            dtEnd = dt.GetMonthLastDate();
+        }
+#if NETSTANDARD2_1
+        /// <summary>
+        /// 月 第一天日期/最后一天日期
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="dtStart"></param>
+        /// <param name="dtEnd"></param>
+        public static (DateTime dtStart, DateTime dtEnd) GetMonthStartAndEndDate(this DateTime dt)
+        {
+            DateTime dtStart, dtEnd;
+            GetMonthStartAndEndDate(dt, out dtStart, out dtEnd);
+            return (dtStart, dtEnd);
+        }
+#endif
+        #endregion
+        #endregion
 
+        #region GetWeekXXX
         /// <summary>
         /// 周 开始时间（周日为第一天）
         /// </summary>
@@ -155,6 +233,7 @@ namespace OYMLCN.Extensions
         /// <param name="dtEnd">结束日期</param>
         public static void GetWeekTime(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
             => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear(), out dtStart, out dtEnd);
+#if NETSTANDARD2_1
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期日是第一天）
         /// </summary>
@@ -175,6 +254,7 @@ namespace OYMLCN.Extensions
         /// <returns>开始日期/结束日期</returns>
         public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt)
             => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear());
+#endif
 
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期一是第一天）
@@ -199,6 +279,7 @@ namespace OYMLCN.Extensions
         /// <param name="dtEnd">结束日期</param>
         public static void GetWeekTimeFromMonday(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
             => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday(), out dtStart, out dtEnd);
+#if NETSTANDARD2_1
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期一是第一天）
         /// </summary>
@@ -219,6 +300,7 @@ namespace OYMLCN.Extensions
         /// <returns>开始日期/结束日期</returns>
         public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt)
             => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday());
+#endif
         #endregion
 
         #region GetWeekWorkTime
@@ -237,6 +319,7 @@ namespace OYMLCN.Extensions
             dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
             dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1).AddDays(-2);
         }
+#if NETSTANDARD2_1
         /// <summary>
         /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
         /// </summary>
@@ -256,9 +339,12 @@ namespace OYMLCN.Extensions
         /// <param name="dt"></param>
         /// <returns>开始日期/结束日期</returns>
         public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt)
-            => GetWeekWorkTime(dt, dt.Year, dt.GetWeekOfYearFromMonday()); 
+            => GetWeekWorkTime(dt, dt.Year, dt.GetWeekOfYearFromMonday());
+#endif
+        #endregion
         #endregion
 
+        #region GetDay/GetHour/GetMinute XXX
         /// <summary>
         /// 天 开始时间
         /// </summary>
@@ -449,7 +535,6 @@ namespace OYMLCN.Extensions
         }
         #endregion
 
-
         #region Timestamp
         /// <summary>
         /// 将Datetime转换成时间戳（1970-1-1 00:00:00至target的总秒数）
@@ -482,5 +567,23 @@ namespace OYMLCN.Extensions
         public static DateTime TimestampToDateTime(this int timestamp)
             => TimestampToDateTime((long)timestamp);
         #endregion
+
+        /// <summary>
+        /// 获得一段时间内相隔时分秒
+        /// </summary>
+        /// <param name="dtStart">起始时间</param>
+        /// <param name="dtEnd">终止时间</param>
+        /// <param name="abs">绝对时间(True时不使用 - 表示之前)</param>
+        /// <returns>小时差</returns>
+        public static string GetTimeDelay(this DateTime dtStart, DateTime dtEnd, bool abs = true)
+        {
+            long lTicks = (dtEnd.Ticks - dtStart.Ticks) / 10000000;
+            string sTemp = abs == false && lTicks < 0 ? "-" : string.Empty;
+            lTicks = Math.Abs(lTicks);
+            sTemp += (lTicks / 3600).ToString().PadLeft(2, '0') + ":";
+            sTemp += (lTicks % 3600 / 60).ToString().PadLeft(2, '0') + ":";
+            sTemp += (lTicks % 3600 % 60).ToString().PadLeft(2, '0');
+            return sTemp;
+        }
     }
 }

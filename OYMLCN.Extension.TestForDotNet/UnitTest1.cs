@@ -9,7 +9,7 @@ namespace OYMLCN.Extension.TestForDotNet
         [TestMethod]
         public void TestMethod1()
         {
-           var dev = Extensions.DateTimeExtensions.GetWeekWorkTime(DateTime.Now);
+            var page = new Helpers.PaginationHelpers(9, 1, 10);
         }
     }
 }

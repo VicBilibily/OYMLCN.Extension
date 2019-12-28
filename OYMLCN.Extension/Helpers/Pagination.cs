@@ -77,9 +77,10 @@ namespace OYMLCN.Helpers
         {
             Total = total;
             Limit = limit;
-            Pages = Convert.ToInt32(Total / Limit + (Total % Limit == 0 ? 0 : 1)); ;
+            //Pages = Convert.ToInt32(Total / Limit + (Total % Limit == 0 ? 0 : 1)); ;
+            Pages = Convert.ToInt32(Math.Ceiling(Total / (decimal)Limit));
             GetValidPage(page);
-            GetPaginationArray(length);
+            UpdatePaginationArray(length);
         }
 
         /// <summary>
@@ -113,10 +114,10 @@ namespace OYMLCN.Helpers
         }
 
         /// <summary>
-        /// 获取基本页码列表
+        /// 更新基本页码列表
         /// </summary>
-        /// <param name="length"></param>
-        public PaginationHelpers GetPaginationArray(int length = 5)
+        /// <param name="length">页码栏长度</param>
+        public PaginationHelpers UpdatePaginationArray(int length = 5)
         {
             var mid = new List<int>();
 
