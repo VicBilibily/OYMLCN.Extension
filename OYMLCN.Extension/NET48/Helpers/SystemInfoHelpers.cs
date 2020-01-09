@@ -117,9 +117,10 @@ namespace OYMLCN.Helpers
 
         #region Win32API声明 
 #pragma warning disable 1591
-        [DllImport("kernel32")]
+#pragma warning disable CA1401 // P/Invokes should not be visible
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
         public static extern void GetWindowsDirectory(StringBuilder winDir, int count);
-        [DllImport("kernel32")]
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
         public static extern void GetSystemDirectory(StringBuilder sysDir, int count);
         [DllImport("kernel32")]
         public static extern void GetSystemInfo(ref CPU_INFO cpuinfo);
@@ -133,7 +134,7 @@ namespace OYMLCN.Helpers
         public static extern int GetWindow(int hWnd, int wCmd);
         [DllImport("User32")]
         public static extern int GetWindowLongA(int hWnd, int wIndx);
-        [DllImport("user32.dll")]
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
         public static extern bool GetWindowText(int hWnd, StringBuilder title, int maxBufSize);
         [DllImport("user32", CharSet = CharSet.Auto)]
         public static extern int GetWindowTextLength(IntPtr hWnd);
@@ -699,7 +700,7 @@ namespace OYMLCN.Helpers
         }
         #endregion
     }
-#if NET48
+#if NET472
     /// <summary>
     /// 系统版本相关
     /// </summary>

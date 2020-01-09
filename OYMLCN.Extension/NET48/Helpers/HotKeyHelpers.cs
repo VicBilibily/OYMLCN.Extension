@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+#pragma warning disable CA1401 // P/Invokes should not be visible
 namespace OYMLCN.Helpers
 {
     /// <summary>

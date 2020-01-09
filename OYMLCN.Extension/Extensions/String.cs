@@ -448,14 +448,14 @@ namespace OYMLCN.Extensions
         #endregion
 
         #region 简繁体转换
-#if NET48
+#if NET472
         /// <summary>
         /// 中文字符工具类
         /// </summary>
         private const int LOCALE_SYSTEM_DEFAULT = 0x0800;
         private const int LCMAP_SIMPLIFIED_CHINESE = 0x02000000;
         private const int LCMAP_TRADITIONAL_CHINESE = 0x04000000;
-        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern int LCMapString(int Locale, int dwMapFlags, string lpSrcStr, int cchSrc, [Out] string lpDestStr, int cchDest);
 
         /// <summary>
