@@ -9,7 +9,7 @@ namespace OYMLCN.Extension.TestForDotNet
         [TestMethod]
         public void TestMethod1()
         {
-            var page = new Helpers.PaginationHelpers(9, 1, 10);
+            var page = new Helpers.PaginationHelper(9, 1, 10);
         }
     }
 }
