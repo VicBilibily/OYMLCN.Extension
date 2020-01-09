@@ -9,7 +9,7 @@ namespace OYMLCN.Extensions
     /// <summary>
     /// BitmapExtensions
     /// </summary>
-    public static class BitmapExtensions
+    public static class BitmapExtension
     {
         /// <summary>
         /// 将图片Image转换成Byte[]
