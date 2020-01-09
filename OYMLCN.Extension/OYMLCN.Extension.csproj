@@ -63,6 +63,13 @@
     <Compile Remove="NETCOREAPP\扩展模块\JsonWebToken.cs" />
     <Compile Remove="NETCOREAPP\独立模块\EmailSender.cs" />
     <Compile Remove="NETCOREAPP\独立模块\UniApp.cs" />
+    <Compile Remove="NETCOREAPP\拦截器\ActionFilterAttribute.cs" />
+    <Compile Remove="NETCOREAPP\云服务\Aliyun\Api\SmsSender.cs" />
+    <Compile Remove="NETCOREAPP\云服务\Aliyun\StartupConfigure.cs" />
+    <Compile Remove="NETCOREAPP\云服务\TencentCloud\Api\CosCloud.cs" />
+    <Compile Remove="NETCOREAPP\云服务\TencentCloud\Api\SmsSender.cs" />
+    <Compile Remove="NETCOREAPP\云服务\TencentCloud\StartupConfigure.cs" />
+    <Compile Remove="NETCOREAPP\云服务\TencentCloud\TagHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>

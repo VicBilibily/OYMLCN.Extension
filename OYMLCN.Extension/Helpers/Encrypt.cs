@@ -229,7 +229,7 @@ namespace OYMLCN.Helpers
                         cryptoStream.FlushFinalBlock();
                         return Memory.ToArray().GetUTF8String();
                     }
-                    catch (Exception ex)
+                    catch //(Exception ex)
                     {
                         return null;
                     }
@@ -267,7 +267,7 @@ namespace OYMLCN.Helpers
                         Array.Copy(tmp, 0, ret, 0, len);
                         return Encoding.UTF8.GetString(ret, 0, len);
                     }
-                    catch (Exception ex)
+                    catch //(Exception ex)
                     {
                         return null;
                     }
@@ -374,7 +374,7 @@ namespace OYMLCN.Helpers
                         cryptoStream.FlushFinalBlock();
                         return Memory.ToArray();
                     }
-                    catch (Exception ex)
+                    catch //(Exception ex)
                     {
                         return null;
                     }
@@ -539,8 +539,6 @@ namespace OYMLCN.Helpers
         /// <summary>
         /// 创建 RSA 导出 PEM 密钥
         /// </summary>
-        /// <param name="isPKCS8"></param>
-        /// <returns></returns>
         public static (string publicPem, string privatePem) RSAToPem(RSAKey rsaKey, bool isPKCS8)
         {
             rsaKey = rsaKey ?? CreateRsaKey();
@@ -609,7 +607,7 @@ namespace OYMLCN.Helpers
         /// RSA导入key
         /// </summary>
         /// <param name="rsa">RSA实例<see cref="RSA"/></param>
-        /// <param name="jsonString">RSA的Key序列化XML字符串</param>
+        /// <param name="xmlString">RSA的Key序列化XML字符串</param>
         internal static void FromLvccXmlString(this RSA rsa, string xmlString)
         {
             RSAParameters parameters = new RSAParameters();

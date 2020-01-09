@@ -13,6 +13,9 @@ using Controller = Microsoft.AspNetCore.Mvc.Controller;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// ControllerExtension
+    /// </summary>
     public static class ControllerExtension
     {
         /// <summary>
