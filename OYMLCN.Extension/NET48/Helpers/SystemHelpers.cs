@@ -110,7 +110,7 @@ namespace OYMLCN.Helpers
                     if (enable)
                     {
                         if (!global)
-                            setting.SetValue("AutoConfigURL", $"http://{_host}:{_port.ToString()}/{_autoConfigPath}?t={DateTime.Now.ToString("yyyyMMddHHmmssfff")}");
+                            setting.SetValue("AutoConfigURL", $"http://{_host}:{_port.ToString()}/{_autoConfigPath}?t={System.DateTime.Now.ToString("yyyyMMddHHmmssfff")}");
                         else
                         {
                             setting.SetValue("ProxyOverride", _lanIP.Join(";"));
