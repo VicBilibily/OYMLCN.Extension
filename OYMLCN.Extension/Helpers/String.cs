@@ -5,7 +5,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 字符串相关辅助
     /// </summary>
-    public static class StringHelpers
+    public static class StringHelper
     {
         #region 生成随机字符
         /// <summary>

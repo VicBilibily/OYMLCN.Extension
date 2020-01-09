@@ -5,11 +5,10 @@
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
     <Description>
-      包含已使用到的基本扩展，若需使用，请到官网查看源码以做了解。
-      不排除大版本更新会大改而不做向前兼容。
+      包含已使用到的基本扩展，若需使用，请到GITHUB查看源码以做了解。
     </Description>
     <Copyright>The MIT License</Copyright>
-    <Version>2.1.0</Version>
+    <Version>3.0.0</Version>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -18,23 +17,58 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net48;netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <DocumentationFile Condition="'$(TargetFramework)'=='net461'">bin\xml\NET461\OYMLCN.Extension.xml</DocumentationFile>
+
+    <DocumentationFile Condition="'$(TargetFramework)'=='net48'">bin\xml\NET48\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.1'">bin\xml\NETSTANDARD2_1\OYMLCN.Extension.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp2.1'">bin\xml\NETCOREAPP2_1\OYMLCN.Extension.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp3.1'">bin\xml\NETCOREAPP3_1\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
+    <Compile Remove="NET48\Helpers\CloseWindowHelpers.cs" />
+    <Compile Remove="NET48\Helpers\ExecAttachHelper.cs" />
+    <Compile Remove="NET48\Helpers\HardwareHelpers.cs" />
+    <Compile Remove="NET48\Helpers\HotKeyHelpers.cs" />
+    <Compile Remove="NET48\Helpers\SystemHelpers.cs" />
+    <Compile Remove="NET48\Helpers\SystemInfoHelpers.cs" />
+    <Compile Remove="NET48\Helpers\WebBrowserHelpers.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.Web" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Management" />
+
+    <Compile Include="..\OYMLCN.BitmapExtension\Bitmap.cs" Link="NET48\Bitmap.cs" />
+    <Compile Include="..\OYMLCN.BitmapExtension\Handlers\BitmapHandler.cs" Link="NET48\BitmapHandler.cs" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp2.1' and '$(TargetFramework)' != 'netcoreapp3.1'">
+    <Compile Remove="NETCOREAPP\Controller.cs" />
+    <Compile Remove="NETCOREAPP\ControllerExt.cs" />
+    <Compile Remove="NETCOREAPP\Json.cs" />
+    <Compile Remove="NETCOREAPP\StartupConfigure.cs" />
+    <Compile Remove="NETCOREAPP\TagHelper.cs" />
+    <Compile Remove="NETCOREAPP\TagHelpers\layui\layui-this.cs" />
+    <Compile Remove="NETCOREAPP\ViewRender.cs" />
+    <Compile Remove="NETCOREAPP\扩展模块\EntityFramework.cs" />
+    <Compile Remove="NETCOREAPP\扩展模块\JsonWebToken.cs" />
+    <Compile Remove="NETCOREAPP\独立模块\EmailSender.cs" />
+    <Compile Remove="NETCOREAPP\独立模块\UniApp.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\LICENSE.txt">

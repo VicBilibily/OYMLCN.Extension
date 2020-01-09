@@ -6,7 +6,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 分页页码辅助
     /// </summary>
-    public class PaginationHelpers
+    public class PaginationHelper
     {
         /// <summary>
         /// 总数据长度
@@ -73,7 +73,7 @@ namespace OYMLCN.Helpers
         /// <param name="page">当前页码</param>
         /// <param name="limit">单页数量</param>
         /// <param name="length">页码栏长度</param>
-        public PaginationHelpers(long total, int page = 1, int limit = 10, int length = 5)
+        public PaginationHelper(long total, int page = 1, int limit = 10, int length = 5)
         {
             Total = total;
             Limit = limit;
@@ -117,7 +117,7 @@ namespace OYMLCN.Helpers
         /// 更新基本页码列表
         /// </summary>
         /// <param name="length">页码栏长度</param>
-        public PaginationHelpers UpdatePaginationArray(int length = 5)
+        public PaginationHelper UpdatePaginationArray(int length = 5)
         {
             var mid = new List<int>();
 

@@ -10,7 +10,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 进程或线程相关操作
     /// </summary>
-    public static partial class ProcessHelpers
+    public static partial class ProcessHelper
     {
         /// <summary>
         /// 挂起线程（Thread.Sleep一年）
@@ -32,7 +32,7 @@ namespace OYMLCN.Helpers
                     p.Kill();
         }
 
-#if NET461
+#if NET48
         /// <summary>
         /// 确定当前主体是否属于具有指定 Administrator 的 Windows 用户组
         /// </summary>

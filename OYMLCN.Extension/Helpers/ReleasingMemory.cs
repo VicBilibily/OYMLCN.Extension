@@ -8,7 +8,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 内存释放辅助方法
     /// </summary>
-    public static class ReleasingMemoryHelpers
+    public static class ReleasingMemoryHelper
     {
         [DllImport("kernel32")]
         [return: MarshalAs(UnmanagedType.Bool)]

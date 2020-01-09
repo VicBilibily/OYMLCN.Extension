@@ -12,7 +12,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// HttpClient方法封装
     /// </summary>
-    public partial class HttpClientHelpers
+    public partial class HttpClientHelper
     {
         /// <summary>
         /// 全局连接
@@ -27,7 +27,7 @@ namespace OYMLCN.Helpers
         /// HttpClient方法封装
         /// </summary>
         /// <param name="timeout">请求超时(秒)</param>
-        public HttpClientHelpers(double timeout = 10)
+        public HttpClientHelper(double timeout = 10)
         {
             CookieContainer = new CookieContainer();
             HttpClient = new HttpClient(new HttpClientHandler
@@ -270,7 +270,7 @@ namespace OYMLCN.Helpers
             request.Method = "POST";
             request.Timeout = timeout * 1000;
             var postStream = new MemoryStream();
-            string boundary = "----" + DateTime.Now.Ticks.ToString("x");
+            string boundary = "----" + System.DateTime.Now.Ticks.ToString("x");
             string fileFormdataTemplate = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: application/octet-stream\r\n\r\n";
             string dataFormdataTemplate = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"{0}\"\r\n\r\n{1}";
             foreach (var file in queryDir)

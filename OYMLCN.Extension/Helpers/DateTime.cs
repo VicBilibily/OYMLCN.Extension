@@ -1,4 +1,4 @@
-﻿#if NET461
+﻿#if NET48
 using System;
 using System.Runtime.InteropServices;
 
@@ -7,7 +7,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 日期时间帮助类
     /// </summary>
-    public static class DateTimeHelper
+    public static class DateTime
     {
 #region P/Invoke 设置本地时间
         [DllImport("kernel32.dll")]
@@ -28,7 +28,7 @@ namespace OYMLCN.Helpers
         /// 设置本地计算机时间
         /// </summary>
         /// <param name="dt">DateTime对象</param>
-        public static void SetLocalTime(this DateTime dt)
+        public static void SetLocalTime(this System.DateTime dt)
         {
             SystemTime st;
 

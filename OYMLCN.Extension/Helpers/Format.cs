@@ -12,7 +12,7 @@ namespace OYMLCN.Helpers
     /// <summary>
     /// 格式处理辅助
     /// </summary>
-    public static class FormatHelpers
+    public static class FormatHelper
     {
         /// <summary>
         /// 将枚举类型转换为Key/Value数组
