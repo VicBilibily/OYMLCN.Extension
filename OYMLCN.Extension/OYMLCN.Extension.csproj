@@ -6,7 +6,7 @@
     <Company>欧阳敏岚工作室</Company>
     <Description>包含已使用到的基本扩展，若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>3.0.0-preview1</Version>
+    <Version>3.0.0-preview2</Version>
     <LangVersion>8.0</LangVersion>
 
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
@@ -20,6 +20,8 @@
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
+    <!-- Include symbol files (*.pdb) in the built .nupkg -->
+    <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
@@ -38,10 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="NET48\**" Condition="'$(TargetFramework)' != 'net472'"  />
-    <Compile Remove="NETCOREAPP\**" />
-    <Compile Include="NETCOREAPP\**" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
-    <Compile Include="NETCOREAPP\**" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+    <Compile Remove="NET48\**" Condition="'$(TargetFramework)' != 'net472'" />
+    <Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp2.1' AND '$(TargetFramework)' != 'netcoreapp3.1'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

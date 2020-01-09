@@ -82,7 +82,12 @@ namespace OYMLCN.Extensions
         }
 
         /// <summary>
-        /// 获取已注入的服务实例
+        /// 获取已注入的服务实例 <typeparamref name="T" /> 基于 <see cref="T:System.IServiceProvider" />.
+        /// </summary>
+        public static T GetService<T>(this Controller controller)
+            => controller.HttpContext.RequestServices.GetService<T>();
+        /// <summary>
+        /// 获取已注入的服务实例 <typeparamref name="T" /> 基于 <see cref="T:System.IServiceProvider" />.
         /// </summary>
         public static T GetRequiredService<T>(this Controller controller)
             => controller.HttpContext.RequestServices.GetRequiredService<T>();
