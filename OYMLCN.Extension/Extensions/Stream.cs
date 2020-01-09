@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OYMLCN.Extensions
 {
@@ -61,18 +62,24 @@ namespace OYMLCN.Extensions
         public static Stream ToStream(this byte[] bytes)
             => new MemoryStream(bytes);
 
+        /// <summary>
+        /// 将byte[]从头写入Stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="bytes"></param>
+        public static void WriteAll(this Stream stream, byte[] bytes)
+            => stream.Write(bytes, 0, bytes.Length);
 
         /// <summary>
         /// 将Stream保存到文件
         /// </summary>
-        /// <param name="memoryStream"></param>
+        /// <param name="stream"></param>
         /// <param name="fileName">文件的相对路径或绝对路径</param>
-        public static void WriteToFile(this Stream memoryStream, string fileName)
+        public static void WriteToFile(this Stream stream, string fileName)
         {
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            (memoryStream as MemoryStream).ToArray().WriteToFile(fileName);
+            stream.Seek(0, SeekOrigin.Begin);
+            (stream as MemoryStream).ToArray().WriteToFile(fileName);
         }
-
         /// <summary>
         /// 将byte[]字节数组写入文件
         /// </summary>
@@ -83,6 +90,39 @@ namespace OYMLCN.Extensions
             using (var localFile = new FileStream(fileName, FileMode.OpenOrCreate))
                 localFile.Write(content, 0, content.Length);
         }
+
+        /// <summary>
+        /// 将Stream保存到文件（使用缓冲区）
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="fileName">文件的相对路径或绝对路径</param>
+        /// <param name="bufferSize">缓冲区大小，默认8MB</param>
+        public static void WriteToFileWithBuffer(this Stream stream, string fileName, int bufferSize = 1024 * 8 * 1024)
+        {
+            using var fsWrite = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            byte[] buf = new byte[bufferSize];
+            int len;
+            while ((len = stream.Read(buf, 0, buf.Length)) != 0)
+                fsWrite.Write(buf, 0, len);
+        }
+        /// <summary>
+        /// 将Stream保存到文件（使用缓冲区）
+        /// </summary>
+        /// <param name="stream">源</param>
+        /// <param name="dest">目标地址</param>
+        /// <param name="bufferSize">缓冲区大小，默认8MB</param>
+        public static async void WriteToFileWithBufferAsync(this Stream stream, string dest, int bufferSize = 1024 * 1024 * 8)
+        {
+            using var fsWrite = new FileStream(dest, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            byte[] buf = new byte[bufferSize];
+            int len;
+            await Task.Run(() =>
+            {
+                while ((len = stream.Read(buf, 0, buf.Length)) != 0)
+                    fsWrite.Write(buf, 0, len);
+            }).ConfigureAwait(true);
+        }
+
 
     }
 }

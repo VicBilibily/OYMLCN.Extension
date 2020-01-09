@@ -159,7 +159,7 @@ namespace OYMLCN.Extensions
 
         #region FileHash
         /// <summary>
-        /// 获取路径文件的MD5码(文件不存在时返回空值)
+        /// 获取路径文件的MD5摘要值(文件不存在时返回空值)
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -172,7 +172,7 @@ namespace OYMLCN.Extensions
                 return string.Empty;
         }
         /// <summary>
-        /// 计算文件流的MD5
+        /// 计算文件流的MD5摘要值
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
@@ -186,7 +186,7 @@ namespace OYMLCN.Extensions
             return sb.ToString();
         }
         /// <summary>
-        /// 获取路径文件的SHA1码(文件不存在时返回空值)
+        /// 获取路径文件的SHA1摘要值(文件不存在时返回空值)
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
@@ -199,7 +199,7 @@ namespace OYMLCN.Extensions
                 return string.Empty;
         }
         /// <summary>
-        /// 计算文件流的SHA1
+        /// 计算文件流的SHA1摘要值
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>

@@ -1,4 +1,3 @@
-using OYMLCN.Handlers;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -81,27 +80,8 @@ namespace OYMLCN.Extensions
         /// 年 第一天日期/最后一天日期
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="dtStart"></param>
-        /// <param name="dtEnd"></param>
-        public static void GetYearStartAndEndDate(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
-        {
-            dtStart = dt.GetYearStart().Date;
-            dtEnd = dt.GetYearLastDate();
-        }
-#if NETSTANDARD2_1
-        /// <summary>
-        /// 年 第一天日期/最后一天日期
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="dtStart"></param>
-        /// <param name="dtEnd"></param>
         public static (DateTime dtStart, DateTime dtEnd) GetYearStartAndEndDate(this DateTime dt)
-        {
-            DateTime dtStart, dtEnd;
-            GetYearStartAndEndDate(dt, out dtStart, out dtEnd);
-            return (dtStart, dtEnd);
-        }
-#endif
+            => (dt.GetYearStart().Date, dt.GetYearLastDate());
         #endregion
 
         #region GetMonthXXX
@@ -126,27 +106,8 @@ namespace OYMLCN.Extensions
         /// 月 第一天日期/最后一天日期
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="dtStart"></param>
-        /// <param name="dtEnd"></param>
-        public static void GetMonthStartAndEndDate(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
-        {
-            dtStart = dt.GetMonthStart().Date;
-            dtEnd = dt.GetMonthLastDate();
-        }
-#if NETSTANDARD2_1
-        /// <summary>
-        /// 月 第一天日期/最后一天日期
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="dtStart"></param>
-        /// <param name="dtEnd"></param>
         public static (DateTime dtStart, DateTime dtEnd) GetMonthStartAndEndDate(this DateTime dt)
-        {
-            DateTime dtStart, dtEnd;
-            GetMonthStartAndEndDate(dt, out dtStart, out dtEnd);
-            return (dtStart, dtEnd);
-        }
-#endif
+            => (dt.GetMonthStart().Date, dt.GetMonthLastDate());
         #endregion
         #endregion
 
@@ -214,26 +175,9 @@ namespace OYMLCN.Extensions
         /// 得到一年中的某周的起始日和截止日（星期日是第一天）
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="year">年份</param>
-        /// <param name="week">第几周（为0时从dt获取）</param>
-        /// <param name="dtStart">开始日期</param>
-        /// <param name="dtEnd">结束日期</param>
-        public static void GetWeekTime(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
-        {
-            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
-            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
-            dtStart = date.AddDays(-(int)date.DayOfWeek + 1);
-            dtEnd = date.AddDays(7 - (int)date.DayOfWeek);
-        }
-        /// <summary>
-        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="dtStart">开始日期</param>
-        /// <param name="dtEnd">结束日期</param>
-        public static void GetWeekTime(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
-            => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear(), out dtStart, out dtEnd);
-#if NETSTANDARD2_1
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt)
+            => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear());
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期日是第一天）
         /// </summary>
@@ -244,42 +188,20 @@ namespace OYMLCN.Extensions
         public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt, int year, int week)
         {
             DateTime dtStart, dtEnd;
-            GetWeekTime(dt, year, week, out dtStart, out dtEnd);
+            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + 1);
+            dtEnd = date.AddDays(7 - (int)date.DayOfWeek);
             return (dtStart, dtEnd);
         }
-        /// <summary>
-        /// 得到一年中的某周的起始日和截止日（星期日是第一天）
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns>开始日期/结束日期</returns>
-        public static (DateTime dtStart, DateTime dtEnd) GetWeekTime(this DateTime dt)
-            => GetWeekTime(dt, dt.Year, dt.GetWeekOfYear());
-#endif
 
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期一是第一天）
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="year">年份</param>
-        /// <param name="week">第几周（为0时从dt获取）</param>
-        /// <param name="dtStart">开始日期</param>
-        /// <param name="dtEnd">结束日期</param>
-        public static void GetWeekTimeFromMonday(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
-        {
-            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
-            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
-            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
-            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1);
-        }
-        /// <summary>
-        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="dtStart">开始日期</param>
-        /// <param name="dtEnd">结束日期</param>
-        public static void GetWeekTimeFromMonday(this DateTime dt, out DateTime dtStart, out DateTime dtEnd)
-            => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday(), out dtStart, out dtEnd);
-#if NETSTANDARD2_1
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt)
+            => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday());
         /// <summary>
         /// 得到一年中的某周的起始日和截止日（星期一是第一天）
         /// </summary>
@@ -290,17 +212,12 @@ namespace OYMLCN.Extensions
         public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt, int year, int week)
         {
             DateTime dtStart, dtEnd;
-            GetWeekTimeFromMonday(dt, year, week, out dtStart, out dtEnd);
+            var date = new DateTime(year > 0 ? year : dt.Year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1);
             return (dtStart, dtEnd);
         }
-        /// <summary>
-        /// 得到一年中的某周的起始日和截止日（星期一是第一天）
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns>开始日期/结束日期</returns>
-        public static (DateTime dtStart, DateTime dtEnd) GetWeekTimeFromMonday(this DateTime dt)
-            => GetWeekTimeFromMonday(dt, dt.Year, dt.GetWeekOfYearFromMonday());
-#endif
         #endregion
 
         #region GetWeekWorkTime
@@ -308,18 +225,9 @@ namespace OYMLCN.Extensions
         /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="year">年份</param>
-        /// <param name="week">第几周</param>
-        /// <param name="dtStart">开始日期</param>
-        /// <param name="dtEnd">结束日期</param>
-        public static void GetWeekWorkTime(this DateTime dt, int year, int week, out DateTime dtStart, out DateTime dtEnd)
-        {
-            var date = new DateTime(year, 1, 1);
-            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
-            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
-            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1).AddDays(-2);
-        }
-#if NETSTANDARD2_1
+        /// <returns>开始日期/结束日期</returns>
+        public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt)
+            => GetWeekWorkTime(dt, dt.Year, dt.GetWeekOfYearFromMonday());
         /// <summary>
         /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
         /// </summary>
@@ -330,17 +238,12 @@ namespace OYMLCN.Extensions
         public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt, int year, int week)
         {
             DateTime dtStart, dtEnd;
-            GetWeekWorkTime(dt, year, week, out dtStart, out dtEnd);
+            var date = new DateTime(year, 1, 1);
+            date += new TimeSpan((week - 1) * 7, 0, 0, 0);
+            dtStart = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            dtEnd = date.AddDays((int)DayOfWeek.Saturday - (int)date.DayOfWeek + 1).AddDays(-2);
             return (dtStart, dtEnd);
         }
-        /// <summary>
-        /// 得到一年中的某周的起始日和截止日 周一到周五/工作日
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns>开始日期/结束日期</returns>
-        public static (DateTime dtStart, DateTime dtEnd) GetWeekWorkTime(this DateTime dt)
-            => GetWeekWorkTime(dt, dt.Year, dt.GetWeekOfYearFromMonday());
-#endif
         #endregion
         #endregion
 

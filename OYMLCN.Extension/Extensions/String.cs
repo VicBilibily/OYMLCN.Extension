@@ -1,4 +1,3 @@
-using OYMLCN.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,14 +14,6 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringExtensions
     {
-        /// <summary>
-        /// 将字符串作为HTML格式文本处理
-        /// </summary>
-        /// <param name="html"></param>
-        /// <returns></returns>
-        public static HtmlFormatHandler AsHtmlFormat(this string html)
-            => html.IsNotNullOrWhiteSpace() ? new HtmlFormatHandler(html) : null;
-
         #region Is对比判断
         /// <summary>
         /// 判断字符串是否为空
@@ -457,7 +448,7 @@ namespace OYMLCN.Extensions
         #endregion
 
         #region 简繁体转换
-#if NET461
+#if NET48
         /// <summary>
         /// 中文字符工具类
         /// </summary>
@@ -492,6 +483,7 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
+
 
     }
 }

@@ -6,9 +6,9 @@ using System.Text;
 namespace OYMLCN.Extensions
 {
     /// <summary>
-    /// ZipExtension
+    /// CompressExtensions
     /// </summary>
-    public static class ZipExtensions
+    public static class CompressExtensions
     {
         /// <summary>
         /// 将传入字符串以GZip算法压缩后，返回Base64编码字符
@@ -22,7 +22,7 @@ namespace OYMLCN.Extensions
                 return "";
             byte[] rawData = Encoding.UTF8.GetBytes(rawString.ToString());
             byte[] zippedData = GZipCompress(rawData);
-            string result = Convert.ToBase64String(zippedData);
+            string result = zippedData.ConvertToBase64String();
             return removeEmpty ? result.TrimEnd('=') : result;
         }
 
@@ -71,7 +71,7 @@ namespace OYMLCN.Extensions
                 for (var i = length; i < 4; i++)
                     zippedString += "=";
 
-            byte[] zippedData = Convert.FromBase64String(zippedString.ToString());
+            byte[] zippedData = zippedString.ConvertFromBase64String();
             return Encoding.UTF8.GetString(GZipDecompress(zippedData));
         }
 
@@ -123,7 +123,7 @@ namespace OYMLCN.Extensions
         public static void GZipDecompressToFile(this FileInfo file, string fileName)
             => file.ReadToStream().GZipDecompress().WriteToFile(fileName);
 
-#if NET35
+
         /// <summary>
         /// 使用指定的文件夹创建Zip压缩文件
         /// </summary>
@@ -138,6 +138,5 @@ namespace OYMLCN.Extensions
         /// <param name="targetPath">文件夹路径</param>
         public static void ExtractZipFile(this FileInfo file, string targetPath)
             => ZipFile.ExtractToDirectory(file.FullName, targetPath);
-#endif
     }
 }

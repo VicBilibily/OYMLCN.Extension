@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OYMLCN.Extensions
@@ -194,9 +195,56 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 将字符数组转换拼接为字符串
         /// </summary>
-        /// <param name="chars"></param>
-        /// <returns></returns>
         public static string ConvertToString(this char[] chars) => new string(chars);
+        /// <summary>
+        /// 获取指定字符串中的所有字符编码为UTF8的字节序列
+        /// </summary>
+        public static byte[] GetUTF8Bytes(this string str)
+            => Encoding.UTF8.GetBytes(str);
+        /// <summary>
+        /// 将Byte[]转换为Base64字符串
+        /// </summary>
+        public static string ConvertToBase64String(this byte[] bytes)
+            => Convert.ToBase64String(bytes);
+        /// <summary>
+        /// 将Base64转换为Byte[]
+        /// </summary>
+        public static byte[] ConvertFromBase64String(this string base64)
+            => Convert.FromBase64String(base64);
+
+        /// <summary>
+        /// 将Byte[]转换为UTF8字符串
+        /// </summary>
+        public static string GetUTF8String(this byte[] bytes)
+            => Encoding.UTF8.GetString(bytes);
+        /// <summary>
+        /// 将Base64转换为UTF8字符串
+        /// </summary>
+        public static string EncodingUTF8FromBase64String(this string base64)
+            => base64.ConvertFromBase64String().GetUTF8String();
+
+        /// <summary>
+        /// 原明文字符串转成二进制字符串
+        /// </summary>
+        public static string StringToBitString(this string str)
+        {
+            byte[] data = Encoding.Unicode.GetBytes(str);
+            StringBuilder result = new StringBuilder(data.Length * 8);
+            foreach (byte b in data)
+                result.Append(Convert.ToString(b, 2).PadLeft(8, '0'));
+            return result.ToString();
+        }
+        /// <summary>
+        /// 原二进制字符串转成明文字符串
+        /// </summary>
+        public static string BitStringToString(this string str)
+        {
+            CaptureCollection cs = Regex.Match(str, @"([01]{8})+").Groups[1].Captures;
+            byte[] data = new byte[cs.Count];
+            for (int i = 0; i < cs.Count; i++)
+                data[i] = Convert.ToByte(cs[i].Value, 2);
+            return Encoding.Unicode.GetString(data, 0, data.Length);
+        }
 
 
         /// <summary>
@@ -226,10 +274,6 @@ namespace OYMLCN.Extensions
             }
         }
 
-        ///// <summary>
-        ///// 转换网页地址为Uri
-        ///// </summary>
-        //public Uri Uri => new Uri(Str);
         /// <summary>
         /// 转换网页地址为Uri(失败返回null)
         /// </summary>
@@ -285,9 +329,6 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 把以英文逗号(,)分割的ID字符串提取为ID数组
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="idStr"></param>
-        /// <returns></returns>
         public static T[] ConvertToIdArray<T>(this string idStr)
         {
             if (string.IsNullOrEmpty(idStr)) return new T[0];
