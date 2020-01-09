@@ -15,79 +15,48 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// AES加密
         /// </summary>
-        public static string AESEncrypt(this string str, string encodingAesKey)
-        {
-            byte[] toEncryptArray = str.GetUTF8Bytes();
-            var aes = Aes.Create();
-            aes.Key = encodingAesKey.HashToMD5().GetUTF8Bytes();
-            aes.Mode = CipherMode.ECB;
-            aes.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = aes.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
+        /// <param name="str">源数据</param>  
+        /// <param name="AesKey">密钥, 32位</param>
+        public static string AESEncrypt(this string str, string AesKey)
+            => EncryptHelper.AESEncrypt(str, AesKey);
         /// <summary>
         /// AES解密
         /// </summary>
-        public static string AESDecrypt(this string str, string encodingAesKey)
-        {
-            byte[] toEncryptArray = str.ConvertFromBase64String();
-            var aes = Aes.Create();
-            aes.Key = encodingAesKey.HashToMD5().GetUTF8Bytes();
-            aes.Mode = CipherMode.ECB;
-            aes.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = aes.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            return resultArray.GetUTF8String();
-        }
+        /// <param name="str">已加密数据</param>  
+        /// <param name="AesKey">密钥, 32位</param>  
+        public static string AESDecrypt(this string str, string AesKey)
+            => EncryptHelper.AESDecrypt(str, AesKey);
+        /// <summary>
+        /// AES加密
+        /// </summary>
+        /// <param name="str">源数据</param>  
+        /// <param name="AesKey">密钥, 32位</param>
+        /// <param name="AesIV">IV, 16位</param>  
+        public static string AESEncrypt(this string str, string AesKey, string AesIV)
+            => EncryptHelper.AESEncrypt(str, AesKey, AesIV);
+        /// <summary>
+        /// AES解密
+        /// </summary>
+        /// <param name="str">已加密数据</param>  
+        /// <param name="AesKey">密钥, 32位</param>  
+        /// <param name="AesIV">IV, 16位</param>  
+        public static string AESDecrypt(this string str, string AesKey, string AesIV)
+            => EncryptHelper.AESDecrypt(str, AesKey, AesIV);
 
         /// <summary> 
         /// DES加密
-        /// </summary> 
-        public static string DESEncrypt(this string str, string key)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var des = TripleDES.Create();
-                var inputByteArray = str.GetUTF8Bytes();
-                var bKey = Encoding.ASCII.GetBytes(key.HashToMD5().SubString(0, 24));
-                des.Key = bKey;
-                des.IV = bKey.Take(8).ToArray();
-                var cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
-                cs.Write(inputByteArray, 0, inputByteArray.Length);
-                cs.FlushFinalBlock();
-                var ret = new StringBuilder();
-                foreach (byte b in ms.ToArray())
-                    ret.AppendFormat("{0:X2}", b);
-                return ret.ToString();
-            }
-        }
+        /// </summary>
+        /// <param name="str">源数据</param>  
+        /// <param name="DesKey">密钥, 24位</param>  
+        public static string DESEncrypt(this string str, string DesKey)
+            => EncryptHelper.DESEncrypt(str, DesKey);
         /// <summary> 
         /// DES解密 
         /// </summary> 
-        public static string DESDecrypt(this string str, string key)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var des = TripleDES.Create();
-                var len = str.Length / 2;
-                byte[] inputByteArray = new byte[len];
-                int x;
-                for (x = 0; x < len; x++)
-                {
-                    var i = Convert.ToInt32(str.Substring(x * 2, 2), 16);
-                    inputByteArray[x] = (byte)i;
-                }
-                var bKey = Encoding.ASCII.GetBytes(key.HashToMD5().SubString(0, 24));
-                des.Key = bKey;
-                des.IV = bKey.Take(8).ToArray();
-                CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write);
-                cs.Write(inputByteArray, 0, inputByteArray.Length);
-                cs.FlushFinalBlock();
-                return Encoding.UTF8.GetString(ms.ToArray());
-            }
-        }
-
+        /// <param name="str">已加密数据</param>  
+        /// <param name="DesKey">密钥, 24位</param>  
+        public static string DESDecrypt(this string str, string DesKey)
+            => EncryptHelper.DESDecrypt(str, DesKey);
 
         #region RSA
         /// <summary>

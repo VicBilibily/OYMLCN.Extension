@@ -1,115 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OYMLCN.Helpers;
 
 namespace OYMLCN.Extensions
 {
-
     /// <summary>
     /// HashExtensions
     /// </summary>
     public static class HashExtensions
     {
-        #region Encoder/Base64Encoder
-        internal static string Encoder<T>(this T encryptor, string str) where T : HashAlgorithm
-        {
-            var sha1bytes = str.GetUTF8Bytes();
-            byte[] resultHash = encryptor.ComputeHash(sha1bytes);
-            string sha1String = BitConverter.ToString(resultHash).ToLower();
-            sha1String = sha1String.Replace("-", "");
-            return sha1String;
-        }
-        internal static string Base64Encoder<T>(this T encryptor, string str) where T : HMAC
-        {
-            byte[] dataBuffer = str.GetUTF8Bytes();
-            byte[] hashBytes = encryptor.ComputeHash(dataBuffer);
-            return hashBytes.ConvertToBase64String();
-        }
-        #endregion
-
-        #region Hash
         /// <summary>
         /// SHA1摘要结果
         /// </summary>
         public static string HashToSHA1(this string str)
-            => SHA1.Create().Encoder(str);
+            => EncryptHelper.Sha1(str);
         /// <summary>
         /// HMACSHA1摘要结果
         /// </summary>
         public static string HashToHMACSHA1(this string str, string key)
-            => new HMACSHA1(key.GetUTF8Bytes()).Encoder(str);
+            => EncryptHelper.HMACSHA1(str, key);
         /// <summary>
         /// HMACSHA1摘要结果(Base64结果)
         /// </summary>
         public static string HashToHMACSHA1Base64(this string str, string key)
-            => new HMACSHA1(key.GetUTF8Bytes()).Base64Encoder(str);
+            => EncryptHelper.HMACSHA1Base64(str, key);
 
         /// <summary>
         /// SHA256摘要结果
         /// </summary>
         public static string HashToSHA256(this string str)
-            => SHA256.Create().Encoder(str);
+            => EncryptHelper.Sha256(str);
         /// <summary>
         /// HMACSHA256摘要结果
         /// </summary>
         public static string HashToHMACSHA256(this string str, string key)
-            => new HMACSHA256(key.GetUTF8Bytes()).Encoder(str);
+            => EncryptHelper.HMACSHA256(str, key);
         /// <summary>
         /// HMACSHA256摘要结果(Base64结果)
         /// </summary>
         public static string HashToHMACSHA256Base64(this string str, string key)
-            => new HMACSHA256(key.GetUTF8Bytes()).Base64Encoder(str);
+            => EncryptHelper.HMACSHA256Base64(str, key);
 
         /// <summary>
         /// SHA384摘要结果
         /// </summary>
         public static string HashToSHA384(this string str)
-            => SHA384.Create().Encoder(str);
+            => EncryptHelper.Sha384(str);
         /// <summary>
         /// HMACSHA384摘要结果
         /// </summary>
         public static string HashToHMACSHA384(this string str, string key)
-            => new HMACSHA384(key.GetUTF8Bytes()).Encoder(str);
+            => EncryptHelper.HMACSHA384(str, key);
         /// <summary>
         /// HMACSHA384摘要结果(Base64结果)
         /// </summary>
         public static string HashToHMACSHA384Base64(this string str, string key)
-            => new HMACSHA384(key.GetUTF8Bytes()).Base64Encoder(str);
+            => EncryptHelper.HMACSHA384Base64(str, key);
 
         /// <summary>
         /// SHA512摘要结果
         /// </summary>
         public static string HashToSHA512(this string str)
-            => SHA512.Create().Encoder(str);
+            => EncryptHelper.Sha512(str);
         /// <summary>
         /// HMACSHA512摘要结果
         /// </summary>
         public static string HashToHMACSHA512(this string str, string key)
-            => new HMACSHA512(key.GetUTF8Bytes()).Encoder(str);
+            => EncryptHelper.HMACSHA512(str, key);
         /// <summary>
         /// HMACSHA512摘要结果(Base64结果)
         /// </summary>
         public static string HashToHMACSHA512Base64(this string str, string key)
-            => new HMACSHA512(key.GetUTF8Bytes()).Base64Encoder(str);
+            => EncryptHelper.HMACSHA512Base64(str, key);
 
         /// <summary>
         /// MD5摘要结果
         /// </summary>
         public static string HashToMD5(this string str)
-            => MD5.Create().Encoder(str);
+            => EncryptHelper.Md5(str);
         /// <summary>
         /// HMACMD5摘要结果
         /// </summary>
         public static string HashToHMACMD5(this string str, string key)
-            => new HMACMD5(key.GetUTF8Bytes()).Encoder(str);
+            => EncryptHelper.HMACMD5(str, key);
         /// <summary>
         /// HMACMD5摘要结果(Base64结果)
         /// </summary>
         public static string HashToHMACMD5Base64(this string str, string key)
-            => new HMACMD5(key.GetUTF8Bytes()).Base64Encoder(str);
-        #endregion
+            => EncryptHelper.HMACMD5Base64(str, key);
     }
 }
