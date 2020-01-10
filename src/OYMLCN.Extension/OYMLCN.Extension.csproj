@@ -6,12 +6,18 @@
     <Company>欧阳敏岚工作室</Company>
     <Description>包含已使用到的基本扩展，若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>3.0.0-preview3</Version>
+    <Version>3.0.0-preview4</Version>
     <LangVersion>8.0</LangVersion>
 
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
-    <RepositoryCommit>891c227a5cbb825f9351caddea67df0d92fa71f5</RepositoryCommit>
 
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
@@ -22,10 +28,6 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <!-- Include symbol files (*.pdb) in the built .nupkg -->
-    <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <DocumentationFile Condition="'$(TargetFramework)'=='net472'">bin\xml\NET472\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
@@ -57,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
