@@ -97,7 +97,7 @@ namespace OYMLCN.Helpers
             => SetIEKeyforWebBrowserControl("7000");
         #endregion
 
-        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("wininet.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         static extern bool InternetGetCookieEx(string pchURL, string pchCookieName, StringBuilder pchCookieData, ref uint pcchCookieData, int dwFlags, IntPtr lpReserved);
         /// <summary>
         /// 获取指定地址的Cookies
