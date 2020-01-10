@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
@@ -50,7 +51,16 @@ namespace OYMLCN.AspNetCore
         public string ActionName { get; internal set; }
         public IDictionary<string, object> ActionArguments { get; internal set; }
 
-        public string FilterRemark { get; set; }
+        public string FilterRemark { get; internal set; }
+
+        /// <summary>
+        /// 新独立IP访客
+        /// </summary>
+        public bool IsNewUV { get; internal set; }
+        /// <summary>
+        /// 新的登录用户
+        /// </summary>
+        public bool IsNewLogin { get; internal set; }
 #pragma warning restore 1591
     }
 
@@ -96,6 +106,8 @@ namespace OYMLCN.AspNetCore
 
             // 尝试获取已注入的分析配置
             var options = context.GetService<IOptions<BrowseStatisticsOptions>>()?.Value;
+            // 获取注入的内存缓存
+            var MemoryCache = context.GetService<IMemoryCache>();
 
             if (options != null && options.handlerDelegate != null)
             {
@@ -115,6 +127,23 @@ namespace OYMLCN.AspNetCore
                 result.ActionArguments = context.ActionArguments;
 
                 result.FilterRemark = this.Remark;
+
+                var controller = context.Controller as Controller;
+                MemoryCache.GetOrCreate($"_bs_ip_{controller.RequestSourceIP}", (cache) =>
+                {
+                    result.IsNewUV = true;
+                    cache.SetValue(true);
+                    cache.AbsoluteExpiration = DateTime.Now.GetNextDayStart();
+                    return true;
+                });
+                if (controller?.IsAuthenticated == true)
+                    MemoryCache.GetOrCreate($"_bs_nl_{controller.UserId}_{controller.UserName}", (cache) =>
+                    {
+                        result.IsNewLogin = true;
+                        cache.SetValue(true);
+                        cache.AbsoluteExpiration = DateTime.Now.GetNextDayStart();
+                        return true;
+                    });
 
                 options.handlerDelegate(context, result);
                 //var task = options.handlerDelegate(context, result);
@@ -138,15 +167,13 @@ namespace Microsoft.Extensions.Configuration
         /// 添加使用浏览分析器
         /// </summary>
         public static IServiceCollection AddBrowseStatistics(this IServiceCollection builder)
-        {
-            builder.Configure(new Action<BrowseStatisticsOptions>(_ => { }));
-            return builder;
-        }
+            => builder.AddBrowseStatistics(_ => { });
         /// <summary>
         /// 添加使用浏览分析器
         /// </summary>
         public static IServiceCollection AddBrowseStatistics(this IServiceCollection builder, Action<BrowseStatisticsOptions> configure)
         {
+            builder.AddMemoryCache();
             builder.Configure(configure);
             return builder;
         }
