@@ -6,8 +6,12 @@
     <Company>欧阳敏岚工作室</Company>
     <Description>包含已使用到的基本扩展，若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
-    <Version>3.0.0-preview2</Version>
+    <Version>3.0.0-preview3</Version>
     <LangVersion>8.0</LangVersion>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+    <RepositoryCommit>891c227a5cbb825f9351caddea67df0d92fa71f5</RepositoryCommit>
 
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
@@ -17,8 +21,6 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <PackageLicenseUrl></PackageLicenseUrl>
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
@@ -33,7 +35,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE.txt">
+    <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

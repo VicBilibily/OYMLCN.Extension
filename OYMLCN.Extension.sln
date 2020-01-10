@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension", "OYMLCN.Extension\OYMLCN.Extension.csproj", "{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension", "src\OYMLCN.Extension\OYMLCN.Extension.csproj", "{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.TestForDotNet", "OYMLCN.Extension.TestForDotNet\OYMLCN.Extension.TestForDotNet.csproj", "{9544B20B-732F-4B72-88C8-5BD2A681317D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.TestForDotNet", "test\OYMLCN.Extension.TestForDotNet\OYMLCN.Extension.TestForDotNet.csproj", "{9544B20B-732F-4B72-88C8-5BD2A681317D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Test", "OYMLCN.Extension.Test\OYMLCN.Extension.Test.csproj", "{3E80989E-D4D7-4297-8F54-3A7475C534D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Test", "test\OYMLCN.Extension.Test\OYMLCN.Extension.Test.csproj", "{3E80989E-D4D7-4297-8F54-3A7475C534D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.SevenZipHelper", "OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj", "{6A44A95F-8666-46DB-BD1E-B63018DE2ACF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.SevenZipHelper", "src\OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj", "{6A44A95F-8666-46DB-BD1E-B63018DE2ACF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.BitmapExtension", "OYMLCN.BitmapExtension\OYMLCN.BitmapExtension.csproj", "{5BED13B4-E9B6-4FA4-92BB-187D3FF473F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.BitmapExtension", "src\OYMLCN.BitmapExtension\OYMLCN.BitmapExtension.csproj", "{5BED13B4-E9B6-4FA4-92BB-187D3FF473F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.HtmlExtension", "OYMLCN.HtmlExtension\OYMLCN.HtmlExtension.csproj", "{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.HtmlExtension", "src\OYMLCN.HtmlExtension\OYMLCN.HtmlExtension.csproj", "{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

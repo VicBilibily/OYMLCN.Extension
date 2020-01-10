@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
-    <ProjectReference Include="..\OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj" />
+    <ProjectReference Include="..\..\src\OYMLCN.Extension\OYMLCN.Extension.csproj" />
+    <ProjectReference Include="..\..\src\OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj" />
   </ItemGroup>
 
 </Project>
