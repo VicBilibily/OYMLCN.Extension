@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +26,14 @@ namespace OYMLCN.AspNetCore
     /// </summary>
     public class BrowseStatisticsOptions
     {
+        /// <summary>
+        /// 启动统计拦截（可在调试时通过条件配置文件禁用统计）
+        /// </summary>
+        public bool Disabled { get; set; } = false;
+        /// <summary>
+        /// 只统计GET请求，默认值false
+        /// </summary>
+        public bool OnlyGetMethod { get; set; } = false;
         internal BrowseStatisticsDelegate handlerDelegate { get; set; }
     }
     /// <summary>
@@ -35,7 +44,8 @@ namespace OYMLCN.AspNetCore
 #pragma warning disable 1591
         internal BrowseStatisticsResult() { }
 
-        public string RequestUrl => $"{RequestScheme}://{RequestHost}{RequestPath}{RequestQueryString}";
+        public string RequestUrl => $"{RequestScheme}://{RequestHost}{RequestPath}";
+        public string RequestQueryUrl => $"{RequestUrl}{RequestQueryString}";
         public string RequestMethod { get; internal set; }
         public string RequestScheme { get; internal set; }
         public HostString RequestHost { get; internal set; }
@@ -51,6 +61,7 @@ namespace OYMLCN.AspNetCore
         public string ActionName { get; internal set; }
         public IDictionary<string, object> ActionArguments { get; internal set; }
 
+        public string FilterName { get; internal set; }
         public string FilterRemark { get; internal set; }
 
         /// <summary>
@@ -71,6 +82,10 @@ namespace OYMLCN.AspNetCore
     public class BrowseStatisticsAttribute : ActionFilterAttribute
     {
         /// <summary>
+        /// 自定义处理名称
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// 不处理分析当前拦截
         /// </summary>
         public bool Ignore { get; set; } = false;
@@ -79,6 +94,15 @@ namespace OYMLCN.AspNetCore
         /// </summary>
         public string Remark { get; set; }
 
+        /// <summary>
+        /// 只统计指定参数名称（多个以 , 号分割）
+        /// </summary>
+        public string Arguments { get; set; }
+        /// <summary>
+        /// 忽略指定参数名称（多个以 , 号分割）[all则全部忽略]
+        /// </summary>
+        public string RemoveArguments { get; set; }
+
 
         /// <summary>
         /// Action 执行之前，数据模型绑定已完成
@@ -86,6 +110,16 @@ namespace OYMLCN.AspNetCore
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
+            // 尝试获取已注入的分析配置
+            var options = context.GetService<IOptions<BrowseStatisticsOptions>>()?.Value;
+            // 获取注入的内存缓存
+            var MemoryCache = context.GetService<IMemoryCache>();
+            // 已禁用统计的情况下不再继续
+            if (options.Disabled) return;
+            // 如果只统计GET请求，不是GET的全部忽略
+            if ( options.OnlyGetMethod && context.HttpContext.Request.Method != HttpMethod.Get.Method)
+                return;
+
             var filters = context.Filters
                 .Where(v => v.GetType() == typeof(BrowseStatisticsAttribute))
                 .Select(v => v as BrowseStatisticsAttribute)
@@ -98,16 +132,15 @@ namespace OYMLCN.AspNetCore
             // 合并最终的处理参数设置
             if (filters.Count > 1)
             {
+                if (this.Name == null)
+                    this.Name = filters.Select(v => v.Name)
+                        .Where(v => v.IsNotNullOrEmpty()).LastOrDefault();
                 if (this.Remark == null)
                     this.Remark = filters.Select(v => v.Remark)
                         .Where(v => v.IsNotNullOrEmpty()).LastOrDefault();
-                // ：TODO
+                this.Arguments = filters.Select(v => v.Arguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
+                this.RemoveArguments = filters.Select(v => v.RemoveArguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
             }
-
-            // 尝试获取已注入的分析配置
-            var options = context.GetService<IOptions<BrowseStatisticsOptions>>()?.Value;
-            // 获取注入的内存缓存
-            var MemoryCache = context.GetService<IMemoryCache>();
 
             if (options != null && options.handlerDelegate != null)
             {
@@ -124,8 +157,26 @@ namespace OYMLCN.AspNetCore
                 result.AreaName = context.ActionDescriptor.RouteValues["area"] as string;
                 result.ControllerName = context.ActionDescriptor.RouteValues["controller"] as string;
                 result.ActionName = context.ActionDescriptor.RouteValues["action"] as string;
-                result.ActionArguments = context.ActionArguments;
 
+                var ActionArguments = context.ActionArguments.ToDictionary(v => v.Key, v => v.Value);
+                if (this.Arguments.IsNotNullOrEmpty())
+                {
+                    var paramArr = this.Arguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
+                    ActionArguments = ActionArguments.Where(v => paramArr.Contains(v.Key.ToLower())).ToDictionary(v => v.Key, v => v.Value);
+                }
+                if (this.RemoveArguments.IsNotNullOrEmpty())
+                {
+                    if (this.RemoveArguments.ToLower() == "all")
+                        ActionArguments = new Dictionary<string, object>();
+                    else
+                    {
+                        var paramArr = this.RemoveArguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
+                        ActionArguments = ActionArguments.Where(v => !paramArr.Contains(v.Key.ToLower())).ToDictionary(v => v.Key, v => v.Value);
+                    }
+                }
+                result.ActionArguments = ActionArguments;
+
+                result.FilterName = this.Name;
                 result.FilterRemark = this.Remark;
 
                 var controller = context.Controller as Controller;
