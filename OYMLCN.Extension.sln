@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.BitmapExtension", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.HtmlExtension", "src\OYMLCN.HtmlExtension\OYMLCN.HtmlExtension.csproj", "{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{624E5562-47DA-4A3D-BFC8-95E41696F382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.AspNetCore.Test", "test\OYMLCN.AspNetCore.Test\OYMLCN.AspNetCore.Test.csproj", "{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +49,18 @@ Global
 		{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6AE15A-5A36-4985-8175-D1F0C7002AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9544B20B-732F-4B72-88C8-5BD2A681317D} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
+		{3E80989E-D4D7-4297-8F54-3A7475C534D0} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
+		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {045324C9-924A-435B-B2D3-A8EEB682E0FA}
