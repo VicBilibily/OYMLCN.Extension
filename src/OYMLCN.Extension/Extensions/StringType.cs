@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -13,19 +14,60 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringExtensions
     {
+        /// <summary>
+        /// string类型转换
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static T Convert2<T>(this string input)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                if (converter != null)
+                    return (T)converter.ConvertFromString(input);
+                return default(T);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+        /// <summary>
+        /// string类型转换
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static object Convert2(this string input, Type type)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(type);
+                if (converter != null)
+                    return converter.ConvertFromString(input);
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         #region 数字的转换
         /// <summary>
         /// 转换数字字符串为可空SByte类型
         /// </summary>
         public static sbyte? ConvertToNullableSByte(this string str)
         {
-            try { return Convert.ToSByte(str); }
+            try { return System.Convert.ToSByte(str); }
             catch
             {
                 str = str.FormatAsIntegerNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToSByte(str);
+                return System.Convert.ToSByte(str);
             }
         }
 
@@ -34,13 +76,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static byte? ConvertToNullableByte(this string str)
         {
-            try { return Convert.ToByte(str); }
+            try { return System.Convert.ToByte(str); }
             catch
             {
                 str = str.FormatAsIntegerNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToByte(str);
+                return System.Convert.ToByte(str);
             }
         }
         /// <summary>
@@ -48,13 +90,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static short? ConvertToNullableShort(this string str)
         {
-            try { return Convert.ToInt16(str); }
+            try { return System.Convert.ToInt16(str); }
             catch
             {
                 str = str.FormatAsIntegerNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToInt16(str);
+                return System.Convert.ToInt16(str);
             }
         }
         /// <summary>
@@ -62,13 +104,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static int? ConvertToNullableInt(this string str)
         {
-            try { return Convert.ToInt32(str); }
+            try { return System.Convert.ToInt32(str); }
             catch
             {
                 str = str.FormatAsIntegerNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToInt32(str);
+                return System.Convert.ToInt32(str);
             }
         }
         /// <summary>
@@ -76,13 +118,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static long? ConvertToNullableLong(this string str)
         {
-            try { return Convert.ToInt64(str); }
+            try { return System.Convert.ToInt64(str); }
             catch
             {
                 str = str.FormatAsIntegerNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToInt64(str);
+                return System.Convert.ToInt64(str);
             }
         }
         /// <summary>
@@ -105,13 +147,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static float? ConvertToNullableFloat(this string str)
         {
-            try { return Convert.ToSingle(str); }
+            try { return System.Convert.ToSingle(str); }
             catch
             {
                 str = str.FormatAsNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToSingle(str);
+                return System.Convert.ToSingle(str);
             }
         }
         /// <summary>
@@ -119,13 +161,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static double? ConvertToNullableDouble(this string str)
         {
-            try { return Convert.ToDouble(str); }
+            try { return System.Convert.ToDouble(str); }
             catch
             {
                 str = str.FormatAsNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToDouble(str);
+                return System.Convert.ToDouble(str);
             }
         }
         /// <summary>
@@ -133,13 +175,13 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static decimal? ConvertToNullableDecimal(this string str)
         {
-            try { return Convert.ToDecimal(str); }
+            try { return System.Convert.ToDecimal(str); }
             catch
             {
                 str = str.FormatAsNumeric();
                 if (str.IsNullOrWhiteSpace())
                     return null;
-                return Convert.ToDecimal(str);
+                return System.Convert.ToDecimal(str);
             }
         }
 
@@ -205,12 +247,12 @@ namespace OYMLCN.Extensions
         /// 将Byte[]转换为Base64字符串
         /// </summary>
         public static string ConvertToBase64String(this byte[] bytes)
-            => Convert.ToBase64String(bytes);
+            => System.Convert.ToBase64String(bytes);
         /// <summary>
         /// 将Base64转换为Byte[]
         /// </summary>
         public static byte[] ConvertFromBase64String(this string base64)
-            => Convert.FromBase64String(base64);
+            => System.Convert.FromBase64String(base64);
 
         /// <summary>
         /// 将Byte[]转换为UTF8字符串
@@ -231,7 +273,7 @@ namespace OYMLCN.Extensions
             byte[] data = Encoding.Unicode.GetBytes(str);
             StringBuilder result = new StringBuilder(data.Length * 8);
             foreach (byte b in data)
-                result.Append(Convert.ToString(b, 2).PadLeft(8, '0'));
+                result.Append(System.Convert.ToString(b, 2).PadLeft(8, '0'));
             return result.ToString();
         }
         /// <summary>
@@ -242,7 +284,7 @@ namespace OYMLCN.Extensions
             CaptureCollection cs = Regex.Match(str, @"([01]{8})+").Groups[1].Captures;
             byte[] data = new byte[cs.Count];
             for (int i = 0; i < cs.Count; i++)
-                data[i] = Convert.ToByte(cs[i].Value, 2);
+                data[i] = System.Convert.ToByte(cs[i].Value, 2);
             return Encoding.Unicode.GetString(data, 0, data.Length);
         }
 
@@ -251,7 +293,7 @@ namespace OYMLCN.Extensions
         /// 转换字符串为Datetime类型
         /// </summary>
         public static DateTime ConvertToDatetime(this string str)
-            => Convert.ToDateTime(str);
+            => System.Convert.ToDateTime(str);
         /// <summary>
         /// 转换字符串为Datetime类型（失败时返回默认值）
         /// </summary>
@@ -266,7 +308,7 @@ namespace OYMLCN.Extensions
                 return null;
             try
             {
-                return Convert.ToDateTime(str);
+                return System.Convert.ToDateTime(str);
             }
             catch
             {
@@ -339,7 +381,7 @@ namespace OYMLCN.Extensions
             {
                 try
                 {
-                    list.Add((T)Convert.ChangeType(value, typeFromHandle));
+                    list.Add((T)System.Convert.ChangeType(value, typeFromHandle));
                 }
                 catch (InvalidCastException)
                 {

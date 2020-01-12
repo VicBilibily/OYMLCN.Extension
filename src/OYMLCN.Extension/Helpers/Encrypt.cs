@@ -213,7 +213,7 @@ namespace OYMLCN.Helpers
             using (MemoryStream Memory = new MemoryStream())
             using (Aes aes = Aes.Create())
             {
-                byte[] plainBytes = data.ConvertFromBase64String();
+                byte[] plainBytes = data.GetUTF8Bytes();
                 byte[] bKey = new byte[32];
                 Array.Copy(key.PadRight(bKey.Length).GetUTF8Bytes(), bKey, bKey.Length);
 
@@ -227,7 +227,7 @@ namespace OYMLCN.Helpers
                     {
                         cryptoStream.Write(plainBytes, 0, plainBytes.Length);
                         cryptoStream.FlushFinalBlock();
-                        return Memory.ToArray().GetUTF8String();
+                        return Memory.ToArray().ConvertToBase64String();
                     }
                     catch //(Exception ex)
                     {

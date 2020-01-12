@@ -1,14 +1,6 @@
 ﻿#if NETCOREAPP3_1
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Globalization;
 using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 namespace OYMLCN.Extensions
 {
@@ -18,25 +10,25 @@ namespace OYMLCN.Extensions
     public static class JsonExtensions
     {
         /// <summary>
-        /// 默认序列化设置
-        /// </summary>
-        public static readonly JsonSerializerOptions DefaultOptions = new JsonSerializerOptions()
-        {
-            //WriteIndented = true, // 是否格式化
-            IgnoreNullValues = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All), // 解决中文格式化的问题
-            DictionaryKeyPolicy = null,
-            PropertyNamingPolicy = null
-        };
-
-        /// <summary>
         /// 将对象转为JSON字符串
         /// </summary>
         /// <param name="data">任意对象</param>
         /// <param name="options">序列化配置</param>
         /// <returns>JSON字符串</returns>
         public static string ToTextJsonString<T>(this T data, JsonSerializerOptions options = null) where T : class
-            => JsonSerializer.Serialize(data, options ?? DefaultOptions);
+            => JsonSerializer.Serialize(data, options);
+
+        private static JsonSerializerOptions UnsafeJsonOption = new JsonSerializerOptions()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        /// <summary>
+        /// 将对象转为JSON字符串（已修正 System.Text.Json 表现与 Newtonsoft.Json 表现不一致的问题）
+        /// </summary>
+        /// <param name="data">任意对象</param>
+        /// <returns>JSON字符串</returns>
+        public static string ToTextJsonStringUnsafe<T>(this T data) where T : class
+            => JsonSerializer.Serialize(data, UnsafeJsonOption);
 
         /// <summary>
         /// JSON字符串转换为对象
@@ -51,7 +43,6 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static JsonDocument ParseToJsonDocument(this string str, JsonDocumentOptions options = default)
             => JsonDocument.Parse(str.IsNullOrWhiteSpace() ? "{}" : str, options);
-
     }
 }
 #endif

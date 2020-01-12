@@ -1,4 +1,3 @@
-#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,142 +14,215 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace OYMLCN.AspNetCore
 {
-    public static class JsonWebToken
+    /// <summary>
+    /// 用户信息
+    /// </summary>
+    public interface IUserInfo
     {
-        internal const string SecretKeyPath = "JWT:SecretKey";
-        internal const string IssuerPath = "JWT:Issuer";
-        internal const string AudiencePath = "JWT:Audience";
-        internal const string TokenNamePath = "JWT:Name";
-        internal const string TokenNameDefault = "access_token";
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        string ID { get; set; }
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        string Name { get; set; }
+    }
 
-        internal static string Encoder<T>(this T encryptor, string str) where T : HashAlgorithm
+    /// <summary>
+    /// Jwt配置信息
+    /// </summary>
+    public sealed class JwtOptions
+    {
+        /// <summary>
+        /// AccessToken名称
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; } = "access_token";
+
+        /// <summary>
+        /// 签名密钥
+        /// </summary>
+        [JsonProperty("secret")]
+        public string Secret { get; set; }
+        /// <summary>
+        /// 签名密钥
+        /// </summary>
+        internal SecurityKey SigningKey
+            => new SymmetricSecurityKey(Secret.GetUTF8Bytes());
+
+        /// <summary>
+        /// 签名发行标识
+        /// </summary>
+        [JsonProperty("issuer")]
+        public string Issuer { get; set; }
+        /// <summary>
+        /// 签名目标用户
+        /// </summary>
+        [JsonProperty("audience")]
+        public string Audience { get; set; }
+
+        /// <summary>
+        /// Token有效期（单位：分钟）[默认：30]
+        /// </summary>
+        [JsonProperty("accessExpiration")]
+        public int AccessExpiration { get; set; } = 30;
+        /// <summary>
+        /// Refresh有效期（单位：分钟）[默认：60]
+        /// </summary>
+        [JsonProperty("refreshExpiration")]
+        public int RefreshExpiration { get; set; } = 60;
+        /// <summary>
+        /// 时钟漂移（允许的时间误差）（单位：秒）[默认：300]
+        /// </summary>
+        [JsonProperty("clockSkew")]
+        public int ClockSkew { get; set; } = 300;
+    }
+    /// <summary>
+    /// JwtToken
+    /// </summary>
+    public sealed class JwtToken
+    {
+        internal JwtToken(JwtSecurityToken token, string tokenName, int expires)
         {
-            var sha1bytes = Encoding.UTF8.GetBytes(str);
-            byte[] resultHash = encryptor.ComputeHash(sha1bytes);
-            string sha1String = BitConverter.ToString(resultHash).ToLower();
-            sha1String = sha1String.Replace("-", "");
-            return sha1String;
+            this.token_name = tokenName;
+            this.access_token = new JwtSecurityTokenHandler().WriteToken(token);
+            this.refresh_token = Guid.NewGuid().ToString("N");
+            this.expires_in = expires * 60;
+        }
+        /// <summary>
+        /// 凭证名称（默认应为access_token）
+        /// </summary>
+        public string token_name { get; }
+        /// <summary>
+        /// 凭证内容
+        /// </summary>
+        public string access_token { get; }
+        /// <summary>
+        /// 凭证刷新
+        /// </summary>
+        public string refresh_token { get; }
+        /// <summary>
+        /// 过期时间（相对N秒后）
+        /// </summary>
+        public int expires_in { get; }
+
+        private Dictionary<string, object> Data
+        {
+            get
+            {
+                var dic = new Dictionary<string, object>();
+                dic.Add(token_name, access_token);
+                dic.Add(nameof(refresh_token), refresh_token);
+                dic.Add(nameof(expires_in), expires_in);
+                return dic;
+            }
+        }
+        /// <summary>
+        /// 转换为Json
+        /// </summary>
+        public string ToJsonString()
+            => Data.ToJsonString();
+        /// <summary>
+        /// 显式转换为string
+        /// </summary>
+        public static explicit operator string(JwtToken jwtToken)
+            => jwtToken.ToJsonString();
+        /// <summary>
+        /// 隐式转换为JsonResult
+        /// </summary>
+        public static implicit operator JsonResult(JwtToken jwtToken)
+            => new JsonResult(jwtToken.Data);
+    }
+
+    /// <summary>
+    /// ControllerExtension
+    /// </summary>
+    public static partial class ControllerExtension
+    {
+        /// <summary>
+        /// 传入用户信息构建JwtSecurityToken
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="userInfo"></param>
+        /// <returns></returns>
+        public static JwtToken BuildJwtSecurityToken(this Controller controller, IUserInfo userInfo)
+            => controller.BuildJwtSecurityToken(userInfo.ToJsonString());
+        private static JwtToken BuildJwtSecurityToken(this Controller controller, string json)
+        {
+            var options = controller.GetRequiredOptions<JwtOptions>();
+
+            var md5 = json.HashToMD5();
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, md5),
+                new Claim("aes",json.AESEncrypt(options.Secret.HashToMD5()))
+            };
+
+            DateTime? expires = null;
+            if (options.AccessExpiration > 0)
+                expires = DateTime.UtcNow.AddMinutes(options.AccessExpiration);
+
+            var credentials = new SigningCredentials(options.SigningKey, SecurityAlgorithms.HmacSha256);
+            var jwtToken = new JwtSecurityToken(options.Issuer, options.Audience, claims, expires: expires, signingCredentials: credentials);
+
+            var result = new JwtToken(jwtToken, options.Name, options.AccessExpiration);
+
+            var MemoryCache = controller.GetRequiredService<IMemoryCache>();
+            var exp = TimeSpan.FromMinutes(options.RefreshExpiration);
+            MemoryCache.Set($"_jwt_refresh_token_{result.refresh_token}", md5, exp);
+            MemoryCache.Set($"_jwt_created_token_{md5}", json, exp);
+            return result;
         }
 
-        public static SecurityKey CrateSecurityKey(string secret) =>
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(MD5.Create().Encoder(secret)));
-        public sealed class JwtToken
+        /// <summary>
+        /// 传入refresh_token构建JwtSecurityToken
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="refresh_token"></param>
+        /// <returns></returns>
+        public static JwtToken RefreshJwtSecurityToken(this Controller controller, string refresh_token)
         {
-            internal JwtToken(JwtSecurityToken token, string key, int expires)
+            var MemoryCache = controller.GetRequiredService<IMemoryCache>();
+            var refreshTokenKey = $"_jwt_refresh_token_{refresh_token}";
+            if (MemoryCache.TryGetValue(refreshTokenKey, out string md5))
             {
-                this.token = new JwtSecurityTokenHandler().WriteToken(token);
-                this.key = key;
-                this.expires = expires;
-            }
-            [JsonIgnore]
-            internal string token { get; private set; }
-            [JsonIgnore]
-            internal int expires { get; private set; }
-
-            public string key { get; private set; }
-            public string access_token => token;
-            public string refresh_token => Guid.NewGuid().ToString("N");
-            public int expires_in => expires;
-        }
-        public sealed class JwtTokenBuilder
-        {
-            private string tokenKey = TokenNameDefault;
-            private SecurityKey securityKey = null;
-            private string subject;
-            private string issuer;
-            private string audience;
-            private Dictionary<string, string> claims = new Dictionary<string, string>();
-            private int expiryInMinutes = 0;
-
-            public IConfiguration Configuration { get; set; }
-
-            /// <summary>
-            /// JsonWebToken 构造
-            /// </summary>
-            /// <param name="configuration">应用程序设置，需要在配置文件设置JWT->SecretKey/Issuer/Audience/Name</param>
-            /// <param name="subject">用户标识</param>
-            public JwtTokenBuilder(IConfiguration configuration, object subject) :
-                this(CrateSecurityKey(configuration.GetValue<string>(SecretKeyPath)), subject.ToString(), configuration.GetValue<string>(IssuerPath), configuration.GetValue<string>(AudiencePath))
-            {
-                this.tokenKey = configuration.GetValue<string>(TokenNamePath) ?? TokenNameDefault;
-            }
-            /// <summary>
-            /// JsonWebToken 构造
-            /// </summary>
-            /// <param name="secret">密钥</param>
-            /// <param name="subject">用户标识</param>
-            /// <param name="issuer">信任签发者</param>
-            /// <param name="audience">信任服务者</param>
-            public JwtTokenBuilder(string secret, string subject, string issuer, string audience) :
-                this(CrateSecurityKey(secret), subject, issuer, audience)
-            { }
-            /// <summary>
-            /// JsonWebToken 构造
-            /// </summary>
-            /// <param name="securityKey">密钥</param>
-            /// <param name="subject">用户标识</param>
-            /// <param name="issuer">信任签发者</param>
-            /// <param name="audience">信任服务者</param>
-            public JwtTokenBuilder(SecurityKey securityKey, string subject, string issuer, string audience)
-            {
-                this.securityKey = securityKey;
-                this.subject = subject;
-                this.issuer = issuer;
-                this.audience = audience;
-            }
-
-            public JwtTokenBuilder AddClaim(string type, string value)
-            {
-                this.claims.AddOrUpdate(type, value);
-                return this;
-            }
-            public JwtTokenBuilder AddClaims(Dictionary<string, string> claims)
-            {
-                this.claims.Union(claims);
-                return this;
-            }
-
-            /// <summary>
-            /// Token有效期
-            /// </summary>
-            /// <param name="expiryInMinutes">单位：分钟</param>
-            /// <returns></returns>
-            public JwtTokenBuilder AddExpiry(int expiryInMinutes)
-            {
-                this.expiryInMinutes = expiryInMinutes;
-                return this;
-            }
-
-            public JwtToken Build()
-            {
-                var claims = new List<Claim>
+                var cacheTokenMD5 = $"_jwt_created_token_{md5}";
+                if (MemoryCache.TryGetValue(cacheTokenMD5, out string json))
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, this.subject),
-                    //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    // 刷新凭证已经使用，移除刷新凭据
+                    MemoryCache.Remove(refreshTokenKey);
+                    return controller.BuildJwtSecurityToken(json);
                 }
-                .Union(this.claims.Select(item => new Claim(item.Key, item.Value)));
-                DateTime? expires = null;
-                if (expiryInMinutes > 0)
-                    expires = DateTime.UtcNow.AddMinutes(expiryInMinutes);
-
-                var token = new JwtSecurityToken(
-                    issuer: this.issuer,
-                    audience: this.audience,
-                    claims: claims,
-                    expires: expires,
-                    signingCredentials: new SigningCredentials(
-                        this.securityKey,
-                        SecurityAlgorithms.HmacSha256));
-                return new JwtToken(token, tokenKey, expiryInMinutes == 0 ? -1 : expiryInMinutes * 60);
             }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取登录用户的信息（如果未登录则返回null）
+        /// </summary>
+        public static T GetUserInfo<T>(this Controller controller) where T : IUserInfo
+        {
+            if (controller.IsAuthenticated)
+            {
+                var info = controller.User.Claims.FirstOrDefault(v => v.Type == "aes")?.Value;
+                if (info != null)
+                {
+                    var options = controller.GetRequiredOptions<JwtOptions>();
+                    info = info.AESDecrypt(options.Secret.HashToMD5());
+                    return info.DeserializeJsonToObject<T>();
+                }
+            }
+            return default(T);
         }
     }
 }
-
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 namespace Microsoft.Extensions.Configuration
 {
@@ -161,81 +233,66 @@ namespace Microsoft.Extensions.Configuration
     {
         /// <summary>
         /// 配置JsonWebToken(JWT)身份验证
-        /// 需要在配置文件设置JWT->SecretKey/Issuer/Audience/Name
-        /// 需在Configure中加入 app.UseAuthentication() 以使得登陆配置生效 
-        /// </summary>
-        public static IServiceCollection AddJsonWebTokenAuthentication(this IServiceCollection services)
-        {
-            var configuration = services.GetRequiredService<IConfiguration>();
-            return AddJsonWebTokenAuthentication(services,
-                configuration.GetValue<string>("JWT:SecretKey"),
-                configuration.GetValue<string>("JWT:Issuer"),
-                configuration.GetValue<string>("JWT:Audience"),
-                configuration.GetValue<string>("JWT:Name") ?? JsonWebToken.TokenNameDefault
-            );
-        }
-        /// <summary>
-        /// 配置JsonWebToken(JWT)身份验证
-        /// 需在Configure中加入 app.UseAuthentication() 以使得登陆配置生效 
+        /// <para>需要在配置文件设置 jwt -> [name] / secret / issuer / audience / [accessExpiration] / [refreshExpiration]</para>
+        /// <para>需在Configure中加入 app.UseAuthentication() 以使得登陆配置生效</para>
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="secret">密钥</param>
-        /// <param name="issuer">信任签发者</param>
-        /// <param name="audience">信任服务者</param>
-        /// <param name="name">Token名称</param>
-        /// <param name="clockSkew">宽限时间/时间验证偏差（默认偏差5分钟）</param>
-        /// <returns></returns>
-        public static IServiceCollection AddJsonWebTokenAuthentication(this IServiceCollection services, string secret, string issuer, string audience, string name = JsonWebToken.TokenNameDefault, TimeSpan clockSkew = default(TimeSpan))
-            => AddJsonWebTokenAuthentication(services, JsonWebToken.CrateSecurityKey(secret), issuer, audience, name, clockSkew);
-        /// <summary>
-        /// 配置JsonWebToken(JWT)身份验证
-        /// 需在Configure中加入 app.UseAuthentication() 以使得登陆配置生效 
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="securityKey">密钥</param>
-        /// <param name="issuer">信任签发者</param>
-        /// <param name="audience">信任服务者</param>
-        /// <param name="name">Token名称</param>
-        /// <param name="clockSkew">宽限时间/时间验证偏差（默认偏差5分钟）</param>
-        /// <returns></returns>
-        public static IServiceCollection AddJsonWebTokenAuthentication(this IServiceCollection services, SecurityKey securityKey, string issuer, string audience, string name = JsonWebToken.TokenNameDefault, TimeSpan clockSkew = default(TimeSpan))
+        /// <param name="cfgKey">配置节名称，默认为jwt</param>
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, string cfgKey = "jwt")
         {
+            services.AddMemoryCache();
+            var Configuration = services.GetRequiredService<IConfiguration>();
+            services.Configure<JwtOptions>(Configuration.GetSection(cfgKey));
+            var jwtOptions = services.GetRequiredOptions<JwtOptions>();
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+                .AddJwtBearer(jwtBearerOptions =>
                 {
-                    options.Events = new JwtBearerEvents()
+                    //options.RequireHttpsMetadata = false;
+                    jwtBearerOptions.SaveToken = true;
+                    jwtBearerOptions.Events = new JwtBearerEvents()
                     {
+                        OnChallenge = context =>
+                        {
+                            //context.Request.Path.StartsWithSegments("/api");
+                            //context.HandleResponse();
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+
+                            return Task.CompletedTask;
+                        },
                         // 注册自定义token获取方式
                         OnMessageReceived = context =>
                         {
                             // 首先尝试从Cookie中获取Token
-                            string token = context.Request.Cookies[name];
+                            string token = context.Request.Cookies[jwtOptions.Name];
                             // 如果无，则尝试参数从中获取Token
-                            if (token.IsNullOrEmpty()) token = context.Request.Query[name];
+                            if (token.IsNullOrEmpty()) token = context.Request.Query[jwtOptions.Name];
                             // 执行完毕，把取得的值设置为token
                             // 如果为空原始方式会从Header重新获取
                             context.Token = token;
                             return Task.CompletedTask;
                         }
                     };
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtOptions.Issuer,
 
-                        ValidIssuer = issuer,
-                        ValidAudience = audience,
-                        IssuerSigningKey = securityKey,
+                        ValidateAudience = true,
+                        ValidAudience = jwtOptions.Audience,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = jwtOptions.SigningKey,
+
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromSeconds(jwtOptions.ClockSkew)
                     };
-                    if (clockSkew != default)
-                        options.TokenValidationParameters.ClockSkew = clockSkew;
                 });
             return services;
         }
-
     }
 
 

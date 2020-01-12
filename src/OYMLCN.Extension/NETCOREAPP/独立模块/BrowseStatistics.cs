@@ -111,7 +111,7 @@ namespace OYMLCN.AspNetCore
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             // 尝试获取已注入的分析配置
-            var options = context.GetService<IOptions<BrowseStatisticsOptions>>()?.Value;
+            var options = context.GetRequiredOptions<BrowseStatisticsOptions>();
             // 获取注入的内存缓存
             var MemoryCache = context.GetService<IMemoryCache>();
             // 已禁用统计的情况下不再继续
@@ -233,7 +233,7 @@ namespace Microsoft.Extensions.Configuration
         /// </summary>
         public static IApplicationBuilder UseBrowseStatistics(this IApplicationBuilder app, BrowseStatisticsDelegate handler)
         {
-            var options = app.GetRequiredService<IOptions<BrowseStatisticsOptions>>().Value;
+            var options = app.GetRequiredOptions<BrowseStatisticsOptions>();
             options.handlerDelegate = handler;
             return app;
         }
