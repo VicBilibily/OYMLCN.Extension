@@ -488,5 +488,23 @@ namespace OYMLCN.Extensions
             sTemp += (lTicks % 3600 % 60).ToString().PadLeft(2, '0');
             return sTemp;
         }
+
+        /// <summary>
+        /// 根据提供的出生日期计算出年龄
+        /// </summary>
+        public static int GetAge(this DateTime birthDate)
+            => GetAge(birthDate, DateTime.Now);
+        /// <summary>
+        /// 根据提供的出生日期和目标日期计算出年龄
+        /// </summary>
+        public static int GetAge(this DateTime birthDate, DateTime targetDate)
+        {
+            int target = int.Parse(targetDate.ToString("yyyyMMdd"));
+            int birth = int.Parse(birthDate.ToString("yyyyMMdd"));
+            int diff = target - birth;
+            if (diff < 0)
+                return 0;
+            return diff / 10000;
+        }
     }
 }

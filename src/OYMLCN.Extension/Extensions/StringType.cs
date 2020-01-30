@@ -293,7 +293,7 @@ namespace OYMLCN.Extensions
         /// 转换字符串为Datetime类型
         /// </summary>
         public static DateTime ConvertToDatetime(this string str)
-            => System.Convert.ToDateTime(str);
+            => Convert.ToDateTime(str);
         /// <summary>
         /// 转换字符串为Datetime类型（失败时返回默认值）
         /// </summary>
@@ -315,6 +315,33 @@ namespace OYMLCN.Extensions
                 return null;
             }
         }
+        /// <summary>
+        /// 转换字符串为Datetime类型
+        /// </summary>
+        public static DateTime ConvertToDatetime(this string str, string format)
+            => DateTime.ParseExact(str, format, null);
+        /// <summary>
+        /// 转换日期时间字符串为Datetime类型（失败时返回默认值）
+        /// </summary>
+        public static DateTime ConvertToDatetime(this string str, string format, DateTime defaultValue)
+            => str.ConvertToNullableDatetime(format) ?? defaultValue;
+        /// <summary>
+        /// 转换日期时间字符串为可空Datetime类型，转换失败返回Null
+        /// </summary>
+        public static DateTime? ConvertToNullableDatetime(this string str, string format)
+        {
+            if (str.IsNullOrWhiteSpace())
+                return null;
+            try
+            {
+                return DateTime.ParseExact(str, format, null);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
         /// <summary>
         /// 转换网页地址为Uri(失败返回null)

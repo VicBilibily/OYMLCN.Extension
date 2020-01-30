@@ -172,7 +172,6 @@ namespace OYMLCN
         };
 
         #region 二十四节气
-
         /// <summary>
         /// 二十四节气
         /// </summary>
@@ -183,7 +182,6 @@ namespace OYMLCN
             "小暑","大暑","立秋","处暑","白露","秋分",
             "寒露","霜降","立冬","小雪","大雪","冬至"
         };
-
         private static readonly int[] STermInfo =
         {
             0,21208,42467,63836,85337,107014,
@@ -192,6 +190,13 @@ namespace OYMLCN
             397447,419210,440795,462224,483532,504758
         };
 
+        private static readonly string[] Seasons =
+        {
+            "出错",
+            "冬季","冬季","春季","春季",
+            "春季","夏季","夏季","夏季",
+            "秋季","秋季","秋季","冬季",
+        };
         #endregion
 
         #region 农历相关数据
@@ -270,7 +275,6 @@ namespace OYMLCN
             new DateInfoStruct(12, 25, 0, "圣诞节"),
             new DateInfoStruct(12, 26, 0, " 诞辰纪念")
         };
-
         /// <summary>
         /// 按农历计算的通用节假日
         /// </summary>
@@ -288,8 +292,6 @@ namespace OYMLCN
             new DateInfoStruct(12, 24, 0, "南方小年(掸尘)"),
             //new HolidayStruct(12, 30, 0, "除夕")  //注意除夕需要其它方法进行计算
         };
-
-
         private static readonly WeekHolidayStruct[] WHolidayInfo =
         {
             new WeekHolidayStruct(5, 2, 1, "母亲节"),
@@ -301,7 +303,6 @@ namespace OYMLCN
             new WeekHolidayStruct(10, 1, 4, "国际减轻自然灾害日"),
             new WeekHolidayStruct(11, 4, 5, "感恩节")
         };
-
         #endregion
 
         #endregion
@@ -799,6 +800,10 @@ namespace OYMLCN
         /// 公历日期中文表示法 如一九九七年七月一日
         /// </summary>
         public string DateString => "公元" + _date.ToLongDateString();
+        /// <summary>
+        /// 月份所在季节
+        /// </summary>
+        public string SeasonString => Seasons[_date.Month];
         /// <summary>
         /// 当前是否公历闰年
         /// </summary>

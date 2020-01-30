@@ -55,7 +55,7 @@ namespace OYMLCN.Helpers
             if (actionDesciptor.MethodInfo == null)
                 throw new ArgumentNullException($"未找到名称为 {actionName} 的公开方法");
 
-            // 把控制器和方法名称加入路由，以用于试图查找
+            // 把控制器和方法名称加入路由，以用于视图查找
             routeData.Values.TryAdd("controller", actionDesciptor.ControllerName.Replace("Controller", ""));
             routeData.Values.TryAdd("action", actionDesciptor.ActionName);
 
