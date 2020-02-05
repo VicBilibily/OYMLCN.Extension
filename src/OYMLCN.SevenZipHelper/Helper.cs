@@ -1,5 +1,4 @@
-﻿using OYMLCN.Extensions;
-using SharpCompress.Archives;
+﻿using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.Helpers
 {
@@ -137,24 +137,17 @@ namespace OYMLCN.Helpers
         {
             var archive = ZipArchive.Create();
             var dic = GetFileEntryMaps(files);
-            var remoteUrls = files.Distinct().Where(s => s.StartsWith("http")).Select(s =>
-            {
-                try
-                {
-                    return new Uri(s);
-                }
-                catch (UriFormatException)
-                {
-                    return null;
-                }
-            }).Where(u => u != null).ToList();
+            var remoteUrls = files.Distinct()
+                .Where(v => v.StartsWith("http"))
+                .Select(v => v.ConvertToUri())
+                .Where(u => u != null)
+                .ToList();
             foreach (var fileEntry in dic)
                 archive.AddEntry(Path.Combine(rootdir, fileEntry.Value), fileEntry.Key);
             if (remoteUrls.Any())
             {
                 var streams = new ConcurrentDictionary<string, Stream>();
                 using (var httpClient = new HttpClient())
-                {
                     Parallel.ForEach(remoteUrls, url =>
                     {
                         httpClient.GetAsync(url).ContinueWith(async t =>
@@ -165,12 +158,11 @@ namespace OYMLCN.Helpers
                                 if (res.IsSuccessStatusCode)
                                 {
                                     Stream stream = await res.Content.ReadAsStreamAsync();
-                                    streams[Path.Combine(rootdir, Path.GetFileName(url.AbsolutePath.UrlDecode()))] = stream;
+                                    streams[Path.Combine(rootdir, Path.GetFileName(url.AbsolutePath))] = stream;
                                 }
                             }
                         }).Wait();
                     });
-                }
                 foreach (var kv in streams)
                     archive.AddEntry(kv.Key, kv.Value);
             }
@@ -194,13 +186,14 @@ namespace OYMLCN.Helpers
                     GetFilesRecurs(directory);
             }
 
-            files.Where(s => !s.StartsWith("http")).ForEach(s =>
+            foreach (var s in files.Where(s => !s.StartsWith("http")))
             {
                 if (Directory.Exists(s))
                     GetFilesRecurs(s);
                 else
                     fileList.Add(s);
-            });
+            }
+
             if (!fileList.Any())
                 return new Dictionary<string, string>();
 

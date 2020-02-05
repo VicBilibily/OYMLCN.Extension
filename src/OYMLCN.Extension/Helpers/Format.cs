@@ -54,7 +54,7 @@ namespace OYMLCN.Helpers
             for (int i = 0; i < values.Length; i++)
             {
                 FieldInfo field = enumType.GetField(names[i]);
-                DescriptionAttribute attribute = AttributeHelper.GetAttribute<DescriptionAttribute>(field);
+                DescriptionAttribute attribute = field.GetAttribute<DescriptionAttribute>();
                 if (attribute == null)
                     dictionary.Add((int)values.GetValue(i), names[i]);
                 else
@@ -76,7 +76,8 @@ namespace OYMLCN.Helpers
             foreach (var item in queryString.SplitBySign("&"))
             {
                 var key = item.SplitThenGetFirst("=");
-                var value = item.SubString(key.Length + 1);
+                // 可能值中也会有 = 号，除了第一个 = 号认作参数分割，其他均认为是值
+                var value = item.TakeSubString(key.Length + 1);
                 value = WebUtility.UrlDecode(value);
                 dic.Add(key, value);
             }

@@ -1,20 +1,48 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-  
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;Xunit</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
+    <None Include="..\..\src\OYMLCN.Extension\**\*.cs" />
+    <Compile Include="..\..\src\OYMLCN.Extension\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\OYMLCN.Extension\OYMLCN.Extension.csproj" />
-    <ProjectReference Include="..\..\src\OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\obj\Debug\**" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\OldSrc\Extensions\**" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\扩展模块\加密摘要\**" />
+    <Compile Remove="obj\**" />
+    <Compile Remove="OldTest\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="OldTest\**" />
+    <None Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**" />
+    <None Remove="..\..\src\OYMLCN.Extension\obj\Debug\**" />
+    <None Remove="..\..\src\OYMLCN.Extension\OldSrc\Extensions\**" />
+    <None Remove="..\..\src\OYMLCN.Extension\扩展模块\加密摘要\**" />
+    <None Remove="obj\**" />
+    <None Include="OldTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

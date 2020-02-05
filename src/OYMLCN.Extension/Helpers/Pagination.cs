@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OYMLCN.Helpers
+namespace OYMLCN
 {
-    /// <summary>
-    /// 分页页码辅助
-    /// </summary>
-    public class PaginationHelper
+    /// <summary> 分页 </summary>
+    public struct PaginationHelper
     {
         /// <summary>
         /// 总数据长度
@@ -77,8 +75,14 @@ namespace OYMLCN.Helpers
         {
             Total = total;
             Limit = limit;
-            //Pages = Convert.ToInt32(Total / Limit + (Total % Limit == 0 ? 0 : 1)); ;
+            Page = page;
             Pages = Convert.ToInt32(Math.Ceiling(Total / (decimal)Limit));
+
+            PrevPage = NextPage = 0;
+            ShowFirst = ShowLast = false;
+            LeftSplit = RightSplit = false;
+            PageArray = null;
+
             GetValidPage(page);
             UpdatePaginationArray(length);
         }

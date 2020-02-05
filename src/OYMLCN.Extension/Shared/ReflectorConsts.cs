@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OYMLCN
 {
-    public class ReflectorConsts
+    public static class ReflectorConsts
     {
         public static readonly Type ObjectType = typeof(object);
         public static readonly Type IDataReaderType = typeof(IDataReader);

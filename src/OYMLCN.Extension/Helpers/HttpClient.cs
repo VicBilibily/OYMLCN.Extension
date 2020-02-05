@@ -57,15 +57,15 @@ namespace OYMLCN.Helpers
         /// <returns></returns>
         public string GetString(string url, string queryStr, Encoding decoder = null)
             => GetData($"{url}?{queryStr.TrimStart('?')}").ReadToEnd(decoder ?? Encoding.UTF8);
-        /// <summary>
-        /// 通过HttpGet获取数据
-        /// </summary>
-        /// <param name="url">请求Url</param>
-        /// <param name="queryDir">请求参数字典集合</param>
-        /// <param name="decoder">返回数据编码形式（默认为UTF-8）</param>
-        /// <returns></returns>
-        public string GetString(string url, Dictionary<string, string> queryDir, Encoding decoder = null)
-            => GetData($"{url}?{queryDir.ToQueryString()}").ReadToEnd(decoder ?? Encoding.UTF8);
+        ///// <summary>
+        ///// 通过HttpGet获取数据
+        ///// </summary>
+        ///// <param name="url">请求Url</param>
+        ///// <param name="queryDir">请求参数字典集合</param>
+        ///// <param name="decoder">返回数据编码形式（默认为UTF-8）</param>
+        ///// <returns></returns>
+        //public string GetString(string url, Dictionary<string, string> queryDir, Encoding decoder = null)
+        //    => GetData($"{url}?{queryDir.ToQueryString()}").ReadToEnd(decoder ?? Encoding.UTF8);
 
         /// <summary>
         /// 通过HttpGet获取数据
@@ -158,9 +158,9 @@ namespace OYMLCN.Helpers
                         foreach (var item in texts)
                             multiContent.Add(new StringContent(item.Value, (encoder ?? Encoding.UTF8), "text/text"), item.Key);
                     var files = queries.Where(d => d.Key).FirstOrDefault();
-                    if (files != null)
-                        foreach (var file in files)
-                            multiContent.Add(new StreamContent(file.FileInfo.ReadToStream()), file.Key, file.FileInfo.Name);
+                    //if (files != null)
+                    //    foreach (var file in files)
+                    //        multiContent.Add(new StreamContent(file.FileInfo.ReadToStream()), file.Key, file.FileInfo.Name);
                 }
             }
 

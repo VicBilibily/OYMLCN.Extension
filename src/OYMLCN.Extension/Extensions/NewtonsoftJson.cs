@@ -8,9 +8,9 @@ using System.Text.RegularExpressions;
 namespace OYMLCN.Extensions
 {
     /// <summary>
-    /// JsonExtension
+    /// Newtonsoft.Json操作简化扩展
     /// </summary>
-    public static partial class NewtonsoftJsonExtensions
+    public static partial class NewtonsoftJsonExtension
     {
         static string DecodeUnicode(Match match)
         {

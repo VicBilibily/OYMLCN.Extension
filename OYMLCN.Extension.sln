@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension", "src\OYMLCN.Extension\OYMLCN.Extension.csproj", "{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.Extension.TestForDotNet", "test\OYMLCN.Extension.TestForDotNet\OYMLCN.Extension.TestForDotNet.csproj", "{9544B20B-732F-4B72-88C8-5BD2A681317D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.Extension.Test", "test\OYMLCN.Extension.Test\OYMLCN.Extension.Test.csproj", "{3E80989E-D4D7-4297-8F54-3A7475C534D0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.SevenZipHelper", "src\OYMLCN.SevenZipHelper\OYMLCN.SevenZipHelper.csproj", "{6A44A95F-8666-46DB-BD1E-B63018DE2ACF}"
@@ -17,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.HtmlExtension", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{624E5562-47DA-4A3D-BFC8-95E41696F382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OYMLCN.AspNetCore.Test", "test\OYMLCN.AspNetCore.Test\OYMLCN.AspNetCore.Test.csproj", "{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OYMLCN.AspNetCore.Test", "test\OYMLCN.AspNetCore.Test\OYMLCN.AspNetCore.Test.csproj", "{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8FB405B-56B3-4B6B-AFC2-1A02A26E75DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9544B20B-732F-4B72-88C8-5BD2A681317D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9544B20B-732F-4B72-88C8-5BD2A681317D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9544B20B-732F-4B72-88C8-5BD2A681317D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9544B20B-732F-4B72-88C8-5BD2A681317D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E80989E-D4D7-4297-8F54-3A7475C534D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E80989E-D4D7-4297-8F54-3A7475C534D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E80989E-D4D7-4297-8F54-3A7475C534D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,7 +52,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9544B20B-732F-4B72-88C8-5BD2A681317D} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
 		{3E80989E-D4D7-4297-8F54-3A7475C534D0} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
 		{4120A4B5-EF35-42D8-A2DE-50BD320AE5BC} = {624E5562-47DA-4A3D-BFC8-95E41696F382}
 	EndGlobalSection

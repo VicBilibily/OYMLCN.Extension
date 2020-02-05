@@ -9,12 +9,12 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class DateTimeExtensions
     {
-        /// <summary>
-        /// 中国农历信息
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static ChineseCalendar AsChineseCalendar(this DateTime dt) => new ChineseCalendar(dt);
+        ///// <summary>
+        ///// 中国农历信息
+        ///// </summary>
+        ///// <param name="dt"></param>
+        ///// <returns></returns>
+        //public static ChineseCalendar AsChineseCalendar(this DateTime dt) => new ChineseCalendar(dt);
 
         #region DateTime
         /// <summary>
@@ -300,10 +300,14 @@ namespace OYMLCN.Extensions
 
         #region DateTimeToString
         /// <summary>
+        /// 中文时间格式提供器
+        /// </summary>
+        public static readonly IFormatProvider CNDateTimeFormatProvider = CultureInfo.GetCultureInfo("zh-CN").DateTimeFormat;
+        /// <summary>
         /// 日期转换为中文 年月
         /// </summary>
         public static string ToCnMonthString(this DateTime dt)
-            => dt.ToString("yyyy年MM月");
+            => dt.ToString("yyyy'年'MM'月'", CNDateTimeFormatProvider);
         /// <summary>
         /// 日期转换为中文 年月日
         /// </summary>

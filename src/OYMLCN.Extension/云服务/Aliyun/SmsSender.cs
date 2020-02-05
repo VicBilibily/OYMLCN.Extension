@@ -49,8 +49,7 @@ namespace OYMLCN.Aliyun
 
             string secretString = accessKeySecret + "&";
             string signString = stringToSign.ToString();
-            //return signString.EncodeToHMACSHA1Base64(secretString);
-            return signString.HashToHMACSHA1Base64(secretString);
+            return signString;//.HashToHMACSHA1Base64(secretString);
         }
 
         /// <summary>
