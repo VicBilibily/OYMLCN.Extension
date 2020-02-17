@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+#if Xunit
+using Xunit;
+#endif
 
 namespace OYMLCN.Extensions
 {
@@ -12,19 +10,25 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringFormatExtension
     {
-        static string _badSqlInputKeywordsRegex;
-        private static string BadSqlInputKeywordsRegex
+        #region public static bool IsSafeSqlData(this string input)
+        /// <summary>
+        /// 验证是否存在 SQL 注入代码
+        /// <para> 建议采用参数化的方式防止 SQL 注入，本方法通过检查关键词的方式判断，可能存在误报情况 </para>
+        /// <para>（eg："Hello World!" 中存在 or 关键词）</para>
+        /// </summary>
+        /// <param name="input"> 要检查的字符串 </param>
+        /// <returns> 当检测到客户的输入中有含有危险字符串，则返回false，否则返回true。 </returns>
+        public static bool IsSafeSqlData(this string input)
         {
-            get
+            if (input.IsNullOrWhiteSpace()) return true;
+            if (BadSqlInputKeywordsRegex == null)
             {
-                if (_badSqlInputKeywordsRegex != null)
-                    return _badSqlInputKeywordsRegex;
                 // SQL的注入关键字符
                 string[] strBadChar =
                 {
                     "and", "exec", "insert", "select", "delete", "update", "count",
                     "from", "drop", "asc", "char", "or", "%", ";", ":", "\'", "\"", "-",
-                    "chr", "mid", "master", "truncate", "char", "declare", "SiteName",
+                    "chr", "mid", "master", "truncate", "char", "declare", // "SiteName",
                     "net user", "xp_cmdshell", "/add",
                     "exec master.dbo.xp_cmdshell", "net localgroup administrators"
                 };
@@ -33,29 +37,119 @@ namespace OYMLCN.Extensions
                 for (int i = 0; i < strBadChar.Length - 1; i++)
                     str_Regex += strBadChar[i] + "|";
                 str_Regex += strBadChar[strBadChar.Length - 1] + ").*";
-                return _badSqlInputKeywordsRegex = str_Regex;
+                BadSqlInputKeywordsRegex = str_Regex;
             }
+            return !Regex.IsMatch(input.ToLower(), BadSqlInputKeywordsRegex);
         }
-        /// <summary>
-        /// 验证是否存在注入代码
-        /// <para>当检测到客户的输入中有攻击性危险字符串,则返回false,有效返回true。</para> 
-        /// </summary>
-        public static bool IsSafeSqlData(this string inputData)
-            => !Regex.IsMatch(inputData.ToLower(), BadSqlInputKeywordsRegex);
-        /// <summary>
-        /// 检测Sql危险字符
-        /// <para>如果没有则返回true，表示当前字符串通过检测</para> 
-        /// <para>有Sql危险字符则返回false，你需要拒绝处理该用户提交的内容</para> 
-        /// </summary>
-        public static bool IsSafeSqlString(this string str)
-            => !Regex.IsMatch(str, @"[-|;|,|\/|\(|\)|\[|\]|\}|\{|%|@|\*|!|\']");
-        /// <summary>
-        /// SQL注入等安全验证
-        /// <para>检测是否有危险的可能用于链接的字符串</para> 
-        /// </summary>
-        public static bool IsSafeUserInfoString(this string str)
-            => !Regex.IsMatch(str, @"^\s*$|^c:\\con\\con$|[%,\*" + "\"" + @"\s\t\<\>\&]|游客|^Guest");
+        private static string BadSqlInputKeywordsRegex = null;
+#if Xunit
+        [Fact]
+        public static void IsSafeSqlDataTest()
+        {
+            string str = null;
+            Assert.True(str.IsSafeSqlData());
+            str = "Hello World!"; // 匹配到 or，令杀错勿放过
+            Assert.False(str.IsSafeSqlData());
+            str = "你好，世界!";
+            Assert.True(str.IsSafeSqlData());
 
+            string[] strBadChar =
+            {
+                "and", "exec", "insert", "select", "delete", "update", "count",
+                "from", "drop", "asc", "char", "or", "%", ";", ":", "\'", "\"", "-",
+                "chr", "mid", "master", "truncate", "char", "declare", //"SiteName",
+                "net user", "xp_cmdshell", "/add",
+                "exec master.dbo.xp_cmdshell", "net localgroup administrators"
+            };
+            strBadChar.ForEach((data, idx) =>
+            {
+                Assert.False($"{data} {idx}".IsSafeSqlData(), $"{data} {idx}");
+            });
+        }
+#endif
+        #endregion
+
+        #region public static bool IsSafeSqlString(this string input)
+        /// <summary>
+        /// 验证字符串是否包含 SQL 危险符号
+        /// <para> 如果没有则返回 true，表示当前字符串通过检测 </para> 
+        /// <para> 有Sql危险字符则返回 false，你应当不再处理该用户提交的内容 </para> 
+        /// </summary>
+        /// <param name="input"> 要检查的字符串 </param>
+        /// <returns> 如果 <paramref name="input"/> 验证通过，不包含 SQL 危险符号，则返回 true，否则为 false </returns>
+        public static bool IsSafeSqlString(this string input)
+        {
+            if (input.IsNullOrWhiteSpace()) return true;
+            return !Regex.IsMatch(input, @"[-|;|,|\/|\(|\)|\[|\]|\}|\{|%|@|\*|!|\']");
+        }
+#if Xunit
+        [Fact]
+        public static void IsSafeSqlStringTest()
+        {
+            string str = null;
+            Assert.True(str.IsSafeSqlString());
+            str = "Hello World";
+            Assert.True(str.IsSafeSqlString());
+            str = "Hello World!";
+            Assert.False(str.IsSafeSqlString());
+            string[] strBadChar = new[] { "-", ";", ",", "/", "(", ")", "[", "]", "}", "{", "%", "@", "*", "!", "'" };
+            strBadChar.ForEach((input) => Assert.False($"Hello{input}".IsSafeSqlString()));
+        }
+#endif 
+        #endregion
+
+        #region public static bool IsSafeInfoString(this string input)
+        /// <summary>
+        /// 用户信息 SQL 注入安全验证
+        /// <para> 检测是否有危险的可能用于注入字符符号 </para> 
+        /// </summary>
+        /// <param name="input"> 要检查的用户字符串 </param>
+        /// <returns> 如果 <paramref name="input"/> 验证通过，不包含危险字符时返回 true，否则为 false </returns>
+        public static bool IsSafeInfoString(this string input)
+        {
+            if (input.IsNullOrWhiteSpace()) return false;
+            //return !Regex.IsMatch(input, @"^\s*$|^c:\\con\\con$|[%,\*" + "\"" + @"\s\t\<\>\&]|游客|^Guest");
+            return !Regex.IsMatch(input, @"^\s*$|[%,\*" + "\"" + @"\s\t\<\>\&]|游客|^Guest");
+        }
+#if Xunit
+        [Fact]
+        public static void IsSafeInfoStringTest()
+        {
+            // 字符串为 null
+            string str = null;
+            Assert.False(str.IsSafeInfoString());
+
+            // 字符串为空或由空格组成
+            str = string.Empty;
+            Assert.False(str.IsSafeInfoString());
+            str = "  ";
+            Assert.False(str.IsSafeInfoString());
+            // 字符串中含有空格
+            str = "Hello World!";
+            Assert.False(str.IsSafeInfoString());
+
+            // 合规的字符串
+            str = "HelloWorld!";
+            Assert.True(str.IsSafeInfoString());
+
+            // 远古漏洞，现在已不受影响
+            str = @"c:\con\con";
+            //Assert.False(str.IsSafeInfoString());
+            Assert.True(str.IsSafeInfoString());
+
+            // 百分号（%），逗号（,），星号（*），双引号（"），制表符（\t），小于号（<），大于号(>)和连接符号（&）
+            string[] strBadChar = new[] { "%", ",", "*", "\"", "\t", "<", ">", "&" };
+            strBadChar.ForEach((input) => Assert.False($"Hi{input}World".IsSafeInfoString()));
+
+            // 包含 游客 的字符串
+            str = "我是游客";
+            Assert.False(str.IsSafeInfoString());
+            // 开头为 Guest 的字符串
+            str = "GuestLogout";
+            Assert.False(str.IsSafeInfoString());
+        }
+#endif 
+        #endregion
 
     }
 }

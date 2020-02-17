@@ -62,27 +62,7 @@ namespace OYMLCN.Helpers
             }
             return dictionary;
         }
-
-        /// <summary>
-        /// QueryString拆解为字典
-        /// </summary>
-        /// <param name="queryString"></param>
-        /// <returns></returns>
-        public static Dictionary<string, string> QueryStringToDictionary(string queryString)
-        {
-            var dic = new Dictionary<string, string>();
-            queryString = WebUtility.HtmlDecode(queryString);
-            queryString = queryString.SplitThenGetLast("?");
-            foreach (var item in queryString.SplitBySign("&"))
-            {
-                var key = item.SplitThenGetFirst("=");
-                // 可能值中也会有 = 号，除了第一个 = 号认作参数分割，其他均认为是值
-                var value = item.TakeSubString(key.Length + 1);
-                value = WebUtility.UrlDecode(value);
-                dic.Add(key, value);
-            }
-            return dic;
-        }
+        
 
         #region FormatCapacity 字节容量格式化
         /// <summary>

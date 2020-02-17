@@ -20,11 +20,12 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 人民币金额小写转大写
         /// </summary>
-        public static string ConvertToUppercaseRMB(this double money)
+        public static string ConvertToUppercaseRMB(this double money, bool endSymbol = true)
         {
             var valueString = money.ToString("#L#E#D#C#K#E#D#C#J#E#D#C#I#E#D#C#H#E#D#C#G#E#D#C#F#E#D#C#.0B0A");
             var temp = Regex.Replace(valueString, @"((?<=-|^)[^1-9]*)|((?'z'0)[0A-E]*((?=[1-9])|(?'-z'(?=[F-L\.]|$))))|((?'b'[F-L])(?'z'0)[0A-L]*((?=[1-9])|(?'-z'(?=[\.]|$))))", "${b}${z}");
             var result = Regex.Replace(temp, ".", m => "负元空零壹贰叁肆伍陆柒捌玖空空空空空空空分角拾佰仟万亿兆京垓秭穰"[m.Value[0] - '-'].ToString());
+            if (endSymbol && result.EndsWith("元")) result += "整";
             return result;
         }
         /// <summary>

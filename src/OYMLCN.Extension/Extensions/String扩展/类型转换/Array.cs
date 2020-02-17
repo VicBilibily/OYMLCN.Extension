@@ -93,5 +93,29 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
+
+        #region public static string ConvertToString(this char[] chars)
+        /// <summary>
+        /// 将 Unicode 字符数组拼接为字符串
+        /// </summary>
+        /// <param name="chars"> Unicode 字符数组 </param>
+        public static string ConvertToString(this char[] chars)
+            => new string(chars);
+#if Xunit
+        [Fact]
+        public static void CharArrayConvertToStringTest()
+        {
+            char[] chars = null;
+            Assert.Equal(string.Empty, chars.ConvertToString());
+
+            chars = new char[0];
+            Assert.Equal(string.Empty, chars.ConvertToString());
+
+            chars = new[] { 'Y', 'e', 's' };
+            Assert.Equal("Yes", chars.ConvertToString());
+        }
+#endif 
+        #endregion
+
     }
 }

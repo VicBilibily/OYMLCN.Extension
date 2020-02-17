@@ -22,7 +22,8 @@ namespace OYMLCN.Extensions
         {
             if (cookie.IsNullOrWhiteSpace()) return null;
             var index = cookie.IndexOf('=');
-            return new Cookie(cookie.TakeSubString(0, index).Trim(), cookie.TakeSubString(++index));
+            index = index < 0 ? 0 : index;
+            return new Cookie(cookie.Substring(0, index).Trim(), cookie.Substring(++index));
         }
 #if Xunit
         [Fact]
@@ -64,7 +65,7 @@ namespace OYMLCN.Extensions
             if (cookies.IsNullOrWhiteSpace())
                 return result;
 
-            foreach (var cookie in cookies.SplitBySignRemoveEmpty(";"))
+            foreach (var cookie in cookies.SplitRemoveEmpty(";"))
                 result.Add(cookie.ConvertToCookie());
             return result;
         }

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using OYMLCN.ArgumentChecker;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+#if Xunit
+using Xunit;
+#endif
 
 namespace OYMLCN.Extensions
 {
@@ -12,116 +14,406 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringFormatExtension
     {
-
+        #region public static string KeepOneLineBreak(this string input)
         /// <summary>
-        /// 去除过多的换行符，仅保留一个换行
+        /// 去除字符串内过多的换行符，多个换行仅保留一个
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string RemoveWrap(this string text)
+        /// <param name="input"> 要处理的字符串 </param>
+        /// <returns> 处理后的字符串 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        public static string KeepOneLineBreak(this string input)
         {
-            string[] param = new string[] { "\r\n", "\r", "\n" };
-            return text.ReplaceNormalWithRegex("\r\n", param);
-        }
-        /// <summary>
-        /// 去掉字符串内的所有空格
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string RemoveAllBlank(this string str)
-            => Regex.Replace(str, @"\s", "");
+            input.ThrowIfNull(nameof(input));
 
-
-        /// <summary>
-        /// 正则匹配所有结果
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="pattern"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        public static string[] RegexMatches(this string str, string pattern, RegexOptions options = RegexOptions.None)
-        {
-            var result = new List<string>();
-            if (!str.IsNullOrEmpty())
+            string[] param = new string[] { "\r\n", "\n" };
+            char[] chars = input.ReplaceValuesRegexMatches("\n", param).ToCharArray();
+            char preChar = default;
+            StringBuilder sb = new StringBuilder();
+            foreach (var @char in chars)
             {
-                var data = Regex.Matches(str, pattern, options);
+                if (preChar != '\n' && @char == '\n')
+                    sb.Append("\r\n");
+                else if (@char != '\n')
+                    sb.Append(@char);
+                preChar = @char;
+            }
+            return sb.ToString()/*.TrimEnd('\r', '\n')*/;
+        }
+#if Xunit
+        [Fact]
+        public static void KeepOneLineBreakTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.KeepOneLineBreak());
+
+            str = string.Empty;
+            Assert.Equal(str, str.KeepOneLineBreak());
+
+            str = "你好，\r\n\r\n\n\n世界\n\n\n！\r\n\n";
+            Assert.Equal("你好，\r\n世界\r\n！\r\n", str.KeepOneLineBreak());
+        }
+#endif
+        #endregion
+
+        #region public static string RemoveAllBlank(this string input)
+        /// <summary>
+        /// 去除字符串内的所有空格、换行、制表符
+        /// </summary>
+        /// <param name="input"> 要处理的字符串 </param>
+        /// <returns> 已处理的结果 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        public static string RemoveAllBlank(this string input)
+        {
+            input.ThrowIfNull(nameof(input));
+            return Regex.Replace(input, @"\s", "");
+        }
+#if Xunit
+        [Fact]
+        public static void RemoveAllBlankTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RemoveAllBlank());
+
+            str = string.Empty;
+            Assert.Equal(str, str.RemoveAllBlank());
+
+            str = "你\r 好\n，\r\n　世\t 界 ！  ";
+            Assert.Equal("你好，世界！", str.RemoveAllBlank());
+        }
+#endif
+        #endregion
+
+
+        #region public static string[] RegexMatches(this string input, string pattern, RegexOptions options = RegexOptions.None)
+        /// <summary>
+        /// 使用正则表达式匹配字符串内的所有匹配项
+        /// </summary>
+        /// <param name="input"> 要搜索匹配项的字符串 </param>
+        /// <param name="pattern"> 要匹配的正则表达式模式 </param>
+        /// <param name="options"> 枚举值的按位组合，这些枚举值指定用于匹配的选项 </param>
+        /// <returns> 已匹配到的字符串序列，如果没有匹配项，则返回一个空序列。 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="pattern"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="pattern"/> 正则表达式含有错误 </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> <paramref name="options"/> 不是 <see cref="RegexOptions"/> 值的有效按位组合 </exception>
+        public static string[] RegexMatches(this string input, string pattern, RegexOptions options = RegexOptions.None)
+        {
+            input.ThrowIfNull(nameof(input));
+            pattern.ThrowIfNull(nameof(pattern));
+
+            var result = new List<string>();
+            if (!input.IsNullOrEmpty())
+            {
+                var data = Regex.Matches(input, pattern, options);
                 foreach (var item in data)
                     result.Add(item.ToString());
             }
             return result.ToArray();
         }
-
-        /// <summary>
-        /// 替换字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="newValue">新值</param>
-        /// <param name="oldValue">旧值</param>
-        /// <returns></returns>
-        public static string ReplaceNormal(this string str, string newValue, params string[] oldValue)
+#if Xunit
+        [Fact]
+        public static void RegexMatchesTest()
         {
-            if (newValue.IsNull())
-                newValue = string.Empty;
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RegexMatches(""));
 
-            foreach (var item in oldValue)
-            {
-                if (str.IsNullOrEmpty())
-                    return str;
-                if (!item.IsNullOrEmpty())
-                    str = str.Replace(item, newValue);
-            }
-            return str;
+            str = "Hello World";
+            Assert.Throws<ArgumentNullException>(() => str.RegexMatches(null));
+            Assert.ThrowsAny<Exception>(() => str.RegexMatches(@"^\d{5}-([a-zA-Z]\){4}$")); // RegexParseException
+            Assert.Equal(new[] { "lo", "rl" }, str.RegexMatches("(lo)|(rl)"));
         }
-        /// <summary>
-        /// 使用正则匹配替换字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="newValue">新值</param>
-        /// <param name="oldValue">旧值(不能包含正则占位符)</param>
-        /// <returns></returns>
-        public static string ReplaceNormalWithRegex(this string str, string newValue, params string[] oldValue)
-            => oldValue.Length == 0 ? str : Regex.Replace(str, $"({oldValue.Join("|")})", newValue);
-        /// <summary>
-        /// 使用正则匹配替换字符串（忽略大小写）
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="newValue">新值</param>
-        /// <param name="oldValue">旧值(不能包含正则占位符)</param>
-        public static string ReplaceIgnoreCaseWithRegex(this string str, string newValue, params string[] oldValue)
-            => oldValue.Length == 0 ? str : Regex.Replace(str, $"({oldValue.Join("|")})", newValue, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        /// <summary>
-        /// 移除字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="word">需要移除的字符</param>
-        /// <returns></returns>
-        public static string RemoveNormal(this string str, params string[] word)
-            => ReplaceNormal(str, string.Empty, word);
+#endif
+        #endregion
 
-        /// <summary>
-        /// 使用正则匹配移除字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="word">需要移除的字符(不能包含正则占位符)</param>
-        /// <returns></returns>
-        public static string RemoveNormalWithRegex(this string str, params string[] word)
-            => word.Length == 0 ? str : str.RegexMatches($"[^({word.Join("|")})]").Join();
-        /// <summary>
-        /// 使用正则匹配移除字符串
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="word">需要移除的字符(不能包含正则占位符)</param>
-        /// <returns></returns>
-        public static string RemoveIgnoreCaseWithRegex(this string str, params string[] word)
-            => word.Length == 0 ? str : str.RegexMatches($"[^({word.Join("|")})]", RegexOptions.Compiled | RegexOptions.IgnoreCase).Join();
 
+        #region public static string ReplaceValues(this string input, string newValue, params string[] oldValues)
         /// <summary>
-        /// 将所有换行及其前后多余的空格替换掉合并为一行
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串都替换为另一个指定的字符串
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static string AllInOneLine(this string str)
-            => str.RemoveNormalWithRegex("\r\n", "\r", "\n");
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="newValue"> 要替换 <paramref name="oldValues"/> 的所有匹配项的字符串 </param>
+        /// <param name="oldValues"> 要替换的字符串 </param>
+        /// <returns> 
+        /// <para> 等效于当前字符串（除了 <paramref name="oldValues"/> 的所有实例都已替换为 <paramref name="newValue"/> 外）的字符串。 </para>
+        /// <para> 如果在当前实例中找不到 <paramref name="oldValues"/>，此方法返回未更改的当前实例。 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="newValue"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="oldValues"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="oldValues"/> 包含空字符串 ("") </exception>
+        public static string ReplaceValues(this string input, string newValue, params string[] oldValues)
+        {
+            input.ThrowIfNull(nameof(input));
+            newValue.ThrowIfNull(nameof(newValue));
+            oldValues.ThrowIfNull(nameof(oldValues));
+            if (input.IsNullOrEmpty()) return input;
+
+            foreach (var old in oldValues)
+                input = input.Replace(old, newValue);
+            return input;
+        }
+#if Xunit
+        [Fact]
+        public static void ReplaceValuesTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValues("demo", "test"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValues(null, "test"));
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValues("demo", null));
+            Assert.Throws<ArgumentException>(() => str.ReplaceValues("demo", string.Empty));
+
+            Assert.Equal("Helll Wlrldl", str.ReplaceValues("l", "o", "!"));
+        }
+#endif
+        #endregion
+
+        #region public static string ReplaceValuesIgnoreCase(this string input, string newValue, params string[] oldValues)
+#if NETSTANDARD2_1 || NETCOREAPP3_1
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串都替换为另一个指定的字符串（忽略匹配项的大小写）
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="newValue"> 要替换 <paramref name="oldValues"/> 的所有匹配项的字符串 </param>
+        /// <param name="oldValues"> 要替换的字符串 </param>
+        /// <returns> 
+        /// <para> 等效于当前字符串（除了 <paramref name="oldValues"/> 的所有实例都已替换为 <paramref name="newValue"/> 外）的字符串。 </para>
+        /// <para> 如果在当前实例中找不到 <paramref name="oldValues"/>，此方法返回未更改的当前实例。 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="newValue"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="oldValues"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="oldValues"/> 包含空字符串 ("") </exception>
+        public static string ReplaceValuesIgnoreCase(this string input, string newValue, params string[] oldValues)
+        {
+            input.ThrowIfNull(nameof(input));
+            newValue.ThrowIfNull(nameof(newValue));
+            oldValues.ThrowIfNull(nameof(oldValues));
+            if (input.IsNullOrEmpty()) return input;
+
+            foreach (var old in oldValues)
+                input = input.Replace(old, newValue, StringComparison.OrdinalIgnoreCase);
+            return input;
+        }
+#if Xunit
+        [Fact]
+        public static void ReplaceValuesIgnoreCaseTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesIgnoreCase("demo", "test"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesIgnoreCase(null, "test"));
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesIgnoreCase("demo", null));
+            Assert.Throws<ArgumentException>(() => str.ReplaceValuesIgnoreCase("demo", string.Empty));
+
+            Assert.Equal("Helll Wlrldl", str.ReplaceValuesIgnoreCase("l", "O", "!"));
+        }
+#endif
+#endif
+        #endregion
+
+        #region public static string ReplaceValuesRegexMatches(this string input, string newValue, params string[] oldValues)
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串或与正则表达式匹配的项都替换为另一个指定的字符串
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="newValue"> 要替换 <paramref name="oldValues"/> 的所有匹配项的字符串 </param>
+        /// <param name="oldValues"> 要替换的字符串或正则表达式 </param>
+        /// <returns> 
+        /// <para> 等效于当前字符串（除了 <paramref name="oldValues"/> 的所有实例都已替换为 <paramref name="newValue"/> 外）的字符串。 </para>
+        /// <para> 如果在当前实例中找不到 <paramref name="oldValues"/>，此方法返回未更改的当前实例。 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="newValue"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="oldValues"/> 不能为 null </exception>
+        public static string ReplaceValuesRegexMatches(this string input, string newValue, params string[] oldValues)
+        {
+            input.ThrowIfNull(nameof(input));
+            newValue.ThrowIfNull(nameof(newValue));
+            oldValues.ThrowIfNull(nameof(oldValues));
+            if (input.IsNullOrEmpty()) return input;
+
+            return Regex.Replace(input, $"({oldValues.Join("|")})", newValue);
+        }
+#if Xunit
+        [Fact]
+        public static void ReplaceValuesRegexMatchesTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatches("demo", "test"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatches(null, "test"));
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatches("demo", null));
+
+            Assert.Equal("HellllWlrldl", str.ReplaceValuesRegexMatches("l", " ", "o", "!"));
+            Assert.Equal("Helll Wlrldl", str.ReplaceValuesRegexMatches("l", "[ho]", "!"));
+        }
+#endif 
+        #endregion
+
+        #region public static string ReplaceValuesRegexMatchesIgnoreCase(this string input, string newValue, params string[] oldValues)
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串或与正则表达式匹配的项都替换为另一个指定的字符串（忽略匹配项的大小写）
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="newValue"> 要替换 <paramref name="oldValues"/> 的所有匹配项的字符串 </param>
+        /// <param name="oldValues"> 要替换的字符串或正则表达式 </param>
+        /// <returns> 
+        /// <para> 等效于当前字符串（除了 <paramref name="oldValues"/> 的所有实例都已替换为 <paramref name="newValue"/> 外）的字符串。 </para>
+        /// <para> 如果在当前实例中找不到 <paramref name="oldValues"/>，此方法返回未更改的当前实例。 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="newValue"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="oldValues"/> 不能为 null </exception>
+        public static string ReplaceValuesRegexMatchesIgnoreCase(this string input, string newValue, params string[] oldValues)
+        {
+            input.ThrowIfNull(nameof(input));
+            newValue.ThrowIfNull(nameof(newValue));
+            oldValues.ThrowIfNull(nameof(oldValues));
+            if (input.IsNullOrEmpty()) return input;
+
+            return Regex.Replace(input, $"({oldValues.Join("|")})", newValue, RegexOptions.IgnoreCase);
+        }
+#if Xunit
+        [Fact]
+        public static void ReplaceValuesRegexMatchesIgnoreCaseTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatchesIgnoreCase("demo", "test"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatchesIgnoreCase(null, "test"));
+            Assert.Throws<ArgumentNullException>(() => str.ReplaceValuesRegexMatchesIgnoreCase("demo", null));
+
+            Assert.Equal("HellllWlrldl", str.ReplaceValuesRegexMatchesIgnoreCase("l", " ", "O", "!"));
+            Assert.Equal("lelll Wlrldl", str.ReplaceValuesRegexMatchesIgnoreCase("l", "[Ho]", "!"));
+        }
+#endif
+        #endregion
+
+
+        #region public static string RemoveValues(this string input, params string[] values)
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串都会被移除
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="values"> 要移除的字符 </param>
+        /// <returns> 由 <paramref name="input"/> 已移除所有 <paramref name="values"/> 指定字符串的新实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="values"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="values"/> 包含空字符串 ("") </exception>
+        public static string RemoveValues(this string input, params string[] values)
+            => ReplaceValues(input, string.Empty, values);
+#if Xunit
+        [Fact]
+        public static void RemoveValuesTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValues("demo"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValues(null));
+            Assert.Throws<ArgumentException>(() => str.RemoveValues(string.Empty));
+
+            Assert.Equal("He Wrd", str.RemoveValues("l", "o", "!"));
+        }
+#endif
+        #endregion
+
+        #region public static string RemoveValuesIgnoreCase(this string input, params string[] values)
+#if NETSTANDARD2_1 || NETCOREAPP3_1
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串都会被移除（忽略匹配项的大小写）
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="values"> 要移除的字符 </param>
+        /// <returns> 由 <paramref name="input"/> 已移除所有 <paramref name="values"/> 指定字符串的新实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="values"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="values"/> 包含空字符串 ("") </exception>
+        public static string RemoveValuesIgnoreCase(this string input, params string[] values)
+            => ReplaceValuesIgnoreCase(input, string.Empty, values);
+#if Xunit
+        [Fact]
+        public static void RemoveValuesIgnoreCaseTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesIgnoreCase("demo"));
+
+            str = "Hello World!";
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesIgnoreCase(null));
+            Assert.Throws<ArgumentException>(() => str.RemoveValuesIgnoreCase(string.Empty));
+
+            Assert.Equal("He Wrd", str.RemoveValuesIgnoreCase("l", "O", "!"));
+        }
+#endif
+#endif
+        #endregion
+
+        #region public static string RemoveValuesRegexMatches(this string input, params string[] values)
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串或与正则表达式匹配的字符都会被移除
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="values"> 要移除的字符 </param>
+        /// <returns> 由 <paramref name="input"/> 已移除所有 <paramref name="values"/> 指定字符串或与正则表达式匹配的新实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="values"/> 不能为 null </exception>
+        public static string RemoveValuesRegexMatches(this string input, params string[] values)
+        {
+            input.ThrowIfNull(nameof(input));
+            values.ThrowIfNull(nameof(values));
+            return input.ReplaceValuesRegexMatches(string.Empty, values);
+        }
+#if Xunit
+        [Fact]
+        public static void RemoveValuesRegexMatchesTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesRegexMatches(""));
+
+            str = "Hello World";
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesRegexMatches(null));
+            Assert.ThrowsAny<Exception>(() => str.RemoveValuesRegexMatches(@"^\d{5}-([a-zA-Z]\){4}$")); // RegexParseException
+
+            Assert.Equal("Hel Wod", str.RemoveValuesRegexMatches("lo", "(rl)"));
+        }
+#endif
+        #endregion
+
+        #region public static string RemoveValuesRegexMatchesIgnoreCase(this string input, params string[] values)
+        /// <summary>
+        /// 返回一个新字符串，其中当前实例中出现的所有指定字符串或与正则表达式匹配的字符都会被移除（忽略匹配项的大小写）
+        /// </summary>
+        /// <param name="input"> 要处理的字符串实例 </param>
+        /// <param name="values"> 要移除的字符 </param>
+        /// <returns> 由 <paramref name="input"/> 已移除所有 <paramref name="values"/> 指定字符串或与正则表达式匹配的新实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="values"/> 不能为 null </exception>
+        public static string RemoveValuesRegexMatchesIgnoreCase(this string input, params string[] values)
+        {
+            input.ThrowIfNull(nameof(input));
+            values.ThrowIfNull(nameof(values));
+            return input.ReplaceValuesRegexMatchesIgnoreCase(string.Empty, values);
+        }
+#if Xunit
+        [Fact]
+        public static void RemoveValuesRegexMatchesIgnoreCaseTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesRegexMatchesIgnoreCase(""));
+
+            str = "Hello World";
+            Assert.Throws<ArgumentNullException>(() => str.RemoveValuesRegexMatchesIgnoreCase(null));
+            Assert.ThrowsAny<Exception>(() => str.RemoveValuesRegexMatchesIgnoreCase(@"^\d{5}-([a-zA-Z]\){4}$")); // RegexParseException
+
+            Assert.Equal("Hel rld", str.RemoveValuesRegexMatchesIgnoreCase("lo", "(WO)"));
+        }
+#endif
+        #endregion
 
     }
 }

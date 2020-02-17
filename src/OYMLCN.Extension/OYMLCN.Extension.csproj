@@ -54,11 +54,9 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.Web" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Management" />
-
-    <Compile Include="..\OYMLCN.BitmapExtension\Bitmap.cs" Link="NET472\Bitmap.cs" />
-    <Compile Include="..\OYMLCN.BitmapExtension\Handlers\BitmapHandler.cs" Link="NET472\BitmapHandler.cs" />
+    
+    <!--<Compile Include="..\OYMLCN.BitmapExtension\Bitmap.cs" Link="NET472\Bitmap.cs" />
+    <Compile Include="..\OYMLCN.BitmapExtension\Handlers\BitmapHandler.cs" Link="NET472\BitmapHandler.cs" />-->
   </ItemGroup>
 
   <ItemGroup>
@@ -67,7 +65,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
     <PackageReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>

@@ -1,89 +1,165 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using OYMLCN.ArgumentChecker;
+using System;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+#if Xunit
+using Xunit;
+#endif
+
 
 namespace OYMLCN.Extensions
 {
     public static class StringHtmlExtension
     {
+        #region public static string HtmlRemoveScript(this string html)
         /// <summary>
-        /// 清理Word文档转html后的冗余标签属性
+        /// 删除字符串内的 script 标签
         /// </summary>
-        /// <param name="html"></param>
-        /// <returns></returns>
-        public static string HtmlClearWordTags(this string html)
-        {
-            string s = Regex.Match(Regex.Replace(html, @"background-color:#?\w{3,7}|font-family:'?[\w|\(|\)]*'?;?", string.Empty), @"<body[^>]*>([\s\S]*)<\/body>").Groups[1].Value.Replace("&#xa0;", string.Empty);
-            s = Regex.Replace(s, @"\w+-?\w+:0\w+;?", string.Empty); //去除多余的零值属性
-            s = Regex.Replace(s, "alt=\"(.+?)\"", string.Empty); //除去alt属性
-            s = Regex.Replace(s, @"-aw.+?\s", string.Empty); //去除Word产生的-aw属性
-            return s;
-        }
-        /// <summary>
-        /// 使用正则表达式删除Script标签
-        /// </summary>
+        /// <param name="html"> HTML 字符串 </param>
+        /// <returns> 已移除 script 标签的字符串 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="html"/> 不能为 null </exception>
         public static string HtmlRemoveScript(this string html)
-            => Regex.Replace(html, @"(\<script(.+?)\</script\>)|(\<style(.+?)\</style\>)", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
-        /// <summary>
-        /// 替换html的img路径为绝对路径
-        /// </summary>
-        /// <param name="html"></param>
-        /// <param name="imgDest"></param>
-        /// <returns></returns>
-        public static string HtmlReplaceImgSource(this string html, string imgDest) => html.Replace("<img src=\"", "<img src=\"" + imgDest + "/");
-        /// <summary>
-        /// 将src的绝对路径换成相对路径
-        /// </summary>
-        /// <param name="html"></param>
-        /// <returns></returns>
-        public static string HtmlConvertImgSrcToRelativePath(this string html)
-            => Regex.Replace(html, @"<img src=""(http:\/\/.+?)/", @"<img src=""/");
-        /// <summary>
-        /// 替换回车换行符为html换行符
-        /// </summary>
-        /// <param name="html">html</param>
-        public static string HtmlStrFormat(this string html)
-            => html.Replace("\r\n", "<br />").Replace("\n", "<br />");
-        /// <summary>
-        /// 替换html字符
-        /// </summary>
-        /// <param name="html">html</param>
-        public static string HtmlWebEncode(this string html)
         {
-            if (html != "")
-            {
-                html = html.Replace(",", "&def");
-                html = html.Replace("'", "&dot");
-                html = html.Replace(";", "&dec");
-                return html;
-            }
-            return "";
+            html.ThrowIfNull(nameof(html));
+            if (html.IsNullOrWhiteSpace()) return html;
+
+            var result = Regex.Replace(html, @"(\<script(.+?)\</script\>)", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            if (html == result)
+                result = Regex.Replace(html, @"(\<script(.+?)>|\</script\>)", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            return result;
         }
+#if Xunit
+        [Fact]
+        public static void HtmlRemoveScriptTest()
+        {
+            string html = null;
+            Assert.Throws<ArgumentNullException>(() => html.HtmlRemoveScript());
+
+            html = string.Empty;
+            Assert.Equal(string.Empty, html.HtmlRemoveScript());
+
+            html = " ";
+            Assert.Equal(html, html.HtmlRemoveScript());
+
+            html = @" <script type='test'> 
+    alert('hi') 
+</script> ";
+            Assert.Equal("  ", html.HtmlRemoveScript());
+
+            html = " <script type='demo'> alert('hi') ";
+            Assert.Equal("  alert('hi') ", html.HtmlRemoveScript());
+        }
+#endif
+        #endregion
+
+        #region public static string HtmlRemoveStyleBlock(this string html)
         /// <summary>
-        /// 被转义HTML的字符串还原
+        /// 使用正则表达式删除 style 标签块
         /// </summary>
+        /// <param name="html"> HTML 字符串 </param>
+        /// <returns> 已移除 style 标签块的字符串 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="html"/> 不能为 null </exception>
+        public static string HtmlRemoveStyleBlock(this string html)
+            => Regex.Replace(html, @"(\<style(.+?)\</style\>)", "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+#if Xunit
+        [Fact]
+        public static void HtmlRemoveStyleBlockTest()
+        {
+            string html = null;
+            Assert.Throws<ArgumentNullException>(() => html.HtmlRemoveStyleBlock());
+
+            html = string.Empty;
+            Assert.Equal(string.Empty, html.HtmlRemoveStyleBlock());
+
+            html = " ";
+            Assert.Equal(html, html.HtmlRemoveStyleBlock());
+
+            html = @" <style type='test'> 
+    .test {
+        backgroup-color: red;
+    }
+</style> ";
+            Assert.Equal("  ", html.HtmlRemoveStyleBlock());
+
+            html = " <style type='test'> .test { ";
+            Assert.Equal(html, html.HtmlRemoveStyleBlock());
+        }
+#endif
+        #endregion
+
+
+        #region public static string HtmlFormatNewLines(this string html)
+        /// <summary>
+        /// 替换回车和换行符为 <br/> 换行符
+        /// </summary>
+        /// <param name="html"> HTML 字符串 </param>
+        /// <returns> 已将换行符或回车替换为 <br/> 换行符的字符串 </returns>
+        public static string HtmlFormatNewLines(this string html)
+        {
+            html.ThrowIfNull(nameof(html));
+            return html.Replace("\r\n", "<br/>").Replace("\n", "<br/>");
+        }
+#if Xunit
+        [Fact]
+        public static void HtmlFormatNewLinesTest()
+        {
+            string html = null;
+            Assert.Throws<ArgumentNullException>(() => html.HtmlFormatNewLines());
+
+            html = string.Empty;
+            Assert.Equal(string.Empty, html.HtmlFormatNewLines());
+
+            html = "Hello World!";
+            Assert.Equal(html, html.HtmlFormatNewLines());
+            html = @"Hello
+World!";
+            Assert.Equal("Hello<br/>World!", html.HtmlFormatNewLines());
+            html = "Hello\nWorld!";
+            Assert.Equal("Hello<br/>World!", html.HtmlFormatNewLines());
+        }
+#endif
+        #endregion
+
+
+        #region public static string HtmlDecode(this string html)
+        /// <summary>
+        /// 将已经为 HTTP 传输进行过 HTML 编码的字符串转换为已解码的字符串
+        /// </summary>
+        /// <param name="html"> 要解码的字符串 </param>
+        /// <returns> 已解码的字符串 </returns>
         public static string HtmlDecode(this string html)
             => WebUtility.HtmlDecode(html);
+#if Xunit
+        [Fact]
+        public static void HtmlDecodeTest()
+        {
+            // 调用内置方法，不需要过多测试
+        }
+        [Fact]
+        public static void HtmlEncodeDecodeTest()
+        {
+            string html = @"<html id=""demo"">test</html>";
+            Assert.Equal(html, html.HtmlEncode().HtmlDecode());
+        }
+#endif
+        #endregion
+
+        #region public static string HtmlEncode(this string html)
         /// <summary>
-        /// HTML转义为数据库合法模式
+        /// 将字符串转换为 HTML 编码字符串
         /// </summary>
+        /// <param name="html"> 要编码的字符串 </param>
+        /// <returns> 已编码的字符串 </returns>
         public static string HtmlEncode(this string html)
             => WebUtility.HtmlEncode(html);
+#if Xunit
+        [Fact]
+        public static void HtmlEncodeTest()
+        {
+            // 调用内置方法，不需要过多测试
+        }
+#endif 
+        #endregion
 
-        /// <summary>
-        /// 字符串去除 &amp;nbsp;/&amp;ensp;/&amp;emsp;/&amp;thinsp;/&amp;zwnj;/&amp;zwj; 空格符 制表符 
-        /// </summary>
-        /// <param name="html"></param>
-        /// <param name="keepOneSpace">保留一个空格</param>
-        public static string HtmlRemoveSpace(this string html, bool keepOneSpace = true)
-            => html.SplitByMultiSign("　", " ", "&nbsp;", "&ensp;", "&emsp;", "&thinsp;", "&zwnj;", "&zwj;", "\t")
-                   .Where(d => !d.Trim().IsNullOrEmpty())
-                   .Join(keepOneSpace ? " " : string.Empty);
     }
-
 }

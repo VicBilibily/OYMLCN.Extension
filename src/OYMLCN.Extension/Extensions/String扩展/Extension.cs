@@ -89,62 +89,141 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 基于提供的关键词筛选包含提供值的序列
         /// </summary>
-        /// <param name="source"> 需要筛选的字符串集合 </param>
+        /// <param name="source"> 需要筛选的字符串序列 </param>
         /// <param name="words"> 要搜寻的字符串 </param>
         /// <returns> 
-        /// <para> 如果要筛选的字符串集合含有字符串包含在 <paramref name="words"/> 中，则返回对应的字符串对象集合 </para> 
-        /// <para> 如果 <paramref name="words"/> 包含空字符串 ("")，则返回原始的 <paramref name="source"/> </para>
-        /// <para> 如果 <paramref name="words"/> 为空，不包含任何值，则返回一个空的字符串对象集合 </para>
+        /// <para> 如果要筛选的字符串序列含有字符串包含在 <paramref name="words"/> 中，则返回对应的字符串对象序列 </para> 
+        /// <para> 如果 <paramref name="words"/> 包含空字符串 ("")，则返回已排除 null 对象的 <paramref name="source"/> 序列 </para>
+        /// <para> 如果 <paramref name="words"/> 为空，不包含任何值，则返回一个空的字符串对象序列 </para>
         /// </returns>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="words"/> 不能含有 null </exception>
         public static IEnumerable<string> WhereContains(this IEnumerable<string> source, params string[] words)
-            => source.Where(item => item.Contains(words)).ToArray();
+            => source.Where(item => item.IsNotNull() && item.Contains(words));
 #if Xunit
         [Fact]
         public static void WhereContainsTest()
         {
             string[] arr = null;
             Assert.Throws<ArgumentNullException>(() => arr.WhereContains(""));
-            arr = new[] { "Hello", " ", "World!" };
-            Assert.Throws<ArgumentNullException>(() => arr.WhereContains(null));
+            arr = new[] { "Hello", " ", null, "World!" };
+            Assert.Throws<ArgumentNullException>(() => arr.WhereContains(null).ToArray());
 
-            Assert.Equal(new string[0], arr.WhereContains());
             Assert.Equal(new[] { " " }, arr.WhereContains(" "));
             Assert.Equal(new[] { " ", "World!" }, arr.WhereContains(" ", "!"));
-            Assert.Equal(arr, arr.WhereContains(" ", "o"));
+            Assert.Equal(new[] { "Hello", " ", "World!" }, arr.WhereContains(" ", "o"));
+            Assert.Empty(arr.WhereContains());
         }
-#endif 
+#endif
         #endregion
 
-
+        #region public static IEnumerable<string> WhereStartsWith(this IEnumerable<string> source, string value)
         /// <summary>
-        /// 搜索字符串数组
+        /// 基于提供的关键词筛选包含此字符串实例的开头是否与指定的字符串匹配的序列
         /// </summary>
-        /// <param name="list"></param>
-        /// <param name="word"></param>
-        /// <returns></returns>
-        public static IEnumerable<string> WhereStartsWith(this IEnumerable<string> list, string word)
-            => list.Where(d => d.StartsWith(word)).ToArray();
+        /// <param name="source"> 需要筛选的字符串序列 </param>
+        /// <param name="value"> 要比较的字符串 </param>
+        /// <returns>
+        /// <para> 如果要筛选的字符串序列含有字符串实例的开头是否与指定的字符串 <paramref name="value"/> 匹配，则返回对应的字符串对象序列 </para>
+        /// <para> 如果 <paramref name="value"/> 为空字符串 ("")，则返回已排除 null 对象的 <paramref name="source"/> 序列 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> 不能为 null </exception>
+        public static IEnumerable<string> WhereStartsWith(this IEnumerable<string> source, string value)
+            => source.Where(item => item.IsNotNull() && item.StartsWith(value));
 #if Xunit
         [Fact]
         public static void WhereStartsWithTest()
         {
+            string[] arr = null;
+            Assert.Throws<ArgumentNullException>(() => arr.WhereStartsWith(""));
+            arr = new[] { "Hello", " ", null, "World!" };
+            Assert.Throws<ArgumentNullException>(() => arr.WhereStartsWith(null).ToArray());
 
+            Assert.Equal(new[] { " " }, arr.WhereStartsWith(" "));
+            Assert.Equal(new[] { "World!" }, arr.WhereStartsWith("W"));
+            Assert.Equal(new[] { "Hello", " ", "World!" }, arr.WhereStartsWith(string.Empty));
+            Assert.Empty(arr.WhereStartsWith("Y"));
+        }
+#endif 
+        #endregion
+
+        #region public static IEnumerable<string> WhereEndsWith(this IEnumerable<string> source, string value)
+        /// <summary>
+        /// 基于提供的关键词筛选包含此字符串实例的结尾是否与指定的字符串匹配的序列
+        /// </summary>
+        /// <param name="source"> 需要筛选的字符串的序列 </param>
+        /// <param name="value"> 要与此序列实例末尾的子字符串进行比较的字符串 </param>
+        /// <returns>
+        /// <para> 如果要筛选的字符串序列含有字符串实例的结尾是否与指定的字符串 <paramref name="value"/> 匹配，则返回对应的字符串对象序列 </para>
+        /// <para> 如果 <paramref name="value"/> 为空字符串 ("")，则返回已排除 null 对象的 <paramref name="source"/> 序列 </para>
+        /// </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> 不能为 null </exception>
+        public static IEnumerable<string> WhereEndsWith(this IEnumerable<string> source, string value)
+            => source.Where(item => item.IsNotNull() && item.EndsWith(value));
+#if Xunit
+        [Fact]
+        public static void WhereEndsWithTest()
+        {
+            string[] arr = null;
+            Assert.Throws<ArgumentNullException>(() => arr.WhereEndsWith(string.Empty));
+            arr = new[] { "Hello", " ", null, "World!" };
+            Assert.Throws<ArgumentNullException>(() => arr.WhereEndsWith(null).ToArray());
+
+            Assert.Equal(new[] { " " }, arr.WhereEndsWith(" "));
+            Assert.Equal(new[] { "World!" }, arr.WhereEndsWith("!"));
+            Assert.Equal(new[] { "Hello", " ", "World!" }, arr.WhereEndsWith(string.Empty));
+            Assert.Empty(arr.WhereEndsWith("Y"));
         }
 #endif
+        #endregion
 
 
+        #region public static IEnumerable<string> WhereIsNotNullOrEmpty(this IEnumerable<string> source)
         /// <summary>
-        /// 搜索字符串数组
+        /// 筛选不是空或由空格组成的字符串实例
         /// </summary>
-        /// <param name="list"></param>
-        /// <param name="word"></param>
-        /// <returns></returns>
-        public static IEnumerable<string> WhereEndsWith(this IEnumerable<string> list, string word)
-            => list?.Where(d => d.EndsWith(word)) ?? new string[0];
+        /// <param name="source"> 需要筛选的字符串的序列 </param>
+        /// <returns>  从 <paramref name="source"/> 筛选出来的不是空或由空格组成的字符串序列 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
+        public static IEnumerable<string> WhereIsNotNullOrEmpty(this IEnumerable<string> source)
+            => source.Where(item => item.IsNotNullOrEmpty());
+#if Xunit
+        [Fact]
+        public static void WhereIsNotNullOrEmptyTest()
+        {
+            string[] arr = null;
+            Assert.Throws<ArgumentNullException>(() => arr.WhereIsNotNullOrEmpty());
 
+            arr = new[] { "Hello", "", null, "World!" };
+            Assert.Equal(new[] { "Hello", "World!" }, arr.WhereIsNotNullOrEmpty());
+            arr = new[] { "Hello", " ", "World!" };
+            Assert.Equal(arr, arr.WhereIsNotNullOrEmpty());
+        }
+#endif
+        #endregion
 
+        #region public static IEnumerable<string> WhereIsNotNullOrWhiteSpace(this IEnumerable<string> source)
+        /// <summary>
+        /// 筛选不是空或由空格组成的字符串实例
+        /// </summary>
+        /// <param name="source"> 需要筛选的字符串的序列 </param>
+        /// <returns>  从 <paramref name="source"/> 筛选出来的不是空或由空格组成的字符串序列 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
+        public static IEnumerable<string> WhereIsNotNullOrWhiteSpace(this IEnumerable<string> source)
+            => source.Where(item => item.IsNotNullOrWhiteSpace());
+#if Xunit
+        [Fact]
+        public static void WhereIsNotNullOrWhiteSpaceTest()
+        {
+            string[] arr = null;
+            Assert.Throws<ArgumentNullException>(() => arr.WhereIsNotNullOrWhiteSpace());
 
+            arr = new[] { "Hello", "", " ", null, "World!" };
+            Assert.Equal(new[] { "Hello", "World!" }, arr.WhereIsNotNullOrWhiteSpace());
+        }
+#endif 
+        #endregion
     }
 }

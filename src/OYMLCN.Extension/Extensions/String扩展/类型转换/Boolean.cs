@@ -19,7 +19,7 @@ namespace OYMLCN.Extensions
         /// <param name="input"> 传入的字符串 </param>
         /// <returns> <seealso cref="bool"/> 的值 true/false </returns>
         public static bool ConvertToBoolean(this string input)
-            => input.IsEqualIgnoreCase(_ConvertToBooleanTrueResultValues);
+            => input.EqualsIgnoreCase(_ConvertToBooleanTrueResultValues);
 #if Xunit
         [Fact]
         public static void ConvertToBooleanTest()

@@ -12,6 +12,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class FileInfoExtension
     {
+        #region public static FileInfo GetFileInfo(this string fileName)
         /// <summary>
         /// 初始化作为文件路径的包装的 <seealso cref="FileInfo"/> 类的新实例，
         /// 如果路径有问题则返回 null
@@ -40,7 +41,9 @@ namespace OYMLCN.Extensions
             // 仅扩展创建内置类型的方式，不需要再次进行复杂的内部测试
         }
 #endif
+        #endregion
 
+        #region public static DirectoryInfo GetDirectoryInfo(this string path)
         /// <summary>
         /// 初始化指定路径上的 <seealso cref="DirectoryInfo"/> 类的新实例，
         /// 如果路径有问题则返回 null
@@ -66,7 +69,8 @@ namespace OYMLCN.Extensions
 
             // 仅扩展创建内置类型的方式，不需要再次进行复杂的内部测试
         }
-#endif
+#endif 
+        #endregion
 
     }
 }
