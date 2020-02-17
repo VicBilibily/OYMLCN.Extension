@@ -1,4 +1,5 @@
-﻿using OYMLCN.Encrypt;
+﻿using OYMLCN.ArgumentChecker;
+using OYMLCN.Encrypt;
 using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string Md5(string srcString, MD5Length length = MD5Length.L32)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            srcString.ThrowIfEmpty(nameof(srcString));
 
             string str_md5_out = string.Empty;
             using (MD5 md5 = MD5.Create())
@@ -56,8 +57,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACMD5(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACMD5 md5 = new HMACMD5(secrectKey))
@@ -68,8 +69,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACMD5Base64(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACMD5 md5 = new HMACMD5(secrectKey))
@@ -81,7 +82,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string Sha1(string srcString)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            srcString.ThrowIfEmpty(nameof(srcString));
 
             using (SHA1 sha1 = SHA1.Create())
                 return sha1.ComputeHash(srcString);
@@ -91,8 +92,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA1(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA1 hmac = new HMACSHA1(secrectKey))
@@ -106,8 +107,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA1Base64(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA1 hmac = new HMACSHA1(secrectKey))
@@ -122,7 +123,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string Sha256(string srcString)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            srcString.ThrowIfEmpty(nameof(srcString));
 
             using (SHA256 sha256 = SHA256.Create())
                 return sha256.ComputeHash(srcString);
@@ -132,8 +133,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA256(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA256 hmac = new HMACSHA256(secrectKey))
@@ -147,8 +148,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA256Base64(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA256 hmac = new HMACSHA256(secrectKey))
@@ -163,7 +164,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string Sha384(string srcString)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            srcString.ThrowIfEmpty(nameof(srcString));
 
             using (SHA384 sha384 = SHA384.Create())
                 return sha384.ComputeHash(srcString);
@@ -173,8 +174,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA384(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA384 hmac = new HMACSHA384(secrectKey))
@@ -188,8 +189,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA384Base64(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA384 hmac = new HMACSHA384(secrectKey))
@@ -204,7 +205,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string Sha512(string srcString)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
+            srcString.ThrowIfEmpty(nameof(srcString));
 
             using (SHA512 sha512 = SHA512.Create())
                 return sha512.ComputeHash(srcString);
@@ -214,8 +215,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA512(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA512 hmac = new HMACSHA512(secrectKey))
@@ -229,8 +230,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string HMACSHA512Base64(string srcString, string key)
         {
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            key.ThrowIfEmpty(nameof(key));
 
             byte[] secrectKey = Encoding.UTF8.GetBytes(key);
             using (HMACSHA512 hmac = new HMACSHA512(secrectKey))
@@ -239,7 +240,6 @@ namespace OYMLCN.Helpers
                 return hmac.ComputeHashBase64(srcString);
             }
         }
-        #endregion
 
     }
 }

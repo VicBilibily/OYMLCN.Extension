@@ -7,7 +7,7 @@
     <Description>（v3.x起弃用所有Win平台独有方法，如有需要请考虑 Kane.Extension）本扩展库包含一些本人常用的方法扩展。若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
-    
+
     <Version>3.0.0-beta1</Version>
     <Version Condition="'$(Configuration)' == 'Debug'">3.0.0-preview$([System.DateTime]::Now.ToString(yyMMddHHmm))</Version>
 
@@ -39,28 +39,15 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="NETCOREAPP\**" />
-    <EmbeddedResource Remove="NETCOREAPP\**" />
-    <Compile Remove="NETCOREAPP\**" />
-    <Compile Remove="扩展模块\加密摘要\**" />
-    <!--<Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netcoreapp2.1'" />-->
-   
-    <EmbeddedResource Remove="OldSrc\**" />
-   
-    <EmbeddedResource Remove="扩展模块\加密摘要\**" />
-    <Compile Remove="OldSrc\**" />
-    <None Include="OldSrc\**" />
+    <Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.Web" />
     <Reference Include="System.Net.Http" />
-    
+
     <!--<Compile Include="..\OYMLCN.BitmapExtension\Bitmap.cs" Link="NET472\Bitmap.cs" />
     <Compile Include="..\OYMLCN.BitmapExtension\Handlers\BitmapHandler.cs" Link="NET472\BitmapHandler.cs" />-->
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="扩展模块\加密摘要\**" />
   </ItemGroup>
 
   <ItemGroup>

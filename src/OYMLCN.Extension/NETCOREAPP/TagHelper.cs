@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
         /// <param name="controller"></param>
         /// <returns></returns>
         public bool IsEqualController(string controller)
-            => controller.IsEqual(ViewContext.RouteData.Values["controller"]?.ToString());
+            => controller.Equals(ViewContext.RouteData.Values["controller"]?.ToString());
         /// <summary>
         /// 传入属性值对比是否等于当前请求的Controller
         /// </summary>
@@ -43,7 +43,7 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
         /// <param name="action"></param>
         /// <returns></returns>
         public bool IsEqualAction(string action)
-            => action.IsEqual(ViewContext.RouteData.Values["action"]?.ToString());
+            => action.Equals(ViewContext.RouteData.Values["action"]?.ToString());
         /// <summary>
         /// 传入属性值对比是否等于当前请求的Action与Controller
         /// </summary>
@@ -58,7 +58,7 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
         /// <param name="area"></param>
         /// <returns></returns>
         public bool IsEqualArea(string area)
-            => area.IsEqual(ViewContext.RouteData.Values["area"]?.ToString());
+            => area.Equals(ViewContext.RouteData.Values["area"]?.ToString());
     }
 
     [HtmlTargetElement("input", Attributes = "asp-checked")]
@@ -208,7 +208,7 @@ namespace OYMLCN.Extensions
         /// <param name="name"></param>
         /// <returns></returns>
         public static TagHelperAttribute GetAttribute(this TagHelperOutput output, string name) =>
-            output.Attributes.Where(d => d.Name.IsEqualIgnoreCase(name)).FirstOrDefault();
+            output.Attributes.Where(d => d.Name.EqualsIgnoreCase(name)).FirstOrDefault();
         /// <summary>
         /// 移除并返回属性
         /// </summary>
@@ -230,7 +230,7 @@ namespace OYMLCN.Extensions
         /// <param name="className"></param>
         public static void AddClass(this TagHelperOutput output, string className)
         {
-            var classNames = output.RemoveAttribute("class")?.Value.ToString().SplitBySign(" ").ToList() ?? new List<string>();
+            var classNames = output.RemoveAttribute("class")?.Value.ToString().Split(" ").ToList() ?? new List<string>();
             classNames.Add(className);
             output.Attributes.Add("class", classNames.Distinct().Join(" "));
         }

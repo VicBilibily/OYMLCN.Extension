@@ -1,6 +1,9 @@
-﻿using System;
+﻿using OYMLCN.ArgumentChecker;
+using OYMLCN.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +35,7 @@ namespace OYMLCN.Helpers
         /// <returns>DecryptionKey</returns>
         public static string CreateDecryptionKey(int length)
         {
-            ArgumentChecker.IsNotOutOfRange(length, 16, 48, nameof(length));
+            length.ThrowIfOutOfRange(16, 48, nameof(length));
             return CreateSaltKey(length);
         }
         /// <summary>
@@ -42,7 +45,7 @@ namespace OYMLCN.Helpers
         /// <returns>ValidationKey</returns>
         public static string CreateValidationKey(int length)
         {
-            ArgumentChecker.IsNotOutOfRange(length, 48, 128, nameof(length));
+            length.ThrowIfOutOfRange(48, 128, nameof(length));
             return CreateSaltKey(length);
         }
     }

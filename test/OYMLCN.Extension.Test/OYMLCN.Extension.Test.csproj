@@ -35,24 +35,18 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
 
-
   <ItemGroup>
+    <!--<None Include="..\..\src\OYMLCN.Extension\**\*.cs" />
+    <Compile Include="..\..\src\OYMLCN.Extension\**\*.cs" />-->
     <None Include="..\..\src\OYMLCN.Extension\**\*.cs" />
     <Compile Include="..\..\src\OYMLCN.Extension\**\*.cs" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**\*.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1' OR '$(TargetFramework)' != 'netcoreapp3.1'" />
     <None Remove="..\..\src\OYMLCN.Extension\obj\**" />
     <Compile Remove="..\..\src\OYMLCN.Extension\obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**" />
-    <Compile Remove="..\..\src\OYMLCN.Extension\OldSrc\Extensions\**" />
-    <Compile Remove="..\..\src\OYMLCN.Extension\扩展模块\加密摘要\**" />
-    <Compile Remove="OldTest\**" />
+    
+    <None Remove="OldTest\**" />
     <EmbeddedResource Remove="OldTest\**" />
-    <None Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**" />
-    <None Remove="..\..\src\OYMLCN.Extension\OldSrc\Extensions\**" />
-    <None Remove="..\..\src\OYMLCN.Extension\扩展模块\加密摘要\**" />
-    <None Include="OldTest\**" />
+    <Compile Remove="OldTest\**" />
   </ItemGroup>
 
 </Project>

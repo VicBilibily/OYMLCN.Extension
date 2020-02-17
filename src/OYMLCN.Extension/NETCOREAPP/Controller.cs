@@ -46,7 +46,8 @@ namespace OYMLCN.AspNetCore
         /// <summary>
         /// 登陆用户唯一标识
         /// </summary>
-        public long UserId => User.Claims.Where(d => d.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value.ConvertToNullableLong() ?? 0;
+        //public long UserId => User.Claims.Where(d => d.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value.ConvertToNullableLong() ?? 0;
+        public long UserId => User.Claims.Where(d => d.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value.ConvertToNullable<long>() ?? 0;
 
         /// <summary>
         /// 上一来源(Uri)
@@ -123,9 +124,9 @@ namespace OYMLCN.AspNetCore
                         foreach (var item in Request.Form)
                             requestQueryParams[item.Key] = item.Value;
                     else if (Request.ContentType.Equals("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase))
-                        foreach (var item in Request.Body.ReadToEnd().SplitBySign("&"))
+                        foreach (var item in Request.Body.ReadToEnd().Split("&"))
                         {
-                            var query = item.SplitBySign("=");
+                            var query = item.Split("=");
                             requestQueryParams.Add(query.FirstOrDefault(), query.Skip(1).FirstOrDefault());
                         }
                     return requestQueryParams;

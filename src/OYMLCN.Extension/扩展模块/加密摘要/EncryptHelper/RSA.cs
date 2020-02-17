@@ -1,8 +1,16 @@
-﻿using System;
+﻿using OYMLCN.Encrypt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using OYMLCN.Extensions;
+using OYMLCN.ArgumentChecker;
+using System.Xml;
+using System.Text.RegularExpressions;
+using System.IO;
+using OYMLCN.Exceptions;
 
 namespace OYMLCN.Helpers
 {
@@ -26,8 +34,8 @@ namespace OYMLCN.Helpers
                 {
                     PublicKey = publicKey,
                     PrivateKey = privateKey,
-                    Exponent = rsa.ExportParameters(false).Exponent.ToHexString(),
-                    Modulus = rsa.ExportParameters(false).Modulus.ToHexString()
+                    Exponent = rsa.ExportParameters(false).Exponent.HexToString(),
+                    Modulus = rsa.ExportParameters(false).Modulus.HexToString()
                 };
             }
         }
@@ -36,7 +44,7 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static RSAKey CreateRsaKey(RSA rsa)
         {
-            ArgumentChecker.IsNotNull(rsa, nameof(rsa));
+            rsa.ThrowIfNull(nameof(rsa));
 
             string publicKey = rsa.ToJsonString(false);
             string privateKey = rsa.ToJsonString(true);
@@ -44,8 +52,8 @@ namespace OYMLCN.Helpers
             {
                 PublicKey = publicKey,
                 PrivateKey = privateKey,
-                Exponent = rsa.ExportParameters(false).Exponent.ToHexString(),
-                Modulus = rsa.ExportParameters(false).Modulus.ToHexString()
+                Exponent = rsa.ExportParameters(false).Exponent.HexToString(),
+                Modulus = rsa.ExportParameters(false).Modulus.HexToString()
             };
         }
 
@@ -56,7 +64,7 @@ namespace OYMLCN.Helpers
         /// <returns></returns>
         public static RSA LoadRSAFromJsonString(string rsaKey)
         {
-            ArgumentChecker.IsNotEmpty(rsaKey, nameof(rsaKey));
+            rsaKey.ThrowIfEmpty(nameof(rsaKey));
             RSA rsa = RSA.Create();
             rsa.FromJsonString(rsaKey);
             return rsa;
@@ -68,7 +76,7 @@ namespace OYMLCN.Helpers
         /// <returns></returns>
         public static RSA RSAFromPem(string pem)
         {
-            ArgumentChecker.IsNotEmpty(pem, nameof(pem));
+            pem.ThrowIfEmpty(nameof(pem));
             return RsaProvider.FromPem(pem);
         }
         /// <summary>
@@ -467,9 +475,9 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static string SignAsRSA(string content, string privateKey, HashAlgorithmName hashAlgorithmName, RSASignaturePadding rSASignaturePadding, Encoding encoding)
         {
-            ArgumentChecker.IsNotEmpty(content, nameof(content));
-            ArgumentChecker.IsNotEmpty(privateKey, nameof(privateKey));
-            ArgumentChecker.IsNotNull(rSASignaturePadding, nameof(rSASignaturePadding));
+            content.ThrowIfEmpty(nameof(content));
+            privateKey.ThrowIfEmpty(nameof(privateKey));
+            rSASignaturePadding.ThrowIfNull(nameof(rSASignaturePadding));
 
             byte[] dataBytes = encoding.GetBytes(content);
             using (RSA rsa = RSA.Create())
@@ -484,8 +492,8 @@ namespace OYMLCN.Helpers
         /// </summary>
         public static bool VerifyRSASign(string content, string signStr, string publickKey, HashAlgorithmName hashAlgorithmName, RSASignaturePadding rSASignaturePadding, Encoding encoding)
         {
-            ArgumentChecker.IsNotEmpty(content, nameof(content));
-            ArgumentChecker.IsNotEmpty(signStr, nameof(signStr));
+            content.ThrowIfEmpty(nameof(content));
+            signStr.ThrowIfEmpty(nameof(signStr));
 
             byte[] dataBytes = encoding.GetBytes(content);
             byte[] signBytes = Convert.FromBase64String(signStr);
@@ -505,9 +513,9 @@ namespace OYMLCN.Helpers
         /// <returns>encrypted string</returns>
         public static string RSAEncrypt(string publicKey, string srcString, RSAEncryptionPadding padding, bool isPemKey = false)
         {
-            ArgumentChecker.IsNotEmpty(publicKey, nameof(publicKey));
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotNull(padding, nameof(padding));
+            publicKey.ThrowIfEmpty(nameof(publicKey));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            padding.ThrowIfNull(nameof(padding));
 
             RSA rsa;
             if (isPemKey)
@@ -527,7 +535,7 @@ namespace OYMLCN.Helpers
                     throw new EncryptOutofMaxlengthException($"'{srcString}' is out of max encrypt length {maxLength}", maxLength, rsa.KeySize, padding);
 
                 byte[] encryptBytes = rsa.Encrypt(rawBytes, padding);
-                return encryptBytes.ToHexString();
+                return encryptBytes.HexToString();
             }
         }
         /// <summary>
@@ -540,9 +548,9 @@ namespace OYMLCN.Helpers
         /// <returns>encrypted string</returns>
         public static string RSADecrypt(string privateKey, string srcString, RSAEncryptionPadding padding, bool isPemKey = false)
         {
-            ArgumentChecker.IsNotEmpty(privateKey, nameof(privateKey));
-            ArgumentChecker.IsNotEmpty(srcString, nameof(srcString));
-            ArgumentChecker.IsNotNull(padding, nameof(padding));
+            privateKey.ThrowIfEmpty(nameof(privateKey));
+            srcString.ThrowIfEmpty(nameof(srcString));
+            padding.ThrowIfNull(nameof(padding));
 
             RSA rsa;
             if (isPemKey)

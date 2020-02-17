@@ -153,7 +153,7 @@ namespace OYMLCN.AspNetCore
             if (_options.IgnorePaths.Any(v => requestPath.StartsWith(v)))
                 return next(context);
 
-            var requestQuery = FormatHelper.QueryStringToDictionary(context.Request.QueryString.Value ?? string.Empty);
+            var requestQuery = (context.Request.QueryString.Value ?? string.Empty).QueryStringToDictionary();
 
             // 获取浏览器代理字符串以判断是否是手机访问
             string userAgent = context.Request.Headers[HeaderNames.UserAgent];
@@ -193,7 +193,7 @@ namespace OYMLCN.AspNetCore
                         foreach (var path in actionPath)
                             try
                             {
-                                actionArray.SetValue(requestQuery.SelectValueOrDefault(path.Key), path.Value.ConvertToInt());
+                                actionArray.SetValue(requestQuery.SelectValueOrDefault(path.Key).FirstOrDefault(), path.Value.ConvertToInt());
                             }
                             catch { }
 
@@ -205,7 +205,7 @@ namespace OYMLCN.AspNetCore
                         // 处理请求参数
                         var queryDic = new Dictionary<string, string>();
                         foreach (var query in actionQuery)
-                            queryDic.Add(query.Key, requestQuery.SelectValueOrDefault(query.Value));
+                            queryDic.Add(query.Key, requestQuery.SelectValueOrDefault(query.Value).Join(","));
                         if (actionQuery.Count > 0)
                             actionUrl = $"{actionUrl}?{queryDic.ToQueryString()}";
 
@@ -244,7 +244,7 @@ namespace OYMLCN.AspNetCore
                     {
                         var found = match.ActionMaps.FirstOrDefault(v => v.Key == query.Key);
                         if (found.IsDefault() == false)
-                            queryDic.AddOrUpdate(found.Value, query.Value);
+                            queryDic.AddOrUpdate(found.Value, query.Value.Join(","));
                     }
                     // 最后拼接新的跳转地址
                     string pageUrl = $"{match.PagePath}";

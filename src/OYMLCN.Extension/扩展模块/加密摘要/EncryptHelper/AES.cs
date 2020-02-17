@@ -1,6 +1,11 @@
-﻿using System;
+﻿using OYMLCN.ArgumentChecker;
+using OYMLCN.Encrypt;
+using OYMLCN.Extensions;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,11 +38,11 @@ namespace OYMLCN.Helpers
         {
             data.ThrowIfEmpty(nameof(data));
 
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
-            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
-            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            vector.ThrowIfEmpty(nameof(vector));
+            vector.Length.ThrowIfOutOfRange(16, 16, nameof(vector));
 
             byte[] plainBytes = data.GetUTF8Bytes();
             var encryptBytes = AESEncrypt(plainBytes, key, vector);
@@ -53,13 +58,13 @@ namespace OYMLCN.Helpers
         /// <param name="vector">IV, 16位</param>  
         public static byte[] AESEncrypt(byte[] data, string key, string vector)
         {
-            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            data.ThrowIfEmpty(nameof(data));
 
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
-            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
-            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            vector.ThrowIfEmpty(nameof(vector));
+            vector.Length.ThrowIfOutOfRange(16, 16, nameof(vector));
 
             byte[] plainBytes = data;
             byte[] bKey = new byte[32];
@@ -94,13 +99,13 @@ namespace OYMLCN.Helpers
         /// <param name="vector">IV, 16位</param>  
         public static string AESDecrypt(string data, string key, string vector)
         {
-            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            data.ThrowIfEmpty(nameof(data));
 
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
-            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
-            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            vector.ThrowIfEmpty(nameof(vector));
+            vector.Length.ThrowIfOutOfRange(16, 16, nameof(vector));
 
             byte[] encryptedBytes = data.GetUTF8Bytes();
             byte[] decryptBytes = AESDecrypt(encryptedBytes, key, vector);
@@ -116,13 +121,13 @@ namespace OYMLCN.Helpers
         /// <param name="vector">IV, 16位</param>  
         public static byte[] AESDecrypt(byte[] data, string key, string vector)
         {
-            ArgumentChecker.IsNotEmpty(data, nameof(data));
+            data.ThrowIfEmpty(nameof(data));
 
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
-            ArgumentChecker.IsNotEmpty(vector, nameof(vector));
-            ArgumentChecker.IsNotOutOfRange(vector.Length, 16, 16, nameof(vector));
+            vector.ThrowIfEmpty(nameof(vector));
+            vector.Length.ThrowIfOutOfRange(16, 16, nameof(vector));
 
             byte[] encryptedBytes = data;
             byte[] bKey = new byte[32];
@@ -159,9 +164,9 @@ namespace OYMLCN.Helpers
         /// <param name="key">密钥, 32位</param>  
         public static string AESEncrypt(string data, string key)
         {
-            ArgumentChecker.IsNotEmpty(data, nameof(data));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            data.ThrowIfEmpty(nameof(data));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
             using (MemoryStream Memory = new MemoryStream())
             using (Aes aes = Aes.Create())
@@ -195,9 +200,9 @@ namespace OYMLCN.Helpers
         /// <param name="key">密钥, 32位</param>  
         public static string AESDecrypt(string data, string key)
         {
-            ArgumentChecker.IsNotEmpty(data, nameof(data));
-            ArgumentChecker.IsNotEmpty(key, nameof(key));
-            ArgumentChecker.IsNotOutOfRange(key.Length, 32, 32, nameof(key));
+            data.ThrowIfEmpty(nameof(data));
+            key.ThrowIfEmpty(nameof(key));
+            key.Length.ThrowIfOutOfRange(32, 32, nameof(key));
 
             byte[] encryptedBytes = data.ConvertFromBase64String();
             byte[] bKey = new byte[32];
