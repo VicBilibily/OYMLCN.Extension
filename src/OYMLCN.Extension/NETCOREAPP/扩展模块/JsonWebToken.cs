@@ -55,7 +55,16 @@ namespace OYMLCN.AspNetCore
         /// 签名密钥
         /// </summary>
         internal SecurityKey SigningKey
-            => new SymmetricSecurityKey(Secret.GetUTF8Bytes());
+        {
+            get
+            {
+                var key = Secret.GetUTF8Bytes();
+                // 确认加密密钥是否是 32 位，不是的话用字符串 MD5 的HASH值
+                if (key.Length != 32)
+                    key = Secret.HashToMD5().GetUTF8Bytes();
+                return new SymmetricSecurityKey(key);
+            }
+    } 
 
         /// <summary>
         /// 签名发行标识

@@ -23,20 +23,12 @@ namespace OYMLCN
         // 因为在文件路径中含有特殊字符时会发生异常情况
         // 详情请看 https://stackoverflow.com/questions/12945805/odd-c-sharp-path-issue
         public static string GetExecutablePath()
-#if NET472
-            => Assembly.GetExecutingAssembly().Location;
-#else
             => Assembly.GetEntryAssembly().Location;
-#endif
 #if Xunit
         [Fact]
         public static void GetExecutablePathTest()
         {
-#if NET472
-            Assert.Contains("OYMLCN.Extension.Test", Application.GetExecutablePath());
-#else
             Assert.Contains("microsoft.testplatform.testhost", Application.GetExecutablePath());
-#endif
         }
 #endif
         #endregion

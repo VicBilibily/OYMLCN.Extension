@@ -17,9 +17,6 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <param name="input"> 传入的字符串 </param>
         /// <returns> 你所指定的 <typeparamref name="T"/> 值类型 </returns>
-#if NET472
-        /// <exception cref="Exception"> 字符串格式不符合目标类型要求或不是 <typeparamref name="T"/> 的有效值，转换失败 </exception>
-#endif
         /// <exception cref="ArgumentException"> 字符串格式不符合目标类型要求或不是 <typeparamref name="T"/> 的有效值，转换失败 </exception>
         /// <exception cref="NotSupportedException"> 无法将字符串转换为指定的类型 </exception>
         /// <exception cref="NullReferenceException"> 不能将 null 强制类型转换为指定的类型 </exception>
@@ -50,13 +47,8 @@ namespace OYMLCN.Extensions
             #region Byte
             Assert.Equal((byte)0, "0".ConvertTo<byte>());
             Assert.Equal((byte)255, "255".ConvertTo<byte>());
-#if NET472
-            Assert.ThrowsAny<Exception>(() => "-1".ConvertTo<byte>());
-            Assert.ThrowsAny<Exception>(() => "256".ConvertTo<byte>());
-#else
             Assert.Throws<ArgumentException>(() => "-1".ConvertTo<byte>());
             Assert.Throws<ArgumentException>(() => "256".ConvertTo<byte>());
-#endif
             #endregion
 
             #region Char
@@ -80,16 +72,6 @@ namespace OYMLCN.Extensions
             Assert.Equal(4294967295, "4294967295".ConvertTo<uint>());
             Assert.Equal(18446744073709551615, "18446744073709551615".ConvertTo<ulong>());
 
-#if NET472
-            Assert.ThrowsAny<Exception>(() => "79228162514264337593543950336".ConvertTo<decimal>());
-            Assert.ThrowsAny<Exception>(() => "128".ConvertTo<sbyte>());
-            Assert.ThrowsAny<Exception>(() => "32768".ConvertTo<short>());
-            Assert.ThrowsAny<Exception>(() => "65536".ConvertTo<ushort>());
-            Assert.ThrowsAny<Exception>(() => "2147483648".ConvertTo<int>());
-            Assert.ThrowsAny<Exception>(() => "9223372036854775808".ConvertTo<long>());
-            Assert.ThrowsAny<Exception>(() => "4294967296".ConvertTo<uint>());
-            Assert.ThrowsAny<Exception>(() => "18446744073709551616".ConvertTo<ulong>());
-#else
             Assert.Throws<ArgumentException>(() => "79228162514264337593543950336".ConvertTo<decimal>());
             Assert.Throws<ArgumentException>(() => "128".ConvertTo<sbyte>());
             Assert.Throws<ArgumentException>(() => "32768".ConvertTo<short>());
@@ -98,7 +80,6 @@ namespace OYMLCN.Extensions
             Assert.Throws<ArgumentException>(() => "9223372036854775808".ConvertTo<long>());
             Assert.Throws<ArgumentException>(() => "4294967296".ConvertTo<uint>());
             Assert.Throws<ArgumentException>(() => "18446744073709551616".ConvertTo<ulong>());
-#endif
             #endregion
 
             #region DateTime

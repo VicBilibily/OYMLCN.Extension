@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>（v3.x起弃用所有Win平台独有方法，如有需要请考虑 Kane.Extension）本扩展库包含一些本人常用的方法扩展。若需使用，请到GITHUB查看源码以做了解。</Description>
+    <Description>（v3.x起弃用所有Win平台独有方法，并对.NET及.NetCore2.x有限兼容）本扩展库包含一些本人常用的方法扩展（跨平台仅兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
 
     <Version>3.0.0-beta1</Version>
-    <Version Condition="'$(Configuration)' == 'Debug'">3.0.0-preview$([System.DateTime]::Now.ToString(yyMMddHHmm))</Version>
+    <Version Condition="'$(Configuration)' == 'Debug'">3.0.0-preview$([System.DateTime]::Now.ToString(MMddHHmm))</Version>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -18,7 +18,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
 
-    <TargetFrameworks>net472;netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
@@ -26,7 +26,6 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
 
-    <DocumentationFile Condition="'$(TargetFramework)'=='net472'">bin\xml\NET472\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.1'">bin\xml\NETSTANDARD2_1\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp2.1'">bin\xml\NETCOREAPP2_1\OYMLCN.Extension.xml</DocumentationFile>
@@ -40,14 +39,6 @@
     </None>
     <None Include="NETCOREAPP\**" />
     <Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netcoreapp2.1'" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="System.Web" />
-    <Reference Include="System.Net.Http" />
-
-    <!--<Compile Include="..\OYMLCN.BitmapExtension\Bitmap.cs" Link="NET472\Bitmap.cs" />
-    <Compile Include="..\OYMLCN.BitmapExtension\Handlers\BitmapHandler.cs" Link="NET472\BitmapHandler.cs" />-->
   </ItemGroup>
 
   <ItemGroup>
