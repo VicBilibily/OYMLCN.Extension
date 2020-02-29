@@ -43,7 +43,8 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T DeserializeJsonToObject<T>(this string str) => JsonConvert.DeserializeObject<T>(str);
+        /// <exception cref="JsonReaderException"> <paramref name="json"/> 不是有效的 JSON 字符串 </exception>
+        public static T DeserializeJsonToObject<T>(this string json) => JsonConvert.DeserializeObject<T>(json);
         /// <summary>
         /// 转换JSON字符串为可供查询的Array数组
         /// </summary>

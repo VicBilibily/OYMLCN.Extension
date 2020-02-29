@@ -116,10 +116,7 @@ namespace OYMLCN.Aliyun
             var requestUrl = $"http://{domain}/?Signature={SpecialUrlEncoder(sign)}&{query}";
 
             using (var webclient = new WebClient())
-            {
-                var result = webclient.GetSourceString(requestUrl);
-                return result.DeserializeJsonToObject<SmsSenderResponse>();
-            }
+                return webclient.DownloadJson<SmsSenderResponse>(requestUrl);
         }
 
     }

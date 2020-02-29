@@ -47,7 +47,7 @@ namespace OYMLCN.ArgumentChecker
         public static void ThrowIfNull<T>(this T argument, string argumentName, string message = null)
         {
             if (argument == null)
-                throw new ArgumentNullException(argumentName, message ?? $"{argumentName} 为 null");
+                throw new ArgumentNullException(argumentName, message ?? $"{argumentName} 不能为 null");
         }
         #endregion
 

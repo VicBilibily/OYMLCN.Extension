@@ -9,12 +9,12 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class DateTimeExtensions
     {
-        ///// <summary>
-        ///// 中国农历信息
-        ///// </summary>
-        ///// <param name="dt"></param>
-        ///// <returns></returns>
-        //public static ChineseCalendar AsChineseCalendar(this DateTime dt) => new ChineseCalendar(dt);
+        /// <summary>
+        /// 中国农历信息
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static ChineseCalendar AsChineseCalendar(this DateTime dt) => new ChineseCalendar(dt);
 
         #region DateTime
         /// <summary>
