@@ -16,7 +16,7 @@ namespace OYMLCN.Extensions
         /// Json序列化的方式实现深拷贝
         /// </summary>
         public static T JsonDeepClone<T>(this T t) where T : class, new()
-            => t.ToJsonString().DeserializeJsonToObject<T>();
+            => t.JsonSerialize().JsonDeserialize<T>();
         /// <summary>
         /// XML序列化的方式实现深拷贝
         /// </summary>

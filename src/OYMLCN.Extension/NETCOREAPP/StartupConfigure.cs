@@ -80,7 +80,7 @@ namespace Microsoft.AspNetCore.Builder
                   {
                       code = response.StatusCode,
                       msg = $"{response.StatusCode.ToString()} {((HttpStatusCode)response.StatusCode).ToString()}"
-                  }.ToJsonString(), Encoding.UTF8);
+                  }.JsonSerialize(), Encoding.UTF8);
               }).UseExceptionHandler(config =>
               {
                   config.Run(handler =>
@@ -92,7 +92,7 @@ namespace Microsoft.AspNetCore.Builder
                       {
                           code = 500,
                           msg = err.Error.Message
-                      }.ToJsonString(), Encoding.UTF8);
+                      }.JsonSerialize(), Encoding.UTF8);
                   });
               });
 

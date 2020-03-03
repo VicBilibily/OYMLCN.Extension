@@ -137,7 +137,7 @@ namespace OYMLCN.AspNetCore
         /// 转换为Json
         /// </summary>
         public string ToJsonString()
-            => Data.ToJsonString();
+            => Data.JsonSerialize();
         /// <summary>
         /// 显式转换为string
         /// </summary>
@@ -162,7 +162,7 @@ namespace OYMLCN.AspNetCore
         /// <param name="userInfo"></param>
         /// <returns></returns>
         public static JwtToken BuildJwtSecurityToken(this Controller controller, IUserInfo userInfo)
-            => controller.BuildJwtSecurityToken(userInfo.ToJsonString());
+            => controller.BuildJwtSecurityToken(userInfo.JsonSerialize());
         private static JwtToken BuildJwtSecurityToken(this Controller controller, string json)
         {
             var options = controller.GetRequiredOptions<JwtOptions>();
@@ -225,7 +225,7 @@ namespace OYMLCN.AspNetCore
                 {
                     var options = controller.GetRequiredOptions<JwtOptions>();
                     info = info.AESDecrypt(options.Secret.HashToMD5());
-                    return info.DeserializeJsonToObject<T>();
+                    return info.JsonDeserialize<T>();
                 }
             }
             return default(T);

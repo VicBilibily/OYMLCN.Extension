@@ -107,7 +107,7 @@ namespace OYMLCN.Aliyun
                 { "PhoneNumbers", phoneNumbers.Join(",") },
                 { "SignName", signName },
                 { "TemplateCode", templateCode },
-                { "TemplateParam", (templateParam is string) ? templateParam.ToString() : templateParam.ToJsonString() },
+                { "TemplateParam", (templateParam is string) ? templateParam.ToString() : templateParam.JsonSerialize() },
                 { "OutId", outId },
             };
 

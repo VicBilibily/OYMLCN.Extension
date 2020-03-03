@@ -292,7 +292,7 @@ namespace OYMLCN.Extensions
 
         #region public static T UploadUTF8JsonString<T>(this WebClient webClient, string address, string json)
         public static T UploadUTF8JsonString<T>(this WebClient webClient, string address, string json)
-            => webClient.UploadUTF8JsonString(address, json).DeserializeJsonToObject<T>();
+            => webClient.UploadUTF8JsonString(address, json).JsonDeserialize<T>();
         #endregion
 
         #region public static Task<T> UploadUTF8JsonStringTaskAsync<T>(this WebClient webClient, string address, string json) where T : class, new()
@@ -310,7 +310,7 @@ namespace OYMLCN.Extensions
         /// <exception cref="JsonReaderException"> 服务器返回的内容不是有效的 JSON 字符串 </exception>
         public static Task<T> UploadUTF8JsonStringTaskAsync<T>(this WebClient webClient, string address, string json) where T : class, new()
             => webClient.UploadUTF8JsonStringTaskAsync(address, json)
-                .ContinueWith(task => task.IsCompleted ? task.Result.DeserializeJsonToObject<T>() : default(T));
+                .ContinueWith(task => task.IsCompleted ? task.Result.JsonDeserialize<T>() : default(T));
         #endregion
 
 
@@ -334,7 +334,7 @@ namespace OYMLCN.Extensions
             address.ThrowIfNull(nameof(address));
 
             var result = webClient.DownloadString(address);
-            return result.DeserializeJsonToObject<T>();
+            return result.JsonDeserialize<T>();
         }
 #if Xunit
         public class TestClass { }
@@ -380,7 +380,7 @@ namespace OYMLCN.Extensions
             address.ThrowIfNull(nameof(address));
 
             return webClient.DownloadStringTaskAsync(address)
-                .ContinueWith(task => task.IsCompleted ? task.Result.DeserializeJsonToObject<T>() : default(T));
+                .ContinueWith(task => task.IsCompleted ? task.Result.JsonDeserialize<T>() : default(T));
         }
 #if Xunit
         [Fact]

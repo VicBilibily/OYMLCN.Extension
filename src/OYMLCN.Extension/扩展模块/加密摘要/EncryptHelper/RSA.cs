@@ -106,7 +106,7 @@ namespace OYMLCN.Helpers
             RSAParameters parameters = new RSAParameters();
             try
             {
-                var paramsJson = jsonString.DeserializeJsonToObject<RSAParametersJson>();
+                var paramsJson = jsonString.JsonDeserialize<RSAParametersJson>();
                 parameters.Modulus = paramsJson.Modulus != null ? Convert.FromBase64String(paramsJson.Modulus) : null;
                 parameters.Exponent = paramsJson.Exponent != null ? Convert.FromBase64String(paramsJson.Exponent) : null;
                 parameters.P = paramsJson.P != null ? Convert.FromBase64String(paramsJson.P) : null;
@@ -142,7 +142,7 @@ namespace OYMLCN.Helpers
                 InverseQ = parameters.InverseQ != null ? Convert.ToBase64String(parameters.InverseQ) : null,
                 D = parameters.D != null ? Convert.ToBase64String(parameters.D) : null
             };
-            return parasJson.ToJsonString();
+            return parasJson.JsonSerialize();
         }
         #endregion
         #region XML
