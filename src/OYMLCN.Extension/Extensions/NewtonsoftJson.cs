@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using OYMLCN.ArgumentChecker;
 #if Xunit
@@ -17,7 +16,7 @@ namespace OYMLCN.Extensions
     /// <summary>
     /// Newtonsoft.Json 扩展
     /// </summary>
-    public static partial class NewtonsoftJsonExtension
+    public static class NewtonsoftJsonExtension
     {
         /// <summary>
         /// 扩展默认序列化配置
@@ -48,10 +47,9 @@ namespace OYMLCN.Extensions
         {
             value.ThrowIfNull(nameof(value));
             var jsonString = JsonConvert.SerializeObject(value, settings ?? DefaultSettings);
-            MatchEvaluator evaluator = new MatchEvaluator(DecodeUnicode);
-            return Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", evaluator);//或：[\\u007f-\\uffff]，\对应为\u000a，但一般情况下会保持\
+            return Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", DecodeUnicode);//或：[\\u007f-\\uffff]，\对应为\u000a，但一般情况下会保持\
         }
-        
+
         /// <summary>
         /// 将 JSON 字符串反序列化为指定的 .NET 类型
         /// </summary>
@@ -62,7 +60,7 @@ namespace OYMLCN.Extensions
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> 不能为 null </exception>
         public static T JsonDeserialize<T>(this string value)
             => JsonConvert.DeserializeObject<T>(value);
-        
+
 #if Xunit
         [Serializable]
         public class TestClass
@@ -132,7 +130,7 @@ namespace OYMLCN.Extensions
 
             int length = jToken.Count();
             if (length == 0)
-                return new T[1] { jToken.Value<T>() };
+                return new[] { jToken.Value<T>() };
 
             T[] array = new T[length];
             for (int i = 0; i < length; i++)
@@ -145,6 +143,7 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <typeparam name="T"> 要转换的目标类型 </typeparam>
         /// <param name="jToken"> 要转换的抽象 <see cref="JToken"/> 对象 </param>
+        /// <param name="key"> 节点键 </param>
         /// <returns> 指定 <typeparamref name="T"/> 类型的序列 </returns>
         public static T[] ToArray<T>(this JToken jToken, object key)
         {
@@ -196,7 +195,7 @@ namespace OYMLCN.Extensions
         /// <returns> 对象的 JSON 字符串表示 </returns>
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> 不能为 null </exception>
         /// <exception cref="JsonReaderException"> <paramref name="value"/> 包含无效的 JavaScript 属性标识符字符或格式错误 </exception>
-        [Obsolete("请改用 JsonSerialize<T>()")]
+        [Obsolete("请改用 JsonSerialize<T>()，将在后续次要版本移除")]
         public static string ToJsonString<T>(this T value, JsonSerializerSettings settings = null) where T : class
             => JsonSerialize(value, settings);
 
@@ -207,7 +206,7 @@ namespace OYMLCN.Extensions
         /// <param name="value"> 要反序列化的JSON 字符串 </param>
         /// <returns> 从JSON字符串反序列化的对象 </returns>
         /// <exception cref="JsonReaderException"> <paramref name="value"/> 不是有效的 JSON 字符串 </exception>
-        [Obsolete("请改用 JsonDeserialize<T>()")]
+        [Obsolete("请改用 JsonDeserialize<T>()，将在后续次要版本移除")]
         public static T DeserializeJsonToObject<T>(this string value)
             => JsonDeserialize<T>(value);
         #endregion

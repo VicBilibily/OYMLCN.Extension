@@ -1,10 +1,7 @@
 ﻿using OYMLCN.ArgumentChecker;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 #if Xunit
 using Xunit;
 #endif
@@ -14,7 +11,7 @@ namespace OYMLCN.Extensions
     /// <summary>
     /// 编码相关扩展
     /// </summary>
-    public static partial class StringUnicodeExtension
+    public static class StringUnicodeExtension
     {
         #region public static string GetUnicodeString(this string value)
         /// <summary>

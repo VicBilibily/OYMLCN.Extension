@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 #if Xunit
 using Xunit;
 #endif
@@ -23,7 +18,7 @@ namespace OYMLCN
         // 因为在文件路径中含有特殊字符时会发生异常情况
         // 详情请看 https://stackoverflow.com/questions/12945805/odd-c-sharp-path-issue
         public static string GetExecutablePath()
-            => Assembly.GetEntryAssembly().Location;
+            => Assembly.GetEntryAssembly()?.Location;
 #if Xunit
         [Fact]
         public static void GetExecutablePathTest()

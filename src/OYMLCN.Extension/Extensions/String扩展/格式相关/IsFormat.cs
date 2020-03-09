@@ -27,13 +27,13 @@ namespace OYMLCN.Extensions
             if (value.IsNullOrWhiteSpace()) return false;
 
             string address = "11,12,13,14,15,21,22,23,31,32,33,34,35,36,37,41,42,43,44,45,46,51,52,53,54,50,61,62,63,64,65,71,81,82";
-            long n = 0;
+            long n;
 
             if (value.Length == 15)
             {
                 if (long.TryParse(value, out n) == false || n < Math.Pow(10, 14))
                     return false; // 数字验证
-                if (address.IndexOf(value.Remove(2)) == -1)
+                if (address.IndexOf(value.Remove(2), StringComparison.Ordinal) == -1)
                     return false; // 省份验证
                 if (value.Substring(6, 6).Insert(4, "-").Insert(2, "-").ConvertToNullableDatetime().IsNull())
                     return false; // 生日验证  
@@ -43,16 +43,16 @@ namespace OYMLCN.Extensions
             {
                 if (long.TryParse(value.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(value.Replace('x', '0').Replace('X', '0'), out n) == false)
                     return false; // 数字验证  
-                if (address.IndexOf(value.Remove(2)) == -1)
+                if (address.IndexOf(value.Remove(2), StringComparison.Ordinal) == -1)
                     return false; // 省份验证  
                 if (value.Substring(6, 8).Insert(6, "-").Insert(4, "-").ConvertToNullableDatetime().IsNull())
                     return false; // 生日验证  
                 string[] arrVarifyCode = ("1,0,x,9,8,7,6,5,4,3,2").Split(',');
-                string[] Wi = ("7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2").Split(',');
-                char[] Ai = value.Remove(17).ToCharArray();
+                string[] wi = ("7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2").Split(',');
+                char[] ai = value.Remove(17).ToCharArray();
                 int sum = 0;
                 for (int i = 0; i < 17; i++)
-                    sum += int.Parse(Wi[i]) * int.Parse(Ai[i].ToString());
+                    sum += int.Parse(wi[i]) * int.Parse(ai[i].ToString());
                 if (arrVarifyCode[sum % 11] != value.Substring(17, 1).ToLower())
                     return false; // 校验码验证
                 return true; // 符合GB11643-1999标准
@@ -223,8 +223,7 @@ namespace OYMLCN.Extensions
             UriHostNameType hostType = Uri.CheckHostName(value);
             if (hostType == UriHostNameType.Unknown)
             {
-                Uri url = null;
-                if (Uri.TryCreate(value, UriKind.Absolute, out url) && url.Host.IsNotNullOrEmpty())
+                if (Uri.TryCreate(value, UriKind.Absolute, out Uri url) && url.Host.IsNotNullOrEmpty())
                     ipAddress = IPAddressTryParse(url.Host);
                 else if (Uri.TryCreate(string.Format("http://{0}", value), UriKind.Absolute, out url))
                     ipAddress = IPAddressTryParse(url.Host);
@@ -239,11 +238,11 @@ namespace OYMLCN.Extensions
         }
         private static string IPAddressTryParse(string value)
         {
-            string _ipAddress = string.Empty;
+            string ipAddress = string.Empty;
             IPAddress _ipAdr;
             if (IPAddress.TryParse(value, out _ipAdr))
-                _ipAddress = _ipAdr.ToString();
-            return _ipAddress;
+                ipAddress = _ipAdr.ToString();
+            return ipAddress;
         }
 #if Xunit
         [Fact]
@@ -430,35 +429,35 @@ namespace OYMLCN.Extensions
             if (value.IsNullOrWhiteSpace()) return false;
             if (new Regex(@"^1[0-9]{10}$").IsMatch(value.Trim()))
             {
-                if (MobilePhoneNumberPrefix == null)
+                if (_mobilePhoneNumberPrefix == null)
                 {
-                    string[] ChinaTelecomPrefix = "133、149、153、173、177、180、181、189、191、193、199、190".Split('、');
-                    string[] ChinaUnicomPrefix = "130、131、132、145、155、156、166、171、175、176、185、186、196".Split('、');
-                    string[] ChinaMobilePrefix = "134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、172、178、182、183、184、187、188、195、198、197".Split('、');
-                    string[] ChinaBroadcstPrefix = new[] { "192" };
-                    string[] ChinaTelecomVirtualPrefix = "1700、1701、1702、162".Split('、');
-                    string[] ChinaUnicomVirtualPrefix = "1704、1707、1708、1709、171、167".Split('、');
-                    string[] ChinaMobileVirtualPrefix = "1703、1705、1706、165".Split('、');
-                    string[] SatelliteCommunicationPrefix = new[] { "1349" };
+                    string[] chinaTelecomPrefix = "133、149、153、173、177、180、181、189、191、193、199、190".Split('、');
+                    string[] chinaUnicomPrefix = "130、131、132、145、155、156、166、171、175、176、185、186、196".Split('、');
+                    string[] chinaMobilePrefix = "134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、172、178、182、183、184、187、188、195、198、197".Split('、');
+                    string[] chinaBroadcstPrefix = new[] { "192" };
+                    string[] chinaTelecomVirtualPrefix = "1700、1701、1702、162".Split('、');
+                    string[] chinaUnicomVirtualPrefix = "1704、1707、1708、1709、171、167".Split('、');
+                    string[] chinaMobileVirtualPrefix = "1703、1705、1706、165".Split('、');
+                    string[] satelliteCommunicationPrefix = new[] { "1349" };
 
                     var prefix = new List<string>();
-                    prefix.AddRange(ChinaTelecomPrefix); // 中国电信号段
-                    prefix.AddRange(ChinaUnicomPrefix); // 中国联通号段
+                    prefix.AddRange(chinaTelecomPrefix); // 中国电信号段
+                    prefix.AddRange(chinaUnicomPrefix); // 中国联通号段
                     // 中国移动 134 号段特殊处理
                     for (var i = 0; i <= 8; i++) prefix.Add($"134{i.ToString()}");
-                    prefix.AddRange(ChinaMobilePrefix.Skip(1)); // 中国移动号段
-                    prefix.AddRange(ChinaBroadcstPrefix); // 中国广电号段
-                    prefix.AddRange(ChinaTelecomVirtualPrefix); // 中国电信虚拟运营商号段
-                    prefix.AddRange(ChinaUnicomVirtualPrefix); // 中国联通虚拟运营商号段
-                    prefix.AddRange(ChinaMobileVirtualPrefix); // 中国移动虚拟运营商号段
-                    prefix.AddRange(SatelliteCommunicationPrefix); // 卫星通信号段
-                    MobilePhoneNumberPrefix = prefix.ToArray();
+                    prefix.AddRange(chinaMobilePrefix.Skip(1)); // 中国移动号段
+                    prefix.AddRange(chinaBroadcstPrefix); // 中国广电号段
+                    prefix.AddRange(chinaTelecomVirtualPrefix); // 中国电信虚拟运营商号段
+                    prefix.AddRange(chinaUnicomVirtualPrefix); // 中国联通虚拟运营商号段
+                    prefix.AddRange(chinaMobileVirtualPrefix); // 中国移动虚拟运营商号段
+                    prefix.AddRange(satelliteCommunicationPrefix); // 卫星通信号段
+                    _mobilePhoneNumberPrefix = prefix.ToArray();
                 }
             }
             else return false;
-            return value.StartsWith(MobilePhoneNumberPrefix);
+            return value.StartsWith(_mobilePhoneNumberPrefix);
         }
-        private static string[] MobilePhoneNumberPrefix;
+        private static string[] _mobilePhoneNumberPrefix;
 #if Xunit
         [Fact]
         public static void FormatIsMobilePhoneNumberTest()

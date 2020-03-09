@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 #if Xunit
 using Xunit;
 #endif
@@ -13,7 +10,7 @@ namespace OYMLCN.Extensions
     /// <summary>
     /// 字符串相关扩展
     /// </summary>
-    public static partial class StringExtension
+    public static class StringExtension
     {
         #region public static bool Contains(this string str, params string[] words)
         /// <summary>

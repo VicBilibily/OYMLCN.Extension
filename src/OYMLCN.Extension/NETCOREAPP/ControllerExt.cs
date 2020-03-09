@@ -24,7 +24,7 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static void SignInJwt(this Controller controller, JwtToken jwt, bool secureCookie = true, CookieOptions options = null)
         {
-            options = options ?? options ?? new CookieOptions();
+            options ??= new CookieOptions();
             options.Secure = secureCookie;
             options.HttpOnly = true;
             controller.HttpContext.Response.Cookies.Append(jwt.token_name, jwt.access_token, options);

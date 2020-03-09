@@ -49,7 +49,7 @@ namespace OYMLCN.Extensions
         public static TAttribute[] GetAttributes<TAttribute>(this MemberInfo memberInfo) where TAttribute : Attribute
         {
             memberInfo.ThrowIfNull(nameof(memberInfo));
-            return Array.ConvertAll(memberInfo.GetCustomAttributes(typeof(TAttribute), false), (object x) => (TAttribute)x);
+            return Array.ConvertAll(memberInfo.GetCustomAttributes(typeof(TAttribute), false), x => (TAttribute)x);
         }
 #if Xunit
         [Fact]

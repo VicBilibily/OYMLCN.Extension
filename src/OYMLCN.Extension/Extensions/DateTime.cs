@@ -7,7 +7,7 @@ namespace OYMLCN.Extensions
     /// <summary>
     /// DateTimeExtension
     /// </summary>
-    public static partial class DateTimeExtensions
+    public static class DateTimeExtensions
     {
         /// <summary>
         /// 中国农历信息

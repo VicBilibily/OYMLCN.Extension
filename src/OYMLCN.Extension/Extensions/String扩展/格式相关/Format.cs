@@ -118,7 +118,7 @@ namespace OYMLCN.Extensions
         #endregion
 
 
-        #region public static string StringFormat(this string format, params string[] args)
+        #region public static string StringFormat(this string format, params object[] args)
         /// <summary>
         /// 将指定字符串中的格式项替换为指定参数中相应对象的字符串表示形式
         /// </summary>
@@ -128,7 +128,7 @@ namespace OYMLCN.Extensions
         /// <exception cref="ArgumentNullException"> <paramref name="format"/> 不能为 null </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="args"/> 不能为 null </exception>
         /// <exception cref="FormatException"> <paramref name="format"/> 无效 或 格式项的索引小于零，或者大于或等于 <paramref name="args"/> 数组的长度 </exception>
-        public static string StringFormat(this string format, params string[] args)
+        public static string StringFormat(this string format, params object[] args)
             => string.Format(format, args);
 #if Xunit
         [Fact]

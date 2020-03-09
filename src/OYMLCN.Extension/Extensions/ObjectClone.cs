@@ -1,58 +1,211 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using OYMLCN.ArgumentChecker;
+using System.Runtime.Serialization;
+#if Xunit
+using System.Data;
+using Xunit;
+#endif
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// 对象克隆扩展
+    /// </summary>
     public static class ObjectCloneExtension
     {
+        #region public static T JsonDeepClone<T>(this T value) where T : class, new()
         /// <summary>
-        /// Json序列化的方式实现深拷贝
+        /// 采用 Json 序列化的方式实现深度对象拷贝
         /// </summary>
-        public static T JsonDeepClone<T>(this T t) where T : class, new()
-            => t.JsonSerialize().JsonDeserialize<T>();
-        /// <summary>
-        /// XML序列化的方式实现深拷贝
-        /// </summary>
-        public static T XmlDeepClone<T>(this T t) where T : class, new()
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行深度拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象实例结构数据相同的新独立实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        public static T JsonDeepClone<T>(this T obj) where T : class, new()
         {
+            obj.ThrowIfNull(nameof(obj));
+            return obj.JsonSerialize().JsonDeserialize<T>();
+        }
+#if Xunit
+        public class DeepCloneClassTest
+        {
+            public int ID;
+            public string Value { get; set; }
+            public DeepCloneClass Object { get; set; }
+        }
+        public class DeepCloneClass
+        {
+            public int ID;
+            public string ClassName { get; set; }
+        }
+        [Fact]
+        public static void JsonDeepCloneTest()
+        {
+            DeepCloneClassTest classTest = null;
+            Assert.Throws<ArgumentNullException>(() => classTest.JsonDeepClone());
+
+            classTest = new DeepCloneClassTest()
+            {
+                ID = 0,
+                Value = DateTime.Now.ToString(),
+                Object = new DeepCloneClass()
+                {
+                    ID = 1,
+                    ClassName = DateTime.Today.ToDateString()
+                }
+            };
+            DeepCloneClassTest cloneClass = classTest.JsonDeepClone();
+            Assert.NotSame(classTest, cloneClass);
+            Assert.Equal(classTest.ID, cloneClass.ID);
+            Assert.Equal(classTest.Value, cloneClass.Value);
+            Assert.NotSame(classTest.Object, cloneClass.Object);
+            Assert.Equal(classTest.Object.ID, cloneClass.Object.ID);
+            Assert.Equal(classTest.Object.ClassName, cloneClass.Object.ClassName);
+        }
+#endif
+        #endregion
+
+        #region public static T XmlDeepClone<T>(this T obj) where T : class, new()
+        /// <summary>
+        /// 采用 XML 序列化的方式实现深度对象拷贝
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行深度拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象实例结构数据相同的新独立实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        public static T XmlDeepClone<T>(this T obj) where T : class, new()
+        {
+            obj.ThrowIfNull(nameof(obj));
             //创建Xml序列化对象
             XmlSerializer xml = new XmlSerializer(typeof(T));
             using (MemoryStream ms = new MemoryStream())//创建内存流
             {
                 //将对象序列化到内存中
-                xml.Serialize(ms, t);
+                xml.Serialize(ms, obj);
                 ms.Position = default;//将内存流的位置设为0
                 return (T)xml.Deserialize(ms);//继续反序列化
             }
         }
-        /// <summary>
-        /// 二进制序列化的方式进行深拷贝
-        /// <para>确保需要拷贝的类里的所有成员已经标记为 [Serializable] 如果没有加该特性特报错</para>
-        /// </summary>
-        public static T BinaryDeepCopy<T>(this T t) where T : class, new()
+#if Xunit
+        [Fact]
+        public static void XmlDeepCloneTest()
         {
+            DeepCloneClassTest classTest = null;
+            Assert.Throws<ArgumentNullException>(() => classTest.XmlDeepClone());
+
+            classTest = new DeepCloneClassTest()
+            {
+                ID = 0,
+                Value = DateTime.Now.ToString(),
+                Object = new DeepCloneClass()
+                {
+                    ID = 1,
+                    ClassName = DateTime.Today.ToDateString()
+                }
+            };
+            DeepCloneClassTest cloneClass = classTest.XmlDeepClone();
+            Assert.NotSame(classTest, cloneClass);
+            Assert.Equal(classTest.ID, cloneClass.ID);
+            Assert.Equal(classTest.Value, cloneClass.Value);
+            Assert.NotSame(classTest.Object, cloneClass.Object);
+            Assert.Equal(classTest.Object.ID, cloneClass.Object.ID);
+            Assert.Equal(classTest.Object.ClassName, cloneClass.Object.ClassName);
+        }
+#endif
+        #endregion
+
+        #region public static T BinaryDeepClone<T>(this T obj) where T : class, new()
+        /// <summary>
+        /// 采用二进制序列化的方式实现深度对象拷贝
+        /// <para> 确保需要拷贝的类里的所有成员已经标记为 [Serializable]，如果没有加该特性特则报错 </para>
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行深度拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象实例结构数据相同的新独立实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        /// <exception cref="SerializationException"> <typeparamref name="T"/> 未标记为 [Serializable] 可序列化的，或者 <typeparamref name="T"/> 内包含为标记为[Serializable] 可序列化的类型 </exception>
+        public static T BinaryDeepClone<T>(this T obj) where T : class, new()
+        {
+            obj.ThrowIfNull(nameof(obj));
             //创建二进制序列化对象
             BinaryFormatter bf = new BinaryFormatter();
             using (MemoryStream ms = new MemoryStream())//创建内存流
             {
                 //将对象序列化到内存中
-                bf.Serialize(ms, t);
+                bf.Serialize(ms, obj);
                 ms.Position = default;//将内存流的位置设为0
                 return (T)bf.Deserialize(ms);//继续反序列化
             }
         }
+#if Xunit
+        [Serializable]
+        public class DeepCloneSerializableFailTest
+        {
+            public int ID { get; set; }
+            public string Value { get; set; }
+            public DeepCloneClass Object { get; set; }
+        }
+        [Serializable]
+        public class DeepCloneSerializableTest
+        {
+            public int ID { get; set; }
+            public string Value { get; set; }
+            public DeepCloneSerializableClass Object { get; set; }
+        }
+        [Serializable]
+        public class DeepCloneSerializableClass
+        {
+            public int ID { get; set; }
+            public string ClassName { get; set; }
+        }
+        [Fact]
+        public static void BinaryDeepCopyTest()
+        {
+            DeepCloneClassTest fail = null;
+            Assert.Throws<ArgumentNullException>(() => fail.BinaryDeepClone());
+            fail = new DeepCloneClassTest();
+            Assert.Throws<SerializationException>(() => fail.BinaryDeepClone());
+
+            DeepCloneSerializableFailTest fail2 = new DeepCloneSerializableFailTest();
+            Assert.Throws<SerializationException>(() => fail2.BinaryDeepClone());
+
+            DeepCloneSerializableTest test = new DeepCloneSerializableTest()
+            {
+                ID = 0,
+                Value = DateTime.Now.ToString(),
+                Object = new DeepCloneSerializableClass()
+                {
+                    ID = 1,
+                    ClassName = DateTime.Today.ToDateString()
+                }
+            };
+            DeepCloneSerializableTest clone = test.BinaryDeepClone();
+            Assert.NotSame(test, clone);
+            Assert.Equal(test.ID, clone.ID);
+            Assert.Equal(test.Value, clone.Value);
+            Assert.NotSame(test.Object, clone.Object);
+            Assert.Equal(test.Object.ID, clone.Object.ID);
+            Assert.Equal(test.Object.ClassName, clone.Object.ClassName);
+        }
+#endif
+        #endregion
+
+
+        #region public static T DeepClone<T>(this T obj) where T : class, new()
         /// <summary>
-        /// Reflection方式进行深拷贝
+        /// 采用 Reflection 对象反射的方式实现深度对象拷贝
         /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行深度拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象实例结构数据相同的新独立实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
         public static T DeepClone<T>(this T obj) where T : class, new()
         {
+            obj.ThrowIfNull(nameof(obj));
             Type type = obj.GetType();
             // 对于没有公共无参构造函数的类型此处会报错
             T returnObj = Activator.CreateInstance(type) as T;
@@ -62,7 +215,7 @@ namespace OYMLCN.Extensions
                 FieldInfo field = fields[i];
                 var fieldValue = field.GetValue(obj);
                 // 值类型，字符串，枚举类型直接把值复制，不存在浅拷贝
-                if (fieldValue.GetType().IsValueType || fieldValue.GetType().Equals(typeof(System.String)) || fieldValue.GetType().IsEnum)
+                if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
                     field.SetValue(returnObj, fieldValue);
                 else
                     field.SetValue(returnObj, DeepClone(fieldValue));
@@ -73,21 +226,52 @@ namespace OYMLCN.Extensions
             {
                 PropertyInfo property = properties[i];
                 var propertyValue = property.GetValue(obj);
-                if (propertyValue.GetType().IsValueType || propertyValue.GetType().Equals(typeof(String)) || propertyValue.GetType().IsEnum)
+                if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
                     property.SetValue(returnObj, propertyValue);
                 else
                     property.SetValue(returnObj, DeepClone(propertyValue));
             }
             return returnObj;
         }
+#if Xunit
+        [Fact]
+        public static void DeepCloneTest()
+        {
+            DeepCloneClassTest classTest = null;
+            Assert.Throws<ArgumentNullException>(() => classTest.DeepClone());
+
+            classTest = new DeepCloneClassTest()
+            {
+                ID = 0,
+                Value = DateTime.Now.ToString(),
+                Object = new DeepCloneClass()
+                {
+                    ID = 1,
+                    ClassName = DateTime.Today.ToDateString()
+                }
+            };
+            DeepCloneClassTest cloneClass = classTest.DeepClone();
+            Assert.NotSame(classTest, cloneClass);
+            Assert.Equal(classTest.ID, cloneClass.ID);
+            Assert.Equal(classTest.Value, cloneClass.Value);
+            Assert.NotSame(classTest.Object, cloneClass.Object);
+            Assert.Equal(classTest.Object.ID, cloneClass.Object.ID);
+            Assert.Equal(classTest.Object.ClassName, cloneClass.Object.ClassName);
+        }
+#endif 
+        #endregion
+
+        #region public static T Clone<T>(this T obj) where T : class, new()
         /// <summary>
-        /// Reflection方式进行浅拷贝（仅克隆值类型）
+        /// 采用 Reflection 对象反射的方式实现引用对象拷贝（仅克隆值类型，引用类型保持不变）
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行深度拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象实例结构数据相同的新独立实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
         public static T Clone<T>(this T obj) where T : class, new()
         {
+            obj.ThrowIfNull(nameof(obj));
             Type type = obj.GetType();
             // 对于没有公共无参构造函数的类型此处会报错
             T returnObj = Activator.CreateInstance(type) as T;
@@ -107,6 +291,33 @@ namespace OYMLCN.Extensions
             }
             return returnObj;
         }
+#if Xunit
+        [Fact]
+        public static void CloneTest()
+        {
+            DeepCloneClassTest classTest = null;
+            Assert.Throws<ArgumentNullException>(() => classTest.Clone());
+
+            classTest = new DeepCloneClassTest()
+            {
+                ID = 0,
+                Value = DateTime.Now.ToString(),
+                Object = new DeepCloneClass()
+                {
+                    ID = 1,
+                    ClassName = DateTime.Today.ToDateString()
+                }
+            };
+            DeepCloneClassTest cloneClass = classTest.Clone();
+            Assert.NotSame(classTest, cloneClass);
+            Assert.Equal(classTest.ID, cloneClass.ID);
+            Assert.Equal(classTest.Value, cloneClass.Value);
+            Assert.Same(classTest.Object, cloneClass.Object);
+            Assert.Equal(classTest.Object.ID, cloneClass.Object.ID);
+            Assert.Equal(classTest.Object.ClassName, cloneClass.Object.ClassName);
+        }
+#endif 
+        #endregion
 
     }
 }

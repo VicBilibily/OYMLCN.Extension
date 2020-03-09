@@ -9,6 +9,9 @@ using Xunit;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// HTML 字符串相关扩展
+    /// </summary>
     public static class StringHtmlExtension
     {
         #region public static string HtmlRemoveScript(this string html)

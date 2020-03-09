@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using OYMLCN.ArgumentChecker;
 
 namespace OYMLCN.Extensions
 {
@@ -77,8 +78,9 @@ namespace OYMLCN.Extensions
         /// <param name="fileName">文件的相对路径或绝对路径</param>
         public static void WriteToFile(this Stream stream, string fileName)
         {
+            stream.ThrowIfNull(nameof(stream));
             stream.Seek(0, SeekOrigin.Begin);
-            (stream as MemoryStream).ToArray().WriteToFile(fileName);
+            ((MemoryStream)stream).ToArray().WriteToFile(fileName);
         }
         /// <summary>
         /// 将byte[]字节数组写入文件
@@ -105,6 +107,7 @@ namespace OYMLCN.Extensions
             while ((len = stream.Read(buf, 0, buf.Length)) != 0)
                 fsWrite.Write(buf, 0, len);
         }
+
         /// <summary>
         /// 将Stream保存到文件（使用缓冲区）
         /// </summary>
@@ -113,16 +116,8 @@ namespace OYMLCN.Extensions
         /// <param name="bufferSize">缓冲区大小，默认8MB</param>
         public static async void WriteToFileWithBufferAsync(this Stream stream, string dest, int bufferSize = 1024 * 1024 * 8)
         {
-            using var fsWrite = new FileStream(dest, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            byte[] buf = new byte[bufferSize];
-            int len;
-            await Task.Run(() =>
-            {
-                while ((len = stream.Read(buf, 0, buf.Length)) != 0)
-                    fsWrite.Write(buf, 0, len);
-            }).ConfigureAwait(true);
+            await Task.Run(() => WriteToFileWithBuffer(stream, dest, bufferSize)).ConfigureAwait(true);
         }
-
 
     }
 }
