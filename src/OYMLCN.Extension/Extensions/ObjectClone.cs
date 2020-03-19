@@ -80,15 +80,8 @@ namespace OYMLCN.Extensions
         public static T XmlDeepClone<T>(this T obj) where T : class, new()
         {
             obj.ThrowIfNull(nameof(obj));
-            //创建Xml序列化对象
-            XmlSerializer xml = new XmlSerializer(typeof(T));
-            using (MemoryStream ms = new MemoryStream())//创建内存流
-            {
-                //将对象序列化到内存中
-                xml.Serialize(ms, obj);
-                ms.Position = default;//将内存流的位置设为0
-                return (T)xml.Deserialize(ms);//继续反序列化
-            }
+            using (var stream = obj.XmlSerializeToStream())
+                return stream.XmlDeserialize<T>();
         }
 #if Xunit
         [Fact]

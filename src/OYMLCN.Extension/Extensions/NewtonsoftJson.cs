@@ -8,7 +8,6 @@ using OYMLCN.ArgumentChecker;
 #if Xunit
 using Xunit;
 using Xunit.Sdk;
-
 #endif
 
 namespace OYMLCN.Extensions

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>（v3.x起弃用所有Win平台独有方法，并对.NET及.NetCore2.x有限兼容）本扩展库包含一些本人常用的方法扩展（跨平台仅兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
+    <Description>（v3起弃用所有Win平台独有方法，并对.NET及.NetCore2.1有限兼容）本扩展库包含一些本人常用的方法扩展（跨平台仅兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
 
@@ -33,6 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
     <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
