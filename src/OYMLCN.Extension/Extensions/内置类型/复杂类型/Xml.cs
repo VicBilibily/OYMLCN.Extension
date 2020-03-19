@@ -18,6 +18,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class XmlExtensions
     {
+        #region public static Stream XmlSerializeToStream<T>(this T value) where T : class
         /// <summary>
         /// 将当前的对象实例 <paramref name="value"/> 序列化为 XML 数据流
         /// </summary>
@@ -36,6 +37,8 @@ namespace OYMLCN.Extensions
             stream.Position = default;
             return stream;
         }
+        #endregion
+        #region public static string XmlSerializeToDocument<T>(this T value) where T : class
         /// <summary>
         /// 将当前的对象实例 <paramref name="value"/> 序列化为 XML 标准文档
         /// </summary>
@@ -52,7 +55,9 @@ namespace OYMLCN.Extensions
             using (var reader = new StreamReader(stream))
                 return reader.ReadToEnd();
         }
+        #endregion
 
+        #region public static string XmlSerializeToString<T>(this T value, Encoding encoding) where T : class
         /// <summary>
         /// 使用 <paramref name="encoding"/> 指定的编码，将当前的对象实例 <paramref name="value"/> 序列化为 XML 表示的字符串
         /// </summary>
@@ -82,6 +87,8 @@ namespace OYMLCN.Extensions
                 return encoding.GetString(stream.ToArray());
             }
         }
+        #endregion
+        #region public static string XmlSerializeToString<T>(this T value) where T : class
         /// <summary>
         /// 使用默认编码 <see cref="Encoding.Default"/>，将当前的对象实例 <paramref name="value"/> 序列化为 XML 表示的字符串
         /// </summary>
@@ -93,8 +100,10 @@ namespace OYMLCN.Extensions
         /// <exception cref="OutOfMemoryException"> 序列化为字符串时内存不足 </exception>
         public static string XmlSerializeToString<T>(this T value) where T : class
             => XmlSerializeToString(value, Encoding.Default);
+        #endregion
 
 
+        #region public static T XmlDeserialize<T>(this Stream stream) where T : class, new()
         /// <summary>
         /// 反序列化包含 XML 数据的字节流为指定的实体对象
         /// </summary>
@@ -106,17 +115,21 @@ namespace OYMLCN.Extensions
             stream.ThrowIfNull(nameof(stream));
             return new XmlSerializer(typeof(T)).Deserialize(stream) as T;
         }
+        #endregion
+        #region public static T XmlDeserialize<T>(this string xml) where T : class, new()
         /// <summary>
         /// 反序列化包含 XML 文档字符串为指定的实体对象
         /// </summary>
         /// <typeparam name="T"> 对象类型，必须是一个类 </typeparam>
         /// <param name="xml"> 包含 XML 数据形式的字符串 </param>
         /// <returns> 指定的 <typeparamref name="T"/> 对象实例 </returns>
-        public static T XmlDeserialize<T>(this string xml)
+        public static T XmlDeserialize<T>(this string xml) where T : class, new()
         {
             xml.ThrowIfNull(nameof(xml));
             return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(xml));
         }
+        #endregion
+        #region public static T XmlDeserialize<T>(this string xml, Encoding encoding) where T : class, new()
         /// <summary>
         /// 使用指定编码反序列化包含 XML 文档字符串为指定的实体对象
         /// </summary>
@@ -124,11 +137,12 @@ namespace OYMLCN.Extensions
         /// <param name="xml"> 包含 XML 数据形式的字符串 </param>
         /// <param name="encoding"> 一个 <see cref="Encoding"/> 编码方式 </param>
         /// <returns> 指定的 <typeparamref name="T"/> 对象实例 </returns>
-        public static T XmlDeserialize<T>(this string xml, Encoding encoding)
+        public static T XmlDeserialize<T>(this string xml, Encoding encoding) where T : class, new()
         {
             xml.ThrowIfNull(nameof(xml));
             return (T)new XmlSerializer(typeof(T)).Deserialize(xml.GetEncodingBytes(encoding).ToStream());
         }
+        #endregion
 
 #if Xunit
         public class XmlClassTest
@@ -210,7 +224,7 @@ namespace OYMLCN.Extensions
             Assert.Equal(classTest.Value, desResult.Value);
             Assert.NotSame(classTest.Object, desResult.Object);
             Assert.Equal(classTest.Object.ID, desResult.Object.ID);
-            Assert.Equal(classTest.Object.ClassName, desResult.Object.ClassName); 
+            Assert.Equal(classTest.Object.ClassName, desResult.Object.ClassName);
             #endregion
         }
 #endif

@@ -387,7 +387,7 @@ namespace OYMLCN.Helpers
                     ms.WriteByte(0x30);
                     var index1 = (int)ms.Length;
                     // Encoded OID sequence for PKCS #1 rsaEncryption szOID_RSA_RSA = "1.2.840.113549.1.1.1"
-                    ms.WriteAll(_SeqOID);
+                    ms.WriteBytes(_SeqOID);
                     //Start with 0x00 
                     ms.WriteByte(0x03);
                     var index2 = (int)ms.Length;
@@ -413,17 +413,17 @@ namespace OYMLCN.Helpers
                     ms.WriteByte(0x30);
                     int index1 = (int)ms.Length;
                     //Write version
-                    ms.WriteAll(_Ver);
+                    ms.WriteBytes(_Ver);
                     //PKCS8 
                     int index2 = -1, index3 = -1;
                     if (isPKCS8)
                     {
-                        ms.WriteAll(_SeqOID);
+                        ms.WriteBytes(_SeqOID);
                         ms.WriteByte(0x04);
                         index2 = (int)ms.Length;
                         ms.WriteByte(0x30);
                         index3 = (int)ms.Length;
-                        ms.WriteAll(_Ver);
+                        ms.WriteBytes(_Ver);
                     }
                     //Write data
                     writeBlock(param.Modulus);
