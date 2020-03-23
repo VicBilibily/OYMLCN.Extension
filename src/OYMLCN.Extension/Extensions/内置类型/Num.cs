@@ -20,7 +20,7 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 人民币金额小写转大写
         /// </summary>
-        public static string ConvertToUppercaseRMB(this double money, bool endSymbol = true)
+        public static string ConvertToRMBUppercase(this decimal money, bool endSymbol = true)
         {
             var valueString = money.ToString("#L#E#D#C#K#E#D#C#J#E#D#C#I#E#D#C#H#E#D#C#G#E#D#C#F#E#D#C#.0B0A");
             var temp = Regex.Replace(valueString, @"((?<=-|^)[^1-9]*)|((?'z'0)[0A-E]*((?=[1-9])|(?'-z'(?=[F-L\.]|$))))|((?'b'[F-L])(?'z'0)[0A-L]*((?=[1-9])|(?'-z'(?=[\.]|$))))", "${b}${z}");
@@ -31,13 +31,13 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 人民币金额小写转大写
         /// </summary>
-        public static string ConvertToUppercaseRMB(this decimal money)
-            => ConvertToUppercaseRMB((double)money);
+        public static string ConvertToRMBUppercase(this double money)
+            => ConvertToRMBUppercase((decimal)money);
         /// <summary>
         /// 人民币金额小写转大写
         /// </summary>
-        public static string ConvertToUppercaseRMB(this int money)
-            => ConvertToUppercaseRMB((double)money);
+        public static string ConvertToRMBUppercase(this int money)
+            => ConvertToRMBUppercase((decimal)money);
 
 
     }

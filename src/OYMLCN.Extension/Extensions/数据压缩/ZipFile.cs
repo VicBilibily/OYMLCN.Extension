@@ -14,6 +14,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class CompressExtensions
     {
+        #region public static void CreateZipFile(this DirectoryInfo sourceDirectoryInfo, string destinationArchiveFileName, CompressionLevel compressionLevel = CompressionLevel.Optimal, bool includeBaseDirectory = false)
         /// <summary> 创建 zip 存档，该存档包含指定目录的文件和目录 </summary>
         /// <param name="sourceDirectoryInfo"> 压缩文件夹信息 </param>
         /// <param name="destinationArchiveFileName"> 压缩文件路径 </param>
@@ -35,14 +36,9 @@ namespace OYMLCN.Extensions
             destinationArchiveFileName.ThrowIfNullOrEmpty(nameof(destinationArchiveFileName));
             ZipFile.CreateFromDirectory(sourceDirectoryInfo.FullName, destinationArchiveFileName, compressionLevel, includeBaseDirectory);
         }
-#if Xunit
-        [Fact]
-        public static void CreateZipFileTest()
-        {
-            // 框架内置方法实现二次扩展，不需要单元测试
-        }
-#endif
+        #endregion
 
+        #region public static void ExtractZipFile(this FileInfo sourceArchiveFileInfo, string destinationDirectoryName)
         /// <summary> 将指定 zip 存档中的所有文件都解压缩到文件系统的一个目录下 </summary>
         /// <param name="sourceArchiveFileInfo"> 要解压缩存档的 <see cref="FileInfo"/> 的实例 </param>
         /// <param name="destinationDirectoryName"> 放置解压缩文件的目录的路径，指定为相对或绝对路径 </param>
@@ -66,14 +62,8 @@ namespace OYMLCN.Extensions
             sourceArchiveFileInfo.ThrowIfNull(nameof(sourceArchiveFileInfo));
             destinationDirectoryName.ThrowIfNullOrEmpty(nameof(destinationDirectoryName));
             ZipFile.ExtractToDirectory(sourceArchiveFileInfo.FullName, destinationDirectoryName);
-        }
-#if Xunit
-        [Fact]
-        public static void ExtractZipFileTest()
-        {
-            // 框架内置方法实现二次扩展，不需要单元测试
-        }
-#endif
+        } 
+        #endregion
 
     }
 }

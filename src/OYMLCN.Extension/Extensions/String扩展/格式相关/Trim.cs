@@ -12,9 +12,9 @@ namespace OYMLCN.Extensions
     public static partial class StringFormatExtension
     {
         static readonly char[] Puntuation = new char[] {
-            '~', '～', '-', '—', '－', '–', '^', '*',
+            '~', '～', '-', '—', '－', '–', '_', '＿',
             ',', '，', '.', '。', '?', '？', '!','！',
-            ':', '：', ';', '；',
+            ':', '：', ';', '；', '^', '*',
             '[', '【', '{', ']', '】', '}',
             '|', '丨', '/', '\\',
             '(', '（', ')', '）', '<', '《', '>', '》',

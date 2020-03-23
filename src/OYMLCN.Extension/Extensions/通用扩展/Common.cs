@@ -9,9 +9,13 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class CommonExtension
     {
-        /// <summary> 确定当前的值或引用就是 null </summary>
+        #region public static bool IsNull<T>(this T obj)
+        /// <summary>
+        /// 确定当前的值或引用就是 null
+        /// </summary>
         /// <returns> 如果当前的值或引用是 null，则为 true；否则为 false。 </returns>
-        public static bool IsNull<T>(this T obj) => obj == null;
+        public static bool IsNull<T>(this T obj)
+            => obj == null;
 #if Xunit
         [Fact]
         public static void IsNullTest()
@@ -26,10 +30,14 @@ namespace OYMLCN.Extensions
             Assert.False(obj.IsNull());
         }
 #endif
-
-        /// <summary> 确定当前的值或引用不是 null </summary>
+        #endregion
+        #region public static bool IsNotNull<T>(this T obj)
+        /// <summary>
+        /// 确定当前的值或引用不是 null
+        /// </summary>
         /// <returns> 如果当前的值或引用不是 null，则为 true；否则为 false。 </returns>
-        public static bool IsNotNull<T>(this T obj) => obj != null;
+        public static bool IsNotNull<T>(this T obj)
+            => obj != null;
 #if Xunit
         [Fact]
         public static void IsNotNullTest()
@@ -43,7 +51,8 @@ namespace OYMLCN.Extensions
             obj = new object();
             Assert.True(obj.IsNotNull());
         }
-#endif
+#endif 
+        #endregion
 
     }
 }

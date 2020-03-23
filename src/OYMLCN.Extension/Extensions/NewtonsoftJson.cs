@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using OYMLCN.ArgumentChecker;
 #if Xunit
@@ -34,6 +33,7 @@ namespace OYMLCN.Extensions
             return new string(outStr, 1);
         }
 
+        #region public static string JsonSerialize<T>(this T value, JsonSerializerSettings settings = null) where T : class
         /// <summary>
         /// 将当前对象实例序列化为 JSON 字符串
         /// </summary>
@@ -48,7 +48,9 @@ namespace OYMLCN.Extensions
             var jsonString = JsonConvert.SerializeObject(value, settings ?? DefaultSettings);
             return Regex.Replace(jsonString, @"\\u[0123456789abcdef]{4}", DecodeUnicode);//或：[\\u007f-\\uffff]，\对应为\u000a，但一般情况下会保持\
         }
+        #endregion
 
+        #region public static T JsonDeserialize<T>(this string value)
         /// <summary>
         /// 将 JSON 字符串反序列化为指定的 .NET 类型
         /// </summary>
@@ -59,6 +61,7 @@ namespace OYMLCN.Extensions
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> 不能为 null </exception>
         public static T JsonDeserialize<T>(this string value)
             => JsonConvert.DeserializeObject<T>(value);
+        #endregion
 
 #if Xunit
         [Serializable]
@@ -108,6 +111,7 @@ namespace OYMLCN.Extensions
 
 
 
+        #region public static JToken JTokenParse(this string json)
         /// <summary>
         /// 将当前 JSON 字符串加载为抽象 <see cref="JToken"/> 类
         /// </summary>
@@ -115,46 +119,9 @@ namespace OYMLCN.Extensions
         /// <returns> 一个抽象的 <see cref="JToken"/> 对象 </returns>
         public static JToken JTokenParse(this string json)
             => JToken.Parse(json.IsNullOrWhiteSpace() ? "{}" : json);
-
-        /// <summary>
-        /// 将当前的抽象 <see cref="JToken"/> 对象转换为指定的类型序列
-        /// </summary>
-        /// <typeparam name="T"> 要转换的目标类型 </typeparam>
-        /// <param name="jToken"> 要转换的抽象 <see cref="JToken"/> 对象 </param>
-        /// <returns> 指定 <typeparamref name="T"/> 类型的序列 </returns>
-        public static T[] ToArray<T>(this JToken jToken)
-        {
-            if (jToken == null)
-                return new T[0];
-
-            int length = jToken.Count();
-            if (length == 0)
-                return new[] { jToken.Value<T>() };
-
-            T[] array = new T[length];
-            for (int i = 0; i < length; i++)
-                array[i] = jToken[i].Value<T>();
-            return array;
-        }
-
-        /// <summary>
-        /// 将当前的抽象 <see cref="JToken"/> 对象转换为指定的类型序列
-        /// </summary>
-        /// <typeparam name="T"> 要转换的目标类型 </typeparam>
-        /// <param name="jToken"> 要转换的抽象 <see cref="JToken"/> 对象 </param>
-        /// <param name="key"> 节点键 </param>
-        /// <returns> 指定 <typeparamref name="T"/> 类型的序列 </returns>
-        public static T[] ToArray<T>(this JToken jToken, object key)
-        {
-            if (jToken == null)
-                return new T[0];
-            jToken = jToken[key];
-            return jToken.ToArray<T>();
-        }
-
 #if Xunit
         [Fact]
-        public static void JTokenTest()
+        public static void JTokenParseTest()
         {
             string json = null;
             JToken jToken = json.JTokenParse();
@@ -165,23 +132,9 @@ namespace OYMLCN.Extensions
             jToken = json.JTokenParse();
             Assert.Single(jToken);
             Assert.Equal("123", jToken.Value<string>("demo"));
-
-
-            jToken = null;
-            Assert.NotNull(jToken.ToArray<string>());
-            Assert.Empty(jToken.ToArray<string>());
-
-            json = "{demo:123}";
-            jToken = json.JTokenParse();
-            Assert.Single(jToken["demo"].ToArray<string>());
-            Assert.Single(jToken.ToArray<string>("demo"));
-
-            json = "{demo:[1,2,3,4,5]}";
-            jToken = json.JTokenParse();
-            Assert.Equal(new[] { "1", "2", "3", "4", "5" }, jToken["demo"].ToArray<string>());
-            Assert.Equal(new[] { "1", "2", "3", "4", "5" }, jToken.ToArray<string>("demo"));
         }
 #endif
+        #endregion
 
 
 

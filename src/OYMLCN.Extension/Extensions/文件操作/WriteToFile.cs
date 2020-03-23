@@ -42,6 +42,7 @@ namespace OYMLCN.Extensions
                     fsWrite.Write(buffer, 0, length);
         }
         #endregion
+
         #region public static async void WriteToFileAsync(this Stream stream, string path, int bufferSize = 1024 * 1024 * 1)
         /// <summary>
         /// 异步将当前字节流 <paramref name="stream"/> 写入到指定路径的文件 <paramref name="path"/>

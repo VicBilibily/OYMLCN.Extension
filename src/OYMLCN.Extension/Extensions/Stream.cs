@@ -43,6 +43,7 @@ namespace OYMLCN.Extensions
             => stream.ReadToEnd(Encoding.UTF8);
         #endregion
 
+
         #region public static byte[] ToBytes(this Stream stream)
         /// <summary>
         /// 从流的当前位置到末尾读取所有字节序列
@@ -62,6 +63,7 @@ namespace OYMLCN.Extensions
             return bytes;
         }
         #endregion
+
         #region public static Stream ToStream(this byte[] buffer)
         /// <summary>
         /// 从当前字节数组创建为一个 <see cref="MemoryStream"/> 新实例
@@ -72,6 +74,7 @@ namespace OYMLCN.Extensions
         public static Stream ToStream(this byte[] buffer)
             => new MemoryStream(buffer);
         #endregion
+
 
         #region public static void WriteBytes(this Stream stream, byte[] buffer)
         /// <summary>
