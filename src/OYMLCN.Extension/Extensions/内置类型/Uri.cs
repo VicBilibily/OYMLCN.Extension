@@ -1,20 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OYMLCN.ArgumentChecker;
+using System;
+#if Xunit
+using Xunit;
+#endif
 
 namespace OYMLCN.Extensions
 {
     public static partial class SystemTypeExtension
     {
+        #region public static string GetSchemeHost(this Uri uri)
         /// <summary>
-        /// 获取url字符串的的协议域名地址（eg：https://www.qq.com）
+        /// 获取 <paramref name="uri"/> 的协议和域名地址（eg：https://www.qq.com）
         /// </summary>
+        /// <param name="uri"> <see cref="Uri"/> 实例 </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="uri"/> 不能为 null </exception>
         public static string GetSchemeHost(this Uri uri)
         {
-            if (uri == null) return null;
+            uri.ThrowIfNull(nameof(uri));
             return $"{uri.Scheme}://{uri.Host}";
         }
+#if Xunit
+        [Fact]
+        public static void GetSchemeHostTest()
+        {
+            Uri uri = null;
+            Assert.Throws<ArgumentNullException>(() => uri.GetSchemeHost());
+            uri = new Uri("https://www.qq.com/index.shtml");
+            Assert.Equal("https://www.qq.com", uri.GetSchemeHost());
+        }
+#endif 
+        #endregion
+
     }
 }

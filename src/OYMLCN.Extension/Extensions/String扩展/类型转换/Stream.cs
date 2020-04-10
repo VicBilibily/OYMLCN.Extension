@@ -52,7 +52,6 @@ namespace OYMLCN.Extensions
         /// 将指定字符串中的所有字符以 UTF8 的格式编码为一个字节序列后返回一个 <see cref="Stream"/> 对象
         /// </summary>
         /// <param name="str"> 字符串对象 </param>
-        /// <param name="encoding"> 所要指定使用的字符编码方式 </param>
         /// <returns>  将指定字符串按指定编码后的 <see cref="Stream"/> 对象 </returns>
         /// <exception cref="ArgumentNullException"> <paramref name="str"/> 的字符串对象不能为 null </exception>
         public static Stream GetUTF8Stream(this string str)

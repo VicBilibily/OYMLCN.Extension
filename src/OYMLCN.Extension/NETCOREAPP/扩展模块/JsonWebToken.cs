@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OYMLCN.AspNetCore
 {
@@ -64,7 +65,7 @@ namespace OYMLCN.AspNetCore
                     key = Secret.HashToMD5().GetUTF8Bytes();
                 return new SymmetricSecurityKey(key);
             }
-    } 
+        }
 
         /// <summary>
         /// 签名发行标识
@@ -151,9 +152,9 @@ namespace OYMLCN.AspNetCore
     }
 
     /// <summary>
-    /// ControllerExtension
+    /// JwtExtension
     /// </summary>
-    public static partial class ControllerExtension
+    public static partial class JwtExtension
     {
         /// <summary>
         /// 传入用户信息构建JwtSecurityToken
@@ -162,10 +163,15 @@ namespace OYMLCN.AspNetCore
         /// <param name="userInfo"></param>
         /// <returns></returns>
         public static JwtToken BuildJwtSecurityToken(this Controller controller, IUserInfo userInfo)
-            => controller.BuildJwtSecurityToken(userInfo.JsonSerialize());
-        private static JwtToken BuildJwtSecurityToken(this Controller controller, string json)
+            => controller.HttpContext.RequestServices.BuildJwtSecurityToken(userInfo.JsonSerialize());
+        public static JwtToken BuildJwtSecurityToken(this HttpContext httpContext, IUserInfo userInfo)
+            => httpContext.RequestServices.BuildJwtSecurityToken(userInfo.JsonSerialize());
+        public static JwtToken BuildJwtSecurityToken(this IServiceProvider serviceProvider, IUserInfo userInfo)
+            => serviceProvider.BuildJwtSecurityToken(userInfo.JsonSerialize());
+
+        private static JwtToken BuildJwtSecurityToken(this IServiceProvider serviceProvider, string json)
         {
-            var options = controller.GetRequiredOptions<JwtOptions>();
+            var options = serviceProvider.GetRequiredService<IOptions<JwtOptions>>().Value;
 
             var md5 = json.HashToMD5();
             var claims = new List<Claim>
@@ -183,22 +189,24 @@ namespace OYMLCN.AspNetCore
 
             var result = new JwtToken(jwtToken, options.Name, options.AccessExpiration);
 
-            var MemoryCache = controller.GetRequiredService<IMemoryCache>();
+            var MemoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
             var exp = TimeSpan.FromMinutes(options.RefreshExpiration);
             MemoryCache.Set($"_jwt_refresh_token_{result.refresh_token}", md5, exp);
             MemoryCache.Set($"_jwt_created_token_{md5}", json, exp);
             return result;
         }
 
+        public static JwtToken RefreshJwtSecurityToken(this Controller controller, string refresh_token)
+            => controller.HttpContext.RefreshJwtSecurityToken(refresh_token);
         /// <summary>
         /// 传入refresh_token构建JwtSecurityToken
         /// </summary>
-        /// <param name="controller"></param>
+        /// <param name="httpContext"></param>
         /// <param name="refresh_token"></param>
         /// <returns></returns>
-        public static JwtToken RefreshJwtSecurityToken(this Controller controller, string refresh_token)
+        public static JwtToken RefreshJwtSecurityToken(this HttpContext httpContext, string refresh_token)
         {
-            var MemoryCache = controller.GetRequiredService<IMemoryCache>();
+            var MemoryCache = httpContext.RequestServices.GetRequiredService<IMemoryCache>();
             var refreshTokenKey = $"_jwt_refresh_token_{refresh_token}";
             if (MemoryCache.TryGetValue(refreshTokenKey, out string md5))
             {
@@ -207,7 +215,7 @@ namespace OYMLCN.AspNetCore
                 {
                     // 刷新凭证已经使用，移除刷新凭据
                     MemoryCache.Remove(refreshTokenKey);
-                    return controller.BuildJwtSecurityToken(json);
+                    return httpContext.RequestServices.BuildJwtSecurityToken(json);
                 }
             }
             return null;

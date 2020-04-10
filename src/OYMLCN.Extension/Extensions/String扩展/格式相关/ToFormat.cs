@@ -35,7 +35,7 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-        #region public static string FormatAsRMBUppercase(this string money, bool endSymbol = true)
+        #region public static string FormatAsRMBUpperCase(this string money, bool endSymbol = true)
         /// <summary>
         /// 将人民币字符串小写金额转换成大写形式
         /// </summary>
@@ -43,27 +43,30 @@ namespace OYMLCN.Extensions
         /// <param name="endSymbol"> 是否在整数后面输出 元整 </param>
         /// <exception cref="ArgumentNullException"> <paramref name="money"/> 不能为 null </exception>
         /// <exception cref="FormatException"> <paramref name="money"/> 不是人民币小数标识的字符串 </exception>
-        public static string FormatAsRMBUppercase(this string money, bool endSymbol = true)
+        public static string FormatAsRMBUpperCase(this string money, bool endSymbol = true)
         {
             money.ThrowIfNull(nameof(money));
             return money.RemoveValuesRegexMatches("￥", ",", "\\s")
-                .ConvertToDecimal().ConvertToRMBUppercase(endSymbol);
+                .ConvertToDouble().ToRMBUpperString(endSymbol);
         }
 #if Xunit
         [Fact]
-        public static void FormatAsRMBUppercaseTest()
+        public static void FormatAsRMBUpperCaseTest()
         {
             string str = null;
-            Assert.Throws<ArgumentNullException>(() => str.FormatAsRMBUppercase());
+            Assert.Throws<ArgumentNullException>(() => str.FormatAsRMBUpperCase());
 
             str = "1,010,123.25";
-            Assert.Equal("壹佰零壹万零壹佰贰拾叁元贰角伍分", str.FormatAsRMBUppercase());
+            Assert.Equal("壹佰零壹万零壹佰贰拾叁元贰角伍分", str.FormatAsRMBUpperCase());
 
             str = "￥1000000000000000";
-            Assert.Equal("壹仟兆元整", str.FormatAsRMBUppercase());
+            Assert.Equal("壹仟兆元整", str.FormatAsRMBUpperCase());
+
+            str = "￥1000";
+            Assert.Equal("壹仟元", str.FormatAsRMBUpperCase(endSymbol: false));
 
             str = "$10000000";
-            Assert.Throws<FormatException>(() => str.FormatAsRMBUppercase());
+            Assert.Throws<FormatException>(() => str.FormatAsRMBUpperCase());
         }
 #endif 
         #endregion

@@ -266,6 +266,7 @@ namespace OYMLCN.Extensions
         ///  <para> 如果文件不存在则返回空字符串 </para>
         /// </summary>
         /// <param name="file"> 文件信息 </param>
+        /// <param name="encoding"> 应用于字符串的编码 </param>
         /// <returns> 文件中所有文本字符串 </returns>
         /// <exception cref="ArgumentException"> <paramref name="file"/> 不能为 null </exception>
         /// <exception cref="PathTooLongException"> 指定的路径和/或文件名超过了系统定义的最大长度 </exception>
@@ -313,6 +314,7 @@ namespace OYMLCN.Extensions
         ///  <para> 如果文件不存在则返回空字符串序列 </para>
         /// </summary>
         /// <param name="file"> 文件信息 </param>
+        /// <param name="encoding"> 应用于字符串的编码 </param>
         /// <returns> 文件中所有文本字符串行序列 </returns>
         /// <exception cref="ArgumentException"> <paramref name="file"/> 不能为 null </exception>
         /// <exception cref="PathTooLongException"> 指定的路径和/或文件名超过了系统定义的最大长度 </exception>

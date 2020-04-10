@@ -78,7 +78,7 @@ namespace OYMLCN.Extensions
         /// <param name="buffer"> 要压缩的字节序列 </param>
         /// <param name="path"> 文件的相对路径或绝对路径 </param>
         /// <param name="compressionLevel"> 压缩流时，指示是否要强调速度或压缩效率的枚举值之一。 </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="file"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="buffer"/> 不能为 null </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="path"/> 不能为 null </exception>
         /// <exception cref="ArgumentException"> <paramref name="path"/> 是一个空字符串 ("")，仅包含空格，或者包含一个或多个无效字符。 </exception>
         /// <exception cref="ArgumentException"> <paramref name="path"/> 指向非文件设备，如 NTFS 环境中的“con:”、“com1:”、“lpt1:”等 </exception>

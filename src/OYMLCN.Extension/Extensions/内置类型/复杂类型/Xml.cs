@@ -14,7 +14,7 @@ using Xunit;
 namespace OYMLCN.Extensions
 {
     /// <summary>
-    /// XmlExtension
+    /// XML 文档相关扩展
     /// </summary>
     public static class XmlExtensions
     {

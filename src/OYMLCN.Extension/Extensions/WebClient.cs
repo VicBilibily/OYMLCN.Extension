@@ -291,6 +291,18 @@ namespace OYMLCN.Extensions
         #endregion
 
         #region public static T UploadUTF8JsonString<T>(this WebClient webClient, string address, string json)
+        /// <summary>
+        /// 使用 POST 方法将指定的 <paramref name="json"/> 数据字符串上载到 <paramref name="address"/> 指定的地址
+        /// </summary>
+        /// <typeparam name="T"> 泛型类 </typeparam>
+        /// <param name="webClient"> <see cref="WebClient"/> 的实例 </param>
+        /// <param name="address"> 要发送数据字符串资源到达的 URI，此 URI 必须可以接受使用 POST 方法发送的请求。 </param>
+        /// <param name="json"> 要上载的 JSON 字符串 </param>
+        /// <returns> 服务器返回的 JSON 响应 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="webClient"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="address"/> 不能为 null </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="json"/> 不能为 null </exception>
+        /// <exception cref="JsonReaderException"> 服务器返回的内容不是有效的 JSON 字符串 </exception>
         public static T UploadUTF8JsonString<T>(this WebClient webClient, string address, string json)
             => webClient.UploadUTF8JsonString(address, json).JsonDeserialize<T>();
         #endregion
