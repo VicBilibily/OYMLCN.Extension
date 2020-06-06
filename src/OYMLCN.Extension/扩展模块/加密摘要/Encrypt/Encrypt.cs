@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿#pragma warning disable CS1591
 namespace OYMLCN.Encrypt
 {
-#pragma warning disable CS1591
     public enum MD5Length
     {
         L16 = 16,
@@ -46,6 +40,4 @@ namespace OYMLCN.Encrypt
         public string InverseQ { get; set; }
         public string D { get; set; }
     }
-#pragma warning restore CS1591
-
 }

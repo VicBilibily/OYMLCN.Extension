@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// IEnumerableExtensions
+    /// </summary>
     public static class IEnumerableExtensions
     {
         /// <summary>

@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OYMLCN.AspNetCore;
@@ -10,14 +13,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace OYMLCN.AspNetCore
 {
@@ -159,13 +155,16 @@ namespace OYMLCN.AspNetCore
         /// <summary>
         /// 传入用户信息构建JwtSecurityToken
         /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="userInfo"></param>
-        /// <returns></returns>
         public static JwtToken BuildJwtSecurityToken(this Controller controller, IUserInfo userInfo)
             => controller.HttpContext.RequestServices.BuildJwtSecurityToken(userInfo.JsonSerialize());
+        /// <summary>
+        /// 传入用户信息构建JwtSecurityToken
+        /// </summary>
         public static JwtToken BuildJwtSecurityToken(this HttpContext httpContext, IUserInfo userInfo)
             => httpContext.RequestServices.BuildJwtSecurityToken(userInfo.JsonSerialize());
+        /// <summary>
+        /// 传入用户信息构建JwtSecurityToken
+        /// </summary>
         public static JwtToken BuildJwtSecurityToken(this IServiceProvider serviceProvider, IUserInfo userInfo)
             => serviceProvider.BuildJwtSecurityToken(userInfo.JsonSerialize());
 
@@ -196,14 +195,14 @@ namespace OYMLCN.AspNetCore
             return result;
         }
 
+        /// <summary>
+        /// 传入refresh_token构建JwtSecurityToken
+        /// </summary>
         public static JwtToken RefreshJwtSecurityToken(this Controller controller, string refresh_token)
             => controller.HttpContext.RefreshJwtSecurityToken(refresh_token);
         /// <summary>
         /// 传入refresh_token构建JwtSecurityToken
         /// </summary>
-        /// <param name="httpContext"></param>
-        /// <param name="refresh_token"></param>
-        /// <returns></returns>
         public static JwtToken RefreshJwtSecurityToken(this HttpContext httpContext, string refresh_token)
         {
             var MemoryCache = httpContext.RequestServices.GetRequiredService<IMemoryCache>();
@@ -236,7 +235,7 @@ namespace OYMLCN.AspNetCore
                     return info.JsonDeserialize<T>();
                 }
             }
-            return default(T);
+            return default;
         }
     }
 }

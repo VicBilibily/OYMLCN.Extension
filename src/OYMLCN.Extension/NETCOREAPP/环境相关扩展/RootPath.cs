@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// EnvironmentExtension
+    /// </summary>
     public static class EnvironmentExtension
     {
 
