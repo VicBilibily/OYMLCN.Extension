@@ -1,4 +1,4 @@
-﻿using OYMLCN.Encrypt;
+﻿using OYMLCN.T3P.Encrypt;
 
 namespace OYMLCN.Extensions
 {
@@ -77,6 +77,13 @@ namespace OYMLCN.Extensions
         public static string HashToMD5(this string str)
             => EncryptProvider.Md5(str);
         /// <summary>
+        /// MD5摘要16位结果
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string HashToMD5L16(this string str)
+            => EncryptProvider.Md5(str, MD5Length.L16);
+        /// <summary>
         /// HMACMD5摘要结果
         /// </summary>
         public static string HashToHMACMD5(this string str, string key)
@@ -86,5 +93,24 @@ namespace OYMLCN.Extensions
         /// </summary>
         public static string HashToHMACMD5Base64(this string str, string key)
             => EncryptProvider.HMACMD5(str, key, base64: true);
+
+
+        /// <summary>
+        /// 获取路径文件的MD5摘要值(文件不存在时返回空值)
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string GetFileMD5Hash(string filePath)
+            => filePath.GetFileInfo()?.GetMD5Hash() ?? string.Empty;
+        /// <summary>
+        /// 获取路径文件的SHA1摘要值(文件不存在时返回空值)
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static string GetFileSHA1Hash(string filePath)
+            => filePath.GetFileInfo()?.GetSHA1Hash() ?? string.Empty;
+
+
+
     }
 }

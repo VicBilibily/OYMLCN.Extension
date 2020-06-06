@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     internal static class BytesAndStringExtensions
     {

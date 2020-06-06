@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 #pragma warning disable CS1591
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     public class Check
     {

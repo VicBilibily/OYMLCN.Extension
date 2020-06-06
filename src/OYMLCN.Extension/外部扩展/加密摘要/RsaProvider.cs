@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     /// <summary>
     /// RSA provider

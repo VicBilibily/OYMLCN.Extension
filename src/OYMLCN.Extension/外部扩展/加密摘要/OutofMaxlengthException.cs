@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     /// <summary>
     /// The encrypt string out of max length exception

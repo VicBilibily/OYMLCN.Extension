@@ -3,10 +3,10 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     /// <summary>
-    /// EncryptProvider v 2.0.9
+    /// EncryptProvider （NETCore.Encrypt v 2.0.9）
     /// </summary>
     public class EncryptProvider
     {

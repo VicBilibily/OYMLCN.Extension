@@ -1,5 +1,5 @@
 ﻿#pragma warning disable CS1591
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     public enum MD5Length
     {

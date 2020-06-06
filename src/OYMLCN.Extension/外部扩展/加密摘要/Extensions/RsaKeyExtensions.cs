@@ -1,12 +1,9 @@
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Xml;
-using Newtonsoft.Json;
 
-namespace OYMLCN.Encrypt
+namespace OYMLCN.T3P.Encrypt
 {
     /// <summary>
     /// RSA参数格式化扩展
