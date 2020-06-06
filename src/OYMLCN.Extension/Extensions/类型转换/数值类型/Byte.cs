@@ -96,6 +96,16 @@ namespace OYMLCN.Extensions
         public static byte ToByte(this bool value)
            => Convert.ToByte(value);
         #endregion
+        #region public static byte ToByte(this sbyte value)
+        /// <summary>
+        /// 将指定的 8 位有符号整数的值转换为等效的 8 位无符号整数
+        /// </summary>
+        /// <param name="value"> 要转换的 8 位有符号整数 </param>
+        /// <returns> 一个与 <paramref name="value"/> 等效的 8 位无符号整数 </returns>
+        /// <exception cref="OverflowException"> <paramref name="value"/> 大于 <see cref="byte.MaxValue"/> </exception>
+        public static byte ToByte(this sbyte value)
+            => Convert.ToByte(value);
+        #endregion
         #region public static byte ToByte(this short value)
         /// <summary>
         /// 将指定的 16 位有符号整数的值转换为等效的 8 位无符号整数
@@ -125,16 +135,6 @@ namespace OYMLCN.Extensions
         /// <exception cref="OverflowException"> <paramref name="value"/> 大于 <see cref="byte.MaxValue"/> 或 小于 <see cref="byte.MinValue"/> </exception>
         public static byte ToByte(this long value)
            => Convert.ToByte(value);
-        #endregion
-        #region public static byte ToByte(this sbyte value)
-        /// <summary>
-        /// 将指定的 8 位有符号整数的值转换为等效的 8 位无符号整数
-        /// </summary>
-        /// <param name="value"> 要转换的 8 位有符号整数 </param>
-        /// <returns> 一个与 <paramref name="value"/> 等效的 8 位无符号整数 </returns>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 大于 <see cref="byte.MaxValue"/> </exception>
-        public static byte ToByte(this sbyte value)
-            => Convert.ToByte(value);
         #endregion
         #region public static byte ToByte(this ushort value)
         /// <summary>

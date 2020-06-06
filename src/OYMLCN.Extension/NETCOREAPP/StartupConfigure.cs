@@ -75,11 +75,13 @@ namespace Microsoft.AspNetCore.Builder
               app.UseStatusCodePages(context =>
               {
                   var response = context.HttpContext.Response;
+                  var statusCode = response.StatusCode;
+                  response.StatusCode = 200;
                   response.ContentType = "application/json";
                   return response.WriteAsync(new
                   {
-                      code = response.StatusCode,
-                      msg = $"{response.StatusCode.ToString()} {((HttpStatusCode)response.StatusCode).ToString()}"
+                      code = statusCode,
+                      msg = $"{statusCode} {(HttpStatusCode)statusCode}"
                   }.JsonSerialize(), Encoding.UTF8);
               }).UseExceptionHandler(config =>
               {

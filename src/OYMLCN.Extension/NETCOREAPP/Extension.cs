@@ -18,6 +18,17 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class AspNetCoreExtension
     {
+        /// <summary>
+        /// 获取已注入的服务实例
+        /// </summary>
+        public static T GetOptions<T>(this IServiceProvider service) where T : class, new()
+            => service.GetService<IOptions<T>>()?.Value ?? new T();
+        /// <summary>
+        /// 获取已注入的服务实例
+        /// </summary>
+        public static T GetRequiredOptions<T>(this IServiceProvider service) where T : class, new()
+            => service.GetRequiredService<IOptions<T>>().Value;
+
         #region GetService/GetOptions
         /// <summary>
         /// 获取已注入的服务实例 <typeparamref name="T" /> 基于 <see cref="T:System.IServiceProvider" />.

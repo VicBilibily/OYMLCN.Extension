@@ -5,6 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using OYMLCN.ArgumentChecker;
 using System.Runtime.Serialization;
+using System.Linq;
+using System.Collections.Generic;
 #if Xunit
 using System.Data;
 using Xunit;
@@ -207,6 +209,7 @@ namespace OYMLCN.Extensions
             {
                 FieldInfo field = fields[i];
                 var fieldValue = field.GetValue(obj);
+                if (fieldValue == null) continue;
                 // 值类型，字符串，枚举类型直接把值复制，不存在浅拷贝
                 if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
                     field.SetValue(returnObj, fieldValue);
@@ -219,6 +222,7 @@ namespace OYMLCN.Extensions
             {
                 PropertyInfo property = properties[i];
                 var propertyValue = property.GetValue(obj);
+                if (propertyValue == null) continue;
                 if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
                     property.SetValue(returnObj, propertyValue);
                 else
@@ -309,8 +313,61 @@ namespace OYMLCN.Extensions
             Assert.Equal(classTest.Object.ID, cloneClass.Object.ID);
             Assert.Equal(classTest.Object.ClassName, cloneClass.Object.ClassName);
         }
-#endif 
+#endif
         #endregion
 
+
+        #region public static T AutoCopyTo<T>(this object obj) where T : class, new()
+        /// <summary>
+        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象的数据结构相同的新目标对象实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        public static T AutoCopyTo<T>(this object obj, bool ignoreVirtual = false) where T : class, new()
+        {
+            obj.ThrowIfNull(nameof(obj));
+            var sourceType = obj.GetType();
+            var returnType = typeof(T);
+            T returnObj = Activator.CreateInstance(returnType) as T;
+            // 对于没有公共无参构造函数的类型会报错
+            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var sourceField = sourceType.GetFields(flags);
+            var returnField = returnType.GetFields(flags);
+            var sourceProperty = sourceType.GetProperties(flags);
+            var returnProperty = returnType.GetProperties(flags);
+            for (int i = 0; i < sourceField.Length; i++)
+            {
+                FieldInfo field = sourceField[i];
+                var fieldValue = field.GetValue(obj);
+                var setField = returnField.FirstOrDefault(v => v.Name == field.Name && v.FieldType == field.FieldType);
+                if (setField == null || fieldValue == null) continue;
+                if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
+                    setField.SetValue(returnObj, fieldValue);
+                else
+                    setField.SetValue(returnObj, DeepClone(fieldValue));
+            }
+            for (int i = 0; i < sourceProperty.Length; i++)
+            {
+                PropertyInfo property = sourceProperty[i];
+                var propertyValue = property.GetValue(obj);
+                var setProperty = returnProperty.FirstOrDefault(v => v.Name == property.Name && v.PropertyType == property.PropertyType);
+                if (setProperty == null || propertyValue == null) continue;
+                if (setProperty.GetAccessors().Any(v => v.IsVirtual)) continue;
+                if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
+                    setProperty.SetValue(returnObj, propertyValue);
+                else
+                    setProperty.SetValue(returnObj, DeepClone(propertyValue));
+            }
+            return returnObj;
+        }
+        #endregion
+
+        public static IEnumerable<T> AutoCopyValues<T>(this IEnumerable<T> list) where T : class, new()
+        {
+            list.ThrowIfNull(nameof(list));
+            return list.Select(v => v.AutoCopyTo<T>(ignoreVirtual: true));
+        }
     }
 }

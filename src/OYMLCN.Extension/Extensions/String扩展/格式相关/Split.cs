@@ -158,17 +158,17 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-        #region public static string SplitThenGetLast(this string str, string separator, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
+        #region public static string SplitThenGetLast(this string input, string separator, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
         /// <summary>
         /// 基于指定的字符串将一个字符串拆分子字符串后获得最后一个字符串对象
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="input"></param>
         /// <param name="separator"> 拆分字符串的指定字符串 </param>
         /// <param name="options"> 要省略返回的数组中的空数组元素，则为 <see cref="StringSplitOptions.RemoveEmptyEntries"/>，要包含返回的数组中的空数组元素，则为 <see cref="StringSplitOptions.None"/> </param>
         /// <returns> 基于指定的字符串将一个字符串拆分子字符串后获得最后一个字符串对象 </returns>
         /// <exception cref="ArgumentException"> <paramref name="options"/> 不是 <see cref="StringSplitOptions"/> 值之一 </exception>
-        public static string SplitThenGetLast(this string str, string separator, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
-            => str.Split(separator, options).LastOrDefault();
+        public static string SplitThenGetLast(this string input, string separator, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
+            => input.Split(separator, options).LastOrDefault();
 #if Xunit
         [Fact]
         public static void SplitThenGetLastTest()

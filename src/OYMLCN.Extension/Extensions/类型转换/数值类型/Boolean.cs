@@ -59,34 +59,6 @@ namespace OYMLCN.Extensions
         public static bool ToBoolean(this byte value)
             => Convert.ToBoolean(value);
         #endregion
-        #region public static bool ToBoolean(ushort value)
-        /// <summary>
-        /// 将指定的 16 位无符号整数的值转换为等效的布尔值
-        /// </summary>
-        /// <param name="value"> 要转换的 16 位无符号整数 </param>
-        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
-        public static bool ToBoolean(ushort value)
-            => Convert.ToBoolean(value);
-        #endregion
-        #region public static bool ToBoolean(uint value)
-        /// <summary>
-        /// 将指定的 32 位无符号整数的值转换为等效的布尔值
-        /// </summary>
-        /// <param name="value"> 要转换的 32 位无符号整数 </param>
-        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
-        public static bool ToBoolean(uint value)
-            => Convert.ToBoolean(value);
-        #endregion
-        #region public static bool ToBoolean(ulong value)
-        /// <summary>
-        /// 将指定的 64 位无符号整数的值转换为等效的布尔值
-        /// </summary>
-        /// <param name="value"> 要转换的 64 位无符号整数 </param>
-        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
-        public static bool ToBoolean(ulong value)
-            => Convert.ToBoolean(value);
-        #endregion
-
         #region public static bool ToBoolean(this sbyte value)
         /// <summary>
         /// 将指定的 8 位有符号整数的值转换为等效的布尔值
@@ -123,7 +95,33 @@ namespace OYMLCN.Extensions
         public static bool ToBoolean(this long value)
             => Convert.ToBoolean(value);
         #endregion
-
+        #region public static bool ToBoolean(this ushort value)
+        /// <summary>
+        /// 将指定的 16 位无符号整数的值转换为等效的布尔值
+        /// </summary>
+        /// <param name="value"> 要转换的 16 位无符号整数 </param>
+        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
+        public static bool ToBoolean(this ushort value)
+            => Convert.ToBoolean(value);
+        #endregion
+        #region public static bool ToBoolean(this uint value)
+        /// <summary>
+        /// 将指定的 32 位无符号整数的值转换为等效的布尔值
+        /// </summary>
+        /// <param name="value"> 要转换的 32 位无符号整数 </param>
+        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
+        public static bool ToBoolean(this uint value)
+            => Convert.ToBoolean(value);
+        #endregion
+        #region public static bool ToBoolean(this ulong value)
+        /// <summary>
+        /// 将指定的 64 位无符号整数的值转换为等效的布尔值
+        /// </summary>
+        /// <param name="value"> 要转换的 64 位无符号整数 </param>
+        /// <returns> 如果 <paramref name="value"/> 不为零，则为 true；否则，为 false。 </returns> 
+        public static bool ToBoolean(this ulong value)
+            => Convert.ToBoolean(value);
+        #endregion
         #region public static bool ToBoolean(this float value)
         /// <summary>
         /// 将指定的单精度浮点数的值转换为等效的布尔值

@@ -287,6 +287,8 @@ namespace Microsoft.Extensions.Configuration
                             string token = context.Request.Cookies[jwtOptions.Name];
                             // 如果无，则尝试参数从中获取Token
                             if (token.IsNullOrEmpty()) token = context.Request.Query[jwtOptions.Name];
+                            // 还没有就尝试从Header中获取Token
+                            if (token.IsNullOrEmpty()) token = context.Request.Headers.Where(v => v.Key == jwtOptions.Name).Select(v => v.Value.FirstOrDefault()).FirstOrDefault();
                             // 执行完毕，把取得的值设置为token
                             // 如果为空原始方式会从Header重新获取
                             context.Token = token;

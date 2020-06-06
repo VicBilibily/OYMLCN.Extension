@@ -20,32 +20,32 @@ namespace OYMLCN.Extensions
         /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="double.MinValue"/> 或大于 <see cref="double.MaxValue"/> 的数字 </exception>
         public static double ConvertToDouble(this string value)
             => Convert.ToDouble(value);
-#if Xunit
-        [Fact]
-        public static void ConvertToDoubleTest()
-        {
-            string str = null;
-            Assert.Equal(0, str.ConvertToDouble());
-            str = string.Empty;
-            Assert.Throws<FormatException>(() => str.ConvertToDouble());
-            str = " ";
-            Assert.Throws<FormatException>(() => str.ConvertToDouble());
-            str = "Hello World!";
-            Assert.Throws<FormatException>(() => str.ConvertToDouble());
-            str = "1.01";
-            Assert.Equal(1.01D, str.ConvertToDouble());
-            str = "-1.7976931348623157E+308";
-            Assert.Equal(double.MinValue, str.ConvertToDouble());
-            str = "1.7976931348623157E+308";
-            Assert.Equal(double.MaxValue, str.ConvertToDouble());
-            str = "1.7976931348623157E+309";
-#if NETCOREAPP2_1
-            Assert.Throws<OverflowException>(() => str.ConvertToDouble());
-#elif NETCOREAPP3_1
-            Assert.True(double.IsInfinity(str.ConvertToDouble()));
-#endif
-        }
-#endif
+//#if Xunit
+//        [Fact]
+//        public static void ConvertToDoubleTest()
+//        {
+//            string str = null;
+//            Assert.Equal(0, str.ConvertToDouble());
+//            str = string.Empty;
+//            Assert.Throws<FormatException>(() => str.ConvertToDouble());
+//            str = " ";
+//            Assert.Throws<FormatException>(() => str.ConvertToDouble());
+//            str = "Hello World!";
+//            Assert.Throws<FormatException>(() => str.ConvertToDouble());
+//            str = "1.01";
+//            Assert.Equal(1.01D, str.ConvertToDouble());
+//            str = "-1.7976931348623157E+308";
+//            Assert.Equal(double.MinValue, str.ConvertToDouble());
+//            str = "1.7976931348623157E+308";
+//            Assert.Equal(double.MaxValue, str.ConvertToDouble());
+//            str = "1.7976931348623157E+309";
+//#if NETCOREAPP2_1
+//            Assert.Throws<OverflowException>(() => str.ConvertToDouble());
+//#elif NETCOREAPP3_1
+//            Assert.True(double.IsInfinity(str.ConvertToDouble()));
+//#endif
+//        }
+//#endif
         #endregion
         #region public static double ConvertToDouble(this string value, IFormatProvider provider)
         /// <summary>
@@ -103,6 +103,15 @@ namespace OYMLCN.Extensions
         public static double ToDouble(this byte value)
             => Convert.ToDouble(value);
         #endregion
+        #region public static double ToDouble(this sbyte value)
+        /// <summary>
+        /// 将指定的 8 位带符号整数的值转换为等效的双精度浮点数
+        /// </summary>
+        /// <param name="value"> 要转换的 8 位带符号整数 </param>
+        /// <returns> 与 <paramref name="value"/> 等效的 8 位带符号整数 </returns>
+        public static double ToDouble(this sbyte value)
+            => Convert.ToDouble(value);
+        #endregion
         #region public static double ToDouble(this short value)
         /// <summary>
         /// 将指定的 16 位带符号整数的值转换为等效的双精度浮点数
@@ -128,15 +137,6 @@ namespace OYMLCN.Extensions
         /// <param name="value"> 要转换的 64 位带符号整数 </param>
         /// <returns>  一个等于 <paramref name="value"/> 的双精度浮点数 </returns>
         public static double ToDouble(this long value)
-            => Convert.ToDouble(value);
-        #endregion
-        #region public static double ToDouble(this sbyte value)
-        /// <summary>
-        /// 将指定的 8 位带符号整数的值转换为等效的双精度浮点数
-        /// </summary>
-        /// <param name="value"> 要转换的 8 位带符号整数 </param>
-        /// <returns> 与 <paramref name="value"/> 等效的 8 位带符号整数 </returns>
-        public static double ToDouble(this sbyte value)
             => Convert.ToDouble(value);
         #endregion
         #region public static double ToDouble(this ushort value)

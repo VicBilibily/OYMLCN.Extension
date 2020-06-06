@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OYMLCN.ArgumentChecker;
 #if Xunit
 using Xunit;
@@ -67,6 +68,89 @@ namespace OYMLCN.Extensions
 
             str = "$10000000";
             Assert.Throws<FormatException>(() => str.FormatAsRMBUpperCase());
+        }
+#endif
+        #endregion
+
+
+        #region public static string FirstCharToLower(this string input)
+        /// <summary>
+        /// 把字符串对象的首字母转换为小写表现形式
+        /// </summary>
+        /// <param name="input"> 要转换的字符串 </param>
+        /// <returns> 如果首字母为大写则转换为小写后返回新的字符串，小写则不处理原样返回 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        public static string FirstCharToLower(this string input)
+        {
+            input.ThrowIfNull(nameof(input));
+            var arr = input.ToCharArray();
+            if (arr.Any())
+            {
+                var first = arr[0];
+                if (char.IsUpper(first))
+                {
+                    arr[0] = char.ToLower(first);
+                    return new string(arr);
+                }
+            }
+            return input;
+        }
+#if Xunit
+        [Fact]
+        public static void FirstCharToLowerTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.FirstCharToLower());
+
+            str = "Hello World!";
+            Assert.Equal("hello World!", str.FirstCharToLower());
+
+            str = "yes";
+            Assert.Equal(str, str.FirstCharToLower());
+
+            str = "你好，世界！";
+            Assert.Equal(str, str.FirstCharToLower());
+        }
+#endif 
+        #endregion
+
+        #region public static string FirstCharToUpper(this string input)
+        /// <summary>
+        /// 把字符串对象的首字母转换为大写表现形式
+        /// </summary>
+        /// <param name="input"> 要转换的字符串 </param>
+        /// <returns> 如果首字母为小写则转换为大写后返回新的字符串，大写则不处理原样返回 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="input"/> 不能为 null </exception>
+        public static string FirstCharToUpper(this string input)
+        {
+            input.ThrowIfNull(nameof(input));
+            var arr = input.ToCharArray();
+            if (arr.Any())
+            {
+                var first = arr[0];
+                if (char.IsLower(first))
+                {
+                    arr[0] = char.ToUpper(first);
+                    return new string(arr);
+                }
+            }
+            return input;
+        }
+#if Xunit
+        [Fact]
+        public static void FirstCharToUpperTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.FirstCharToUpper());
+
+            str = "hello world!";
+            Assert.Equal("Hello world!", str.FirstCharToUpper());
+
+            str = "yes";
+            Assert.Equal("Yes", str.FirstCharToUpper());
+
+            str = "你好，世界！";
+            Assert.Equal(str, str.FirstCharToUpper());
         }
 #endif 
         #endregion
