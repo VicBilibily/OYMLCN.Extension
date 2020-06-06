@@ -49,34 +49,6 @@ namespace OYMLCN.Extensions
         public static byte ConvertToByte(this string value, int fromBase)
             => Convert.ToByte(value, fromBase);
         #endregion
-        #region public static byte ConvertToByte(this object value)
-        /// <summary>
-        /// 将指定对象的值转换为 8 位无符号整数
-        /// </summary>
-        /// <param name="value"> 用于实现 <see cref="IConvertible"/> 接口的对象，或为 null </param>
-        /// <returns> 一个与 <paramref name="value"/>  一个与 value 等效的 8 位无符号整数，如果 <paramref name="value"/> 为 null，则为零。 </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 未采用 <see cref="byte"/> 值的属性格式 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> </exception>
-        /// <exception cref="InvalidCastException"> 不支持从 <paramref name="value"/> 转换为 <see cref="byte"/> 类型 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 是一个小于 <see cref="byte.MinValue"/> 或大于 <see cref="byte.MaxValue"/> 的数字 </exception>
-        public static byte ConvertToByte(this object value)
-            => Convert.ToByte(value);
-        #endregion
-        #region public static byte ConvertToByte(this object value, IFormatProvider provider)
-        /// <summary>
-        /// 使用指定的区域性特定格式设置信息，将指定对象的值转换为 8 位无符号整数
-        /// </summary>
-        /// <param name="value"> 一个实现 <see cref="IConvertible"/> 接口的对象 </param>
-        /// <param name="provider"> 一个提供区域性特定的格式设置信息的对象 </param>
-        /// <returns> 一个与 <paramref name="value"/>  一个与 value 等效的 8 位无符号整数，如果 <paramref name="value"/> 为 null，则为零。 </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 未采用 <see cref="byte"/> 值的属性格式 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> </exception>
-        /// <exception cref="InvalidCastException"> 不支持从 <paramref name="value"/> 转换为 <see cref="byte"/> 类型 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 是一个小于 <see cref="byte.MinValue"/> 或大于 <see cref="byte.MaxValue"/> 的数字 </exception>
-        public static byte ConvertToByte(this object value, IFormatProvider provider)
-            => Convert.ToByte(value, provider);
-        #endregion
-
         #region public static byte ToByte(this char value)
         /// <summary>
         /// 将指定 Unicode 字符的值转换为等效的 8 位无符号整数

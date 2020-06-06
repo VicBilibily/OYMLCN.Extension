@@ -105,7 +105,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static T? ConvertToNullable<T>(this string input) where T : struct
         /// <summary>
         /// string转换为可空结构性类型

@@ -30,32 +30,6 @@ namespace OYMLCN.Extensions
         public static decimal ConvertToDecimal(this string value, IFormatProvider provider)
             => Convert.ToDecimal(value, provider);
         #endregion
-        #region public static decimal ConvertToDecimal(this object value)
-        /// <summary>
-        /// 将指定对象的值转换为等效的十进制数
-        /// </summary>
-        /// <param name="value"> 用于实现 <see cref="IConvertible"/> 接口的对象，或为 null </param>
-        /// <returns> 与 <paramref name="value"/> 中数字等效的十进制数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="decimal.MinValue"/> 或大于 <see cref="decimal.MaxValue"/> 的数字 </exception>
-        public static decimal ConvertToDecimal(this object value)
-            => Convert.ToDecimal(value);
-        #endregion
-        #region public static decimal ConvertToDecimal(this object value, IFormatProvider provider)
-        /// <summary>
-        /// 使用指定的区域性特定格式设置信息，将指定对象的值转换为等效的十进制数
-        /// </summary>
-        /// <param name="value"> 用于实现 <see cref="IConvertible"/> 接口的对象，或为 null </param>
-        /// <param name="provider"> 一个提供区域性特定的格式设置信息的对象 </param>
-        /// <returns> 与 <paramref name="value"/> 中数字等效的十进制数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="decimal.MinValue"/> 或大于 <see cref="decimal.MaxValue"/> 的数字 </exception>
-        public static decimal ConvertToDecimal(this object value, IFormatProvider provider)
-            => Convert.ToDecimal(value, provider);
-        #endregion
-
         #region public static decimal ToDecimal(this bool value)
         /// <summary>
         /// 将指定的布尔值转换为等效的十进制数

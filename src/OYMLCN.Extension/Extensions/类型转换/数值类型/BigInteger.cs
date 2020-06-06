@@ -31,7 +31,6 @@ namespace OYMLCN.Extensions
         public static BigInteger ConvertToBigInteger(this string value, IFormatProvider provider)
             => BigInteger.Parse(value, provider);
         #endregion
-
         #region public static BigInteger ToBigInteger(this byte[] value)
         /// <summary>
         /// 使用字节数组中的值初始化 <see cref="BigInteger"/> 结构的新实例

@@ -51,32 +51,6 @@ namespace OYMLCN.Extensions
         public static short ConvertToShort(this string value, IFormatProvider provider)
             => Convert.ToInt16(value, provider);
         #endregion
-        #region public static short ConvertToShort(this object value)
-        /// <summary>
-        /// 将指定对象的值转换为 16 位带符号整数
-        /// </summary>
-        /// <param name="value"> 用于实现 <see cref="IConvertible"/> 接口的对象，或为 null </param>
-        /// <returns> 一个与 <paramref name="value"/> 中数字等效的 16 位带符号整数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> 对于 <see cref="short"/> 类型，<paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="short.MinValue"/> 或大于 <see cref="short.MaxValue"/> 的数字 </exception>
-        public static short ConvertToShort(this object value)
-            => Convert.ToInt16(value);
-        #endregion
-        #region public static short ConvertToShort(this object value, IFormatProvider provider)
-        /// <summary>
-        /// 使用指定的区域性特定格式信息，将指定对象的值转换为 16 位带符号整数
-        /// </summary>
-        /// <param name="value"> 一个实现 <see cref="IConvertible"/> 接口的对象 </param>
-        /// <param name="provider"> 一个提供区域性特定的格式设置信息的对象 </param>
-        /// <returns> 一个与 <paramref name="value"/> 中数字等效的 16 位带符号整数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口。 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="short.MinValue"/> 或大于 <see cref="short.MaxValue"/> 的数字 </exception>
-        public static short ConvertToShort(this object value, IFormatProvider provider)
-            => Convert.ToInt16(value, provider);
-        #endregion
-
         #region public static short ToShort(this bool value)
         /// <summary>
         /// 将指定的布尔值转换为等效的 16 位带符号整数

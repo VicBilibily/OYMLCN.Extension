@@ -18,7 +18,7 @@ namespace OYMLCN.Extensions
         public static sbyte ConvertToSByte(this string value)
             => Convert.ToSByte(value);
         #endregion
-        #region public static sbyte ConvertToSByte(string value, int fromBase)
+        #region public static sbyte ConvertToSByte(this string value, int fromBase)
         /// <summary>
         /// 将指定基数的数字的字符串表示形式转换为等效的 8 位有符号整数
         /// </summary>
@@ -35,7 +35,7 @@ namespace OYMLCN.Extensions
         /// </exception>
         /// <exception cref="OverflowException"> <paramref name="value"/>（表示基数不为 10 的符号数字）的前缀为负号 </exception>
         /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="sbyte.MinValue"/> 或大于 <see cref="sbyte.MaxValue"/> 的数字 </exception>
-        public static sbyte ConvertToSByte(string value, int fromBase)
+        public static sbyte ConvertToSByte(this string value, int fromBase)
             => Convert.ToSByte(value, fromBase);
         #endregion
         #region public static sbyte ConvertToSByte(this string value, IFormatProvider provider)
@@ -51,32 +51,6 @@ namespace OYMLCN.Extensions
         public static sbyte ConvertToSByte(this string value, IFormatProvider provider)
             => Convert.ToSByte(value, provider);
         #endregion
-        #region public static sbyte ConvertToSByte(this object value)
-        /// <summary>
-        /// 将指定对象的值转换为 8 位带符号整数
-        /// </summary>
-        /// <param name="value"> 用于实现 <see cref="IConvertible"/> 接口的对象，或为 null </param>
-        /// <returns> 一个与 <paramref name="value"/> 中数字等效的 8 位带符号整数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口。 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="sbyte.MinValue"/> 或大于 <see cref="sbyte.MaxValue"/> 的数字 </exception>
-        public static sbyte ConvertToSByte(this object value)
-            => Convert.ToSByte(value);
-        #endregion
-        #region public static sbyte ConvertToSByte(this object value, IFormatProvider provider)
-        /// <summary>
-        /// 使用指定的区域性特定格式信息，将指定对象的值转换为 8 位带符号整数
-        /// </summary>
-        /// <param name="value"> 一个实现 <see cref="IConvertible"/> 接口的对象 </param>
-        /// <param name="provider"> 一个提供区域性特定的格式设置信息的对象 </param>
-        /// <returns> 一个与 <paramref name="value"/> 中数字等效的 8 位带符号整数，如果 <paramref name="value"/> 为 null，则为 0（零） </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 的格式不正确 </exception>
-        /// <exception cref="InvalidCastException"> <paramref name="value"/> 不实现 <see cref="IConvertible"/> 接口。 或 不支持该转换 </exception>
-        /// <exception cref="OverflowException"> <paramref name="value"/> 表示一个小于 <see cref="sbyte.MinValue"/> 或大于 <see cref="sbyte.MaxValue"/> 的数字 </exception>
-        public static sbyte ConvertToSByte(this object value, IFormatProvider provider)
-            => Convert.ToSByte(value, provider);
-        #endregion
-
         #region public static sbyte ToSByte(this bool value)
         /// <summary>
         /// 将指定的布尔值转换为等效的 8 位带符号整数
