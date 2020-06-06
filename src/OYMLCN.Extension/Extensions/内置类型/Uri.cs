@@ -6,6 +6,9 @@ using Xunit;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// SystemTypeExtension
+    /// </summary>
     public static partial class SystemTypeExtension
     {
         #region public static string GetSchemeHost(this Uri uri)

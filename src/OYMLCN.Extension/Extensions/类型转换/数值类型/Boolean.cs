@@ -16,7 +16,7 @@ namespace OYMLCN.Extensions
         /// 如果 <paramref name="value"/> 等于 <see cref="bool.TrueString"/> 则为 true，
         /// 如果 <paramref name="value"/> 等于 <see cref="bool.FalseString"/> 或 null 时则为 fasle。
         /// </returns>
-        /// <exception cref="FormatException"> <paramref name="value"/> 不是 <see cref="bool.TrueString"/> 或 <see cref="bool.FalseString"/ </exception>
+        /// <exception cref="FormatException"> <paramref name="value"/> 不是 <see cref="bool.TrueString"/> 或 <see cref="bool.FalseString"/> </exception>
         public static bool ConvertToBoolean(this string value)
             => Convert.ToBoolean(value);
         #endregion

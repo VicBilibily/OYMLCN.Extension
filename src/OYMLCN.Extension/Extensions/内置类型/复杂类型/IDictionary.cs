@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OYMLCN.Extensions
 {
+    /// <summary>
+    /// IDictionaryExtension
+    /// </summary>
     public static class IDictionaryExtension
     {
         /// <summary>
