@@ -35,9 +35,11 @@ namespace Microsoft.Extensions.Configuration
         /// <returns></returns>
         public static IMvcBuilder FixJsonOptionsUnsafe(this IMvcBuilder mvcBuilder)
         {
+            var opts = JsonExtensions.JsonOptions;
             mvcBuilder.AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                options.JsonSerializerOptions.Encoder = opts.Encoder;
+                options.JsonSerializerOptions.IgnoreNullValues = opts.IgnoreNullValues;
             });
             return mvcBuilder;
         }

@@ -70,7 +70,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static T XmlDeepClone<T>(this T obj) where T : class, new()
         /// <summary>
         /// 采用 XML 序列化的方式实现深度对象拷贝
@@ -112,7 +111,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static T BinaryDeepClone<T>(this T obj) where T : class, new()
         /// <summary>
         /// 采用二进制序列化的方式实现深度对象拷贝
@@ -189,7 +187,6 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-
         #region public static T DeepClone<T>(this T obj) where T : class, new()
         /// <summary>
         /// 采用 Reflection 对象反射的方式实现深度对象拷贝
@@ -257,7 +254,6 @@ namespace OYMLCN.Extensions
         }
 #endif 
         #endregion
-
         #region public static T Clone<T>(this T obj) where T : class, new()
         /// <summary>
         /// 采用 Reflection 对象反射的方式实现引用对象拷贝（仅克隆值类型，引用类型保持不变）
@@ -316,16 +312,16 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-
         #region public static T AutoCopyTo<T>(this object obj) where T : class, new()
         /// <summary>
         /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝
         /// </summary>
         /// <typeparam name="T"> 对象实例的类型 </typeparam>
         /// <param name="obj"> 要进行拷贝的对象实例 </param>
+        /// <param name="onlyValueType"> 只拷贝值类型，默认false </param>
         /// <returns> 一个与 <paramref name="obj"/> 对象的数据结构相同的新目标对象实例 </returns>
         /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
-        public static T AutoCopyTo<T>(this object obj, bool ignoreVirtual = false) where T : class, new()
+        public static T AutoCopyTo<T>(this object obj, bool onlyValueType = false) where T : class, new()
         {
             obj.ThrowIfNull(nameof(obj));
             var sourceType = obj.GetType();
@@ -345,7 +341,7 @@ namespace OYMLCN.Extensions
                 if (setField == null || fieldValue == null) continue;
                 if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
                     setField.SetValue(returnObj, fieldValue);
-                else
+                else if (onlyValueType == false)
                     setField.SetValue(returnObj, DeepClone(fieldValue));
             }
             for (int i = 0; i < sourceProperty.Length; i++)
@@ -354,20 +350,36 @@ namespace OYMLCN.Extensions
                 var propertyValue = property.GetValue(obj);
                 var setProperty = returnProperty.FirstOrDefault(v => v.Name == property.Name && v.PropertyType == property.PropertyType);
                 if (setProperty == null || propertyValue == null) continue;
-                if (setProperty.GetAccessors().Any(v => v.IsVirtual)) continue;
                 if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
                     setProperty.SetValue(returnObj, propertyValue);
-                else
+                else if (onlyValueType == false)
                     setProperty.SetValue(returnObj, DeepClone(propertyValue));
             }
             return returnObj;
         }
         #endregion
+        #region public static T AutoCopyValues<T>(this T obj) where T : class, new()
+        /// <summary>
+        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝值
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行拷贝的对象实例 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象的数据结构相同的新目标对象实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        public static T AutoCopyValues<T>(this T obj) where T : class, new()
+            => AutoCopyTo<T>(obj, true);
+        #endregion
+        #region public static List<T> AutoCopyValues<T>(this List<T> list) where T : class, new()
+        /// <summary>
+        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝值
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="list"> 要进行拷贝的对象实例集合 </param>
+        /// <returns> 一个与 <paramref name="list"/> 集合内对象的数据结构相同的新目标对象实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="list"/> 不能为 null </exception>
+        public static List<T> AutoCopyValues<T>(this List<T> list) where T : class, new()
+            => list.Select(obj => AutoCopyTo<T>(obj, true)).ToList();
+        #endregion
 
-        public static IEnumerable<T> AutoCopyValues<T>(this IEnumerable<T> list) where T : class, new()
-        {
-            list.ThrowIfNull(nameof(list));
-            return list.Select(v => v.AutoCopyTo<T>(ignoreVirtual: true));
-        }
     }
 }

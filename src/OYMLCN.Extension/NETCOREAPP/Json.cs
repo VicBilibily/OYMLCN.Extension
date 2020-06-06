@@ -18,9 +18,10 @@ namespace OYMLCN.Extensions
         public static string ToTextJsonString<T>(this T data, JsonSerializerOptions options = null) where T : class
             => JsonSerializer.Serialize(data, options);
 
-        private static JsonSerializerOptions UnsafeJsonOption = new JsonSerializerOptions()
+        internal static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            IgnoreNullValues = true,
         };
         /// <summary>
         /// 将对象转为JSON字符串（已修正 System.Text.Json 表现与 Newtonsoft.Json 表现不一致的问题）
@@ -28,7 +29,7 @@ namespace OYMLCN.Extensions
         /// <param name="data">任意对象</param>
         /// <returns>JSON字符串</returns>
         public static string ToTextJsonStringUnsafe<T>(this T data) where T : class
-            => JsonSerializer.Serialize(data, UnsafeJsonOption);
+            => JsonSerializer.Serialize(data, JsonOptions);
 
         /// <summary>
         /// JSON字符串转换为对象

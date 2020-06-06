@@ -13,31 +13,6 @@ namespace OYMLCN.Extensions
 {
     public static partial class SystemTypeExtension
     {
-        ///// <summary>
-        ///// 把秒转换成分钟
-        ///// </summary>
-        ///// <param name="second">秒数</param>
-        ///// <returns>分钟数</returns>
-        //public static int SecondsToMinutes(this int second)
-        //{
-        //    second.ThrowIfNegative(nameof(second));
-        //    return Convert.ToInt32(Math.Ceiling(second / (decimal)60));
-        //}
-        //#if Xunit
-        //        [Fact]
-        //        public static void SecondToMinuteTest()
-        //        {
-        //            Assert.Throws<ArgumentOutOfRangeException>(() => (-1).SecondsToMinutes());
-        //            Assert.Equal(0, 0.SecondsToMinutes());
-        //            Assert.Equal(1, 1.SecondsToMinutes());
-        //            Assert.Equal(1, 30.SecondsToMinutes());
-        //            Assert.Equal(1, 55.SecondsToMinutes());
-        //            Assert.Equal(1, 60.SecondsToMinutes());
-        //            Assert.Equal(2, 61.SecondsToMinutes());
-        //        }
-        //#endif
-
-
         #region public static string ToRMBUpperString(this double money, bool endSymbol = true)
         /// <summary>
         /// 将数值格式化为人民币金额大写
