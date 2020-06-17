@@ -39,7 +39,8 @@ namespace Microsoft.Extensions.Configuration
             mvcBuilder.AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Encoder = opts.Encoder;
-                options.JsonSerializerOptions.IgnoreNullValues = opts.IgnoreNullValues;
+                // 前端对象绑定需要有定义才能双向绑定，故不再忽略空值
+                //options.JsonSerializerOptions.IgnoreNullValues = opts.IgnoreNullValues;
             });
             return mvcBuilder;
         }

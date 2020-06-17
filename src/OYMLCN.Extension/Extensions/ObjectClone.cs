@@ -360,7 +360,7 @@ namespace OYMLCN.Extensions
         #endregion
         #region public static T AutoCopyValues<T>(this T obj) where T : class, new()
         /// <summary>
-        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝值
+        /// 采用 Reflection 对象反射的方式实现引用对象值拷贝
         /// </summary>
         /// <typeparam name="T"> 对象实例的类型 </typeparam>
         /// <param name="obj"> 要进行拷贝的对象实例 </param>
@@ -371,7 +371,7 @@ namespace OYMLCN.Extensions
         #endregion
         #region public static List<T> AutoCopyValues<T>(this List<T> list) where T : class, new()
         /// <summary>
-        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝值
+        /// 采用 Reflection 对象反射的方式实现引用对象值拷贝
         /// </summary>
         /// <typeparam name="T"> 对象实例的类型 </typeparam>
         /// <param name="list"> 要进行拷贝的对象实例集合 </param>
@@ -380,6 +380,15 @@ namespace OYMLCN.Extensions
         public static List<T> AutoCopyValues<T>(this List<T> list) where T : class, new()
             => list.Select(obj => AutoCopyTo<T>(obj, true)).ToList();
         #endregion
-
+        #region public static List<T> AutoMapValues<T>(this List<object> list) where T : class, new()
+        /// <summary>
+        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝值
+        /// </summary>
+        /// <typeparam name="T"> 映射目标对象类型 </typeparam>
+        /// <returns> 一个与 <paramref name="list"/> 集合内对象的值类型数据相同的新目标对象实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="list"/> 不能为 null </exception>
+        public static List<T> AutoMapValues<T>(this IEnumerable<object> list) where T : class, new()
+            => list.Select(obj => AutoCopyTo<T>(obj, true)).ToList();
+        #endregion
     }
 }

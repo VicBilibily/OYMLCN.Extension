@@ -113,7 +113,67 @@ namespace OYMLCN.Extensions
             obj.Add(new object());
             Assert.True(obj.IsNotEmpty());
         }
-#endif 
+#endif
+        #endregion
+
+
+        #region public static List<T> AddIf<T>(this List<T> list, bool condition, Func<T> action)
+        /// <summary>
+        /// 如果符合 <paramref name="condition"/> 条件，则添加 <paramref name="action"/> 返回的对象到 <paramref name="list"/> 中
+        /// </summary>
+        /// <typeparam name="T"> 泛型 </typeparam>
+        /// <param name="list"> 对象列表 </param>
+        /// <param name="condition"> 条件 </param>
+        /// <param name="action"> 匿名委托方法 </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="list"/> 不能为 null </exception>
+        public static List<T> AddIf<T>(this List<T> list, bool condition, Func<T> action)
+        {
+            list.ThrowIfNull(nameof(list));
+            if (condition) list.Add(action.Invoke());
+            return list;
+        }
+#if Xunit
+        [Fact]
+        public static void AddIfFuncTest()
+        {
+            List<string> list = null;
+            Assert.Throws<ArgumentNullException>(() => list.AddIf(true, () => null));
+            list = new List<string>();
+            list.AddIf(false, () => null);
+            Assert.Empty(list);
+            list.AddIf(true, () => null);
+            Assert.NotEmpty(list);
+        }
+#endif
+        #endregion
+        #region public static List<T> AddIf<T>(this List<T> list, bool condition, T obj)
+        /// <summary>
+        /// 如果符合 <paramref name="condition"/> 条件，则添加 <paramref name="obj"/> 对象到 <paramref name="list"/> 中
+        /// </summary>
+        /// <typeparam name="T"> 泛型 </typeparam>
+        /// <param name="list"> 对象列表 </param>
+        /// <param name="condition"> 条件 </param>
+        /// <param name="obj"> 对象 </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="list"/> 不能为 null </exception>
+        public static List<T> AddIf<T>(this List<T> list, bool condition, T obj)
+        {
+            list.ThrowIfNull(nameof(list));
+            if (condition) list.Add(obj);
+            return list;
+        }
+#if Xunit
+        [Fact]
+        public static void AddIfObjTest()
+        {
+            List<string> list = null;
+            Assert.Throws<ArgumentNullException>(() => list.AddIf(true, (string)null));
+            list = new List<string>();
+            list.AddIf(false, string.Empty);
+            Assert.Empty(list);
+            list.AddIf(true, (string)null);
+            Assert.NotEmpty(list);
+        }
+#endif
         #endregion
 
     }

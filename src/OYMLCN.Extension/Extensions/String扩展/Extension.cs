@@ -42,6 +42,34 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
+        #region public static bool Contains(this IEnumerable<string> values, params string[] words)
+        /// <summary>
+        /// 确定某元素是否在 <see cref="IEnumerable{T}"/> 中
+        /// </summary>
+        /// <param name="values"> 搜寻字符串序列 </param>
+        /// <param name="words"> 要搜寻的字符串对象 </param>
+        /// <returns> 如果要搜寻的字符串在搜寻对象字符串中，则为 true；否则为 false。 </returns>
+        public static bool Contains(this IEnumerable<string> values, params string[] words)
+        {
+            if (values.IsNullOrEmpty()) return false;
+            return words.Any(word => values.Any(val => val == word));
+        }
+#if Xunit
+        [Fact]
+        public static void IEnumerableContainsWordsTest()
+        {
+            string[] str = null;
+            Assert.False(str.Contains("0", "1"));
+
+            str = new[] { "20200202", "20", "100", null, string.Empty };
+            Assert.True(str.Contains("020", "100"));
+            Assert.False(str.Contains("10", "11"));
+            Assert.True(str.Contains("110", string.Empty));
+            Assert.False(str.Contains("020", "02"));
+            Assert.True(str.Contains(null, "02"));
+        }
+#endif
+        #endregion
 
         #region public static string Join(this IEnumerable<string> values, string separator = "")
         /// <summary>
@@ -80,6 +108,7 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
+
 
 
         #region public static IEnumerable<string> WhereContains(this IEnumerable<string> source, params string[] words)

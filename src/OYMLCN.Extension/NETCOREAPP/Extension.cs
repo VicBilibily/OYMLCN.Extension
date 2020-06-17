@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -18,6 +19,16 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class AspNetCoreExtension
     {
+        /// <summary>
+        /// 获取指定键下的配置节属性对象实例
+        /// </summary>
+        public static T GetOptions<T>(this IConfiguration configuration, string key) where T : class, new()
+        {
+            var opts = new T();
+            configuration.GetSection(key).Bind(opts);
+            return opts;
+        }
+
         /// <summary>
         /// 获取已注入的服务实例
         /// </summary>

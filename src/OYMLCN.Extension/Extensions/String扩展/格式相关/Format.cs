@@ -35,7 +35,6 @@ namespace OYMLCN.Extensions
         }
 #endif 
         #endregion
-
         #region public static bool IsNotNullOrEmpty(this string value)
         /// <summary> 
         /// 检查字符串 不是 null 且不是 <see cref="string.Empty"/> 字符串
@@ -57,9 +56,55 @@ namespace OYMLCN.Extensions
 
             // 内置方法扩展，不需要深入测试
         }
+#endif
+        #endregion
+        #region public static string IfNull(this string value, string defVal)
+        /// <summary> 
+        /// 如果检查字符串 <paramref name="value"/> 是 null 则返回 <paramref name="defVal"/> 默认值，否则原样返回。
+        /// </summary>
+        /// <param name="value"> 要测试的字符串 </param>
+        /// <param name="defVal"> <paramref name="value"/> 为 null 时返回的默认值 </param>
+        /// <returns> 如果 <paramref name="value"/> 为 null 则为 <paramref name="defVal"/>，否则为 <paramref name="value"/>。 </returns>
+        [Obsolete("建议使用 obj ??= value 语法糖写法")]
+        public static string IfNull(this string value, string defVal)
+            => value.IsNull() ? defVal : value;
+#if Xunit
+#pragma warning disable CS0618
+        [Fact]
+        public static void IfNullTest()
+        {
+            string str = null, defVal = "Hello World!";
+            Assert.Equal(defVal, str.IfNull(defVal));
+            str = string.Empty;
+            Assert.Equal(str, str.IfNull(defVal));
+            str = " ";
+            Assert.Equal(str, str.IfNull(defVal));
+        }
+#pragma warning restore CS0618
 #endif 
         #endregion
-
+        #region public static string IfNullOrEmpty(this string value, string defVal)
+        /// <summary> 
+        /// 检查字符串 是 null 或者是 <see cref="string.Empty"/> 字符串，如果是则返回 <paramref name="defVal"/> 默认值，否则原样返回。
+        /// </summary>
+        /// <param name="value"> 要测试的字符串 </param>
+        /// <param name="defVal"> <paramref name="value"/> 为 null 或空字符串 ("") 返回的默认值 </param>
+        /// <returns> 如果 <paramref name="value"/> 为 null 或空字符串 ("") 则为 <paramref name="defVal"/>，否则为 <paramref name="value"/>。 </returns>
+        public static string IfNullOrEmpty(this string value, string defVal)
+            => value.IsNullOrEmpty() ? defVal : value;
+#if Xunit
+        [Fact]
+        public static void IfNullOrEmptyTest()
+        {
+            string str = null, defVal = "Hello World!";
+            Assert.Equal(defVal, str.IfNullOrEmpty(defVal));
+            str = string.Empty;
+            Assert.Equal(defVal, str.IfNullOrEmpty(defVal));
+            str = " ";
+            Assert.Equal(str, str.IfNullOrEmpty(defVal));
+        }
+#endif 
+        #endregion
 
         #region public static bool IsNullOrWhiteSpace(this string value)
         /// <summary> 
@@ -88,7 +133,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static bool IsNotNullOrWhiteSpace(this string value)
         /// <summary> 
         /// 检查字符串 不是 null、空 <see cref="string.Empty"/> 或仅由空白字符组成 
@@ -115,6 +159,30 @@ namespace OYMLCN.Extensions
             // 内置方法扩展，不需要深入测试
         }
 #endif
+        #endregion
+        #region public static string IfNullOrWhiteSpace(this string value, string defVal)
+        /// <summary> 
+        /// 检查字符串 是 null、空 <see cref="string.Empty"/> 或是仅由空白字符组成，如果是则返回 <paramref name="defVal"/> 默认值，否则原样返回。
+        /// </summary>
+        /// <param name="value"> 要测试的字符串 </param>
+        /// <param name="defVal"> <paramref name="value"/> 为 null 或空字符串 ("") 或仅由空白字符组成时 返回的默认值 </param>
+        /// <returns> 如果 <paramref name="value"/> 为 null 或空字符串 <see cref="string.Empty"/> 或仅由空白字符组成则为 <paramref name="defVal"/>，否则为 <paramref name="value"/>。 </returns>
+        public static string IfNullOrWhiteSpace(this string value, string defVal)
+            => value.IsNullOrWhiteSpace() ? defVal : value;
+#if Xunit
+        [Fact]
+        public static void IfNullOrWhiteSpaceTest()
+        {
+            string str = null, defVal = "Hello World!";
+            Assert.Equal(defVal, str.IfNullOrWhiteSpace(defVal));
+            str = string.Empty;
+            Assert.Equal(defVal, str.IfNullOrWhiteSpace(defVal));
+            str = " ";
+            Assert.Equal(defVal, str.IfNullOrWhiteSpace(defVal));
+            str = " 123 ";
+            Assert.Equal(str, str.IfNullOrWhiteSpace(defVal));
+        }
+#endif 
         #endregion
 
 
@@ -215,7 +283,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static bool StartsWith(this string input, params char[] args)
         /// <summary>
         /// 确定此字符串实例的开头是否与指定的字符串匹配
@@ -242,7 +309,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static bool EndsWith(this string input, params string[] args)
         /// <summary>
         /// 确定此字符串实例的末尾是否与指定的字符串匹配
@@ -269,7 +335,6 @@ namespace OYMLCN.Extensions
         }
 #endif
         #endregion
-
         #region public static bool EndsWith(this string input, params char[] args)
         /// <summary>
         /// 确定此字符串实例的末尾是否与指定的字符串匹配

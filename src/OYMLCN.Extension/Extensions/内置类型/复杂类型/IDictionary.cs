@@ -72,8 +72,9 @@ namespace OYMLCN.Extensions
         /// <param name="key"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
+        [Obsolete("请使用.Net内置扩展 GetValueOrDefault ")]
         public static TValue SelectValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
-            => dict.ContainsKey(key) ? dict[key] : defaultValue;
+             => dict.ContainsKey(key) ? dict[key] : defaultValue;
         /// <summary>
         /// 获取字典值，如果为空则设置为默认值
         /// </summary>
