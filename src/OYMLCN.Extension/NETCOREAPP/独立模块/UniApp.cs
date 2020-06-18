@@ -135,13 +135,8 @@ namespace OYMLCN.AspNetCore
     public class UniAppPageMidleware : IMiddleware
     {
         private readonly UniAppPageOptions _options;
-#if NETCOREAPP3_1
         private IWebHostEnvironment web;
         public UniAppPageMidleware(IWebHostEnvironment web, IOptions<UniAppPageOptions> options)
-#elif NETCOREAPP2_1
-        private IHostingEnvironment web;
-        public UniAppPageMidleware(IHostingEnvironment web, IOptions<UniAppPageOptions> options)
-#endif
         {
             this.web = web;
             _options = options?.Value ?? new UniAppPageOptions();

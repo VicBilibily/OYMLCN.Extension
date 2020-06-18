@@ -1,5 +1,4 @@
-﻿#if NETCOREAPP3_1
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Encodings.Web;
 
 namespace OYMLCN.Extensions
@@ -15,7 +14,7 @@ namespace OYMLCN.Extensions
         /// <param name="data">任意对象</param>
         /// <param name="options">序列化配置</param>
         /// <returns>JSON字符串</returns>
-        public static string ToTextJsonString<T>(this T data, JsonSerializerOptions options = null) where T : class
+        public static string TextJsonSerialize<T>(this T data, JsonSerializerOptions options = null) where T : class
             => JsonSerializer.Serialize(data, options);
 
         internal static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
@@ -24,11 +23,11 @@ namespace OYMLCN.Extensions
             IgnoreNullValues = true,
         };
         /// <summary>
-        /// 将对象转为JSON字符串（已修正 System.Text.Json 表现与 Newtonsoft.Json 表现不一致的问题）
+        /// 将对象转为JSON字符串（已修正 System.Text.Json 表现）
         /// </summary>
         /// <param name="data">任意对象</param>
         /// <returns>JSON字符串</returns>
-        public static string ToTextJsonStringUnsafe<T>(this T data) where T : class
+        public static string TextJsonSerializeFix<T>(this T data) where T : class
             => JsonSerializer.Serialize(data, JsonOptions);
 
         /// <summary>
@@ -36,7 +35,7 @@ namespace OYMLCN.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T DeserializeTextJsonToObject<T>(this string str)
+        public static T TextJsonDeserialize<T>(this string str)
             => JsonSerializer.Deserialize<T>(str);
         /// <summary>
         /// 转换JSON字符串为可供查询的JsonDocument
@@ -46,4 +45,3 @@ namespace OYMLCN.Extensions
             => JsonDocument.Parse(str.IsNullOrWhiteSpace() ? "{}" : str, options);
     }
 }
-#endif

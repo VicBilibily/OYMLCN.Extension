@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
 
     <IsPackable>false</IsPackable>
@@ -25,9 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +34,7 @@
     <Compile Include="..\..\src\OYMLCN.Extension\**\*.cs" />-->
     <None Include="..\..\src\OYMLCN.Extension\**\*.cs" />
     <Compile Include="..\..\src\OYMLCN.Extension\**\*.cs" />
-    <Compile Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**\*.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1' OR '$(TargetFramework)' != 'netcoreapp3.1'" />
+    <Compile Remove="..\..\src\OYMLCN.Extension\NETCOREAPP\**\*.cs" Condition="'$(TargetFramework)' != 'netcoreapp3.1'" />
     <None Remove="..\..\src\OYMLCN.Extension\obj\**" />
     <Compile Remove="..\..\src\OYMLCN.Extension\obj\**" />
     

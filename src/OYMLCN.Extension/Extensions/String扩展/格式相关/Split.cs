@@ -14,7 +14,7 @@ namespace OYMLCN.Extensions
     public static partial class StringFormatExtension
     {
         #region public static string[] Split(this string input, string separator, StringSplitOptions options = StringSplitOptions.None)
-#if NETSTANDARD2_0 || NETCOREAPP2_1
+#if NETSTANDARD2_0
         /// <summary>
         /// 基于指定的字符串将一个字符串拆分成最大数量的子字符串
         /// </summary>

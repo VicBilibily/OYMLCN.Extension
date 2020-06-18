@@ -21,11 +21,7 @@ namespace OYMLCN.Extensions
         /// <returns> 内容目录路径 </returns>
         public static string GetRootPath(this IServiceProvider services)
         {
-#if NETCOREAPP2_1
-            return services.GetRequiredService<IHostingEnvironment>()?.ContentRootPath;
-#elif NETCOREAPP3_1
             return services.GetRequiredService<IWebHostEnvironment>()?.ContentRootPath;
-#endif
         }
 
         /// <summary>
@@ -35,11 +31,7 @@ namespace OYMLCN.Extensions
         /// <returns> 静态内容目录 </returns>
         public static string GetWebRootPath(this IServiceProvider services)
         {
-#if NETCOREAPP2_1
-            return services.GetRequiredService<IHostingEnvironment>()?.WebRootPath;
-#elif NETCOREAPP3_1
             return services.GetRequiredService<IWebHostEnvironment>()?.WebRootPath;
-#endif
         }
 
         internal static string CombinePath(in string filePath, in string sourceDir)

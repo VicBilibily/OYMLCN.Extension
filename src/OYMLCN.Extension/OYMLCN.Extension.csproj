@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>（v3起弃用所有Win平台独有方法，并对.NET及.NetCore2.1有限兼容）本扩展库包含一些本人常用的方法扩展（跨平台仅兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
+    <Description>（v3主要支持.NetCore3.1）本扩展库包含一些个人常用的方法扩展（跨平台兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
 
@@ -18,7 +18,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
 
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
@@ -28,7 +28,6 @@
 
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.1'">bin\xml\NETSTANDARD2_1\OYMLCN.Extension.xml</DocumentationFile>
-    <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp2.1'">bin\xml\NETCOREAPP2_1\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp3.1'">bin\xml\NETCOREAPP3_1\OYMLCN.Extension.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -39,14 +38,13 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="NETCOREAPP\**" />
-    <Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp3.1' AND '$(TargetFramework)' != 'netcoreapp2.1'" />
+    <Compile Remove="NETCOREAPP\**" Condition="'$(TargetFramework)' != 'netcoreapp3.1'" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.4" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" />
   </ItemGroup>
 
 </Project>

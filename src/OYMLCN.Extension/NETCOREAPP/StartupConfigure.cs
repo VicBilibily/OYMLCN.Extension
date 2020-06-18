@@ -20,7 +20,6 @@ namespace Microsoft.Extensions.Configuration
     /// </summary>
     public static partial class StartupConfigureExtensions
     {
-#if NETCOREAPP3_1
         /// <summary>
         /// 添加字符转化器，以避免中文被编码
         /// </summary>
@@ -44,7 +43,6 @@ namespace Microsoft.Extensions.Configuration
             });
             return mvcBuilder;
         }
-#endif
     }
 }
 namespace Microsoft.AspNetCore.Builder

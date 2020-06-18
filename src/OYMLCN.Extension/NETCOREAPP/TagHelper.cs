@@ -13,9 +13,7 @@ using Microsoft.AspNetCore.Html;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.IO;
-#if NETCOREAPP3_1
 using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
-#endif
 
 namespace Microsoft.AspNetCore.Mvc.TagHelpers
 {
@@ -124,7 +122,6 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
     }
 
 
-#if NETCOREAPP3_1
     [HtmlTargetElement("link", Attributes = "href,auto-use-minify")]
     public class LinkAutoUseMinifyHelper : LinkTagHelper
     {
@@ -178,7 +175,6 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
             base.Process(context, output);
         }
     }
-#endif
 }
 
 namespace OYMLCN.Extensions
