@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using OYMLCN.Extensions;
 using OYMLCN.Helpers;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OYMLCN.AspNetCore.Test.Controllers
 {
@@ -11,9 +15,24 @@ namespace OYMLCN.AspNetCore.Test.Controllers
     {
         public IActionResult Index()
         {
+            this.TransferJob(() => Console.WriteLine("Hello World Job0"));
+            this.TransferJob<IWebHostEnvironment>(env => TaskJob(env));
+            this.TransferJob<IWebHostEnvironment>(env => VoidJob(env));
             return Content("Hello World!");
         }
-
+        private Task TaskJob(IWebHostEnvironment logger)
+        {
+            for (var i = 1; i <= 10; i++)
+            {
+                Console.WriteLine("Hello World Job" + i);
+                Thread.Sleep(100);
+            }
+            return Task.CompletedTask;
+        }
+        private void VoidJob(IWebHostEnvironment logger)
+        {
+            Console.WriteLine("Hello World Void");
+        }
 
         public class UserInfo : IUserInfo
         {
