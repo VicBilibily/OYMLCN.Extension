@@ -193,7 +193,7 @@ namespace OYMLCN.AspNetCore
                         foreach (var path in actionPath)
                             try
                             {
-                                actionArray.SetValue(requestQuery.SelectValueOrDefault(path.Key).FirstOrDefault(), path.Value.ConvertToInt());
+                                actionArray.SetValue(requestQuery.GetValueOrDefault(path.Key).FirstOrDefault(), path.Value.ConvertToInt());
                             }
                             catch { }
 
@@ -205,7 +205,7 @@ namespace OYMLCN.AspNetCore
                         // 处理请求参数
                         var queryDic = new Dictionary<string, string>();
                         foreach (var query in actionQuery)
-                            queryDic.Add(query.Key, requestQuery.SelectValueOrDefault(query.Value).Join(","));
+                            queryDic.Add(query.Key, requestQuery.GetValueOrDefault(query.Value).Join(","));
                         if (actionQuery.Count > 0)
                             actionUrl = $"{actionUrl}?{queryDic.ToQueryString()}";
 

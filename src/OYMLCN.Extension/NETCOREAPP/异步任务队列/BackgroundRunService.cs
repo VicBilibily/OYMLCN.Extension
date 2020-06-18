@@ -86,6 +86,7 @@ namespace OYMLCN.AspNetCore.TransferJob
                     }
                 }
             }
+            catch (OperationCanceledException) { }
             catch (Exception e)
             {
                 _logger.LogError(e, e.ToString());
