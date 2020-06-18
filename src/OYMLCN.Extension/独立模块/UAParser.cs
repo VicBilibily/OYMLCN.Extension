@@ -8,7 +8,7 @@ namespace OYMLCN
 {
     /// <summary>
     /// 基于 https://github.com/faisalman/ua-parser-js 0.7.21
-    /// 重新编写为 .Net C# 版本
+    /// 重新编写为 .Net C# 版本 (还没时间写)
     /// </summary>
     public class UAParser
     {

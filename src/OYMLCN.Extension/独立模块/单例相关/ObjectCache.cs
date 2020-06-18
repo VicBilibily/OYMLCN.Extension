@@ -1,10 +1,8 @@
-﻿#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-//using System.Runtime.Remoting.Messaging;
 
-namespace OYMLCN.Helpers
+namespace OYMLCN
 {
     /// <summary>
     /// 取线程内唯一对象
@@ -13,8 +11,18 @@ namespace OYMLCN.Helpers
     {
         static ConcurrentDictionary<string, AsyncLocal<object>> state = new ConcurrentDictionary<string, AsyncLocal<object>>();
 
+        /// <summary>
+        /// 设置数据
+        /// </summary>
+        /// <param name="name"> 唯一键值 </param>
+        /// <param name="data"> 数据对象 </param>
         public static void SetData(string name, object data)
             => state.GetOrAdd(name, _ => new AsyncLocal<object>()).Value = data;
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <param name="name"> 唯一键值 </param>
+        /// <returns> 数据对象 </returns>
         public static object GetData(string name)
             => state.TryGetValue(name, out AsyncLocal<object> data) ? data.Value : null;
     }
@@ -25,13 +33,31 @@ namespace OYMLCN.Helpers
     /// <typeparam name="TObject"></typeparam>
     public static class ObjectCache<TObject>
     {
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <returns> 对象实例 </returns>
         public static TObject Get()
             => Get(() => (TObject)(Activator.CreateInstance(typeof(TObject), false)));
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="createInstanceAction"> 自定义实例初始化方法 </param>
+        /// <returns> 对象实例 </returns>
         public static TObject Get(Func<TObject> createInstanceAction)
             => Instance ?? (Instance = createInstanceAction());
 
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext()
             => GetFromCallContext((Type x) => (TObject)Activator.CreateInstance(x));
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="createInstance"> 自定义实例初始化方法 </param>
+        /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext(Func<Type, TObject> createInstance)
         {
             Type typeFromHandle = typeof(TObject);
@@ -53,19 +79,36 @@ namespace OYMLCN.Helpers
     /// <typeparam name="TObject"></typeparam>
     public class ObjectCacheLocked<TObject>
     {
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <returns> 对象实例 </returns>
         public static TObject Get()
             => Get(() => (TObject)Activator.CreateInstance(typeof(TObject), false));
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="createInstanceAction"> 自定义实例初始化方法 </param>
+        /// <returns> 对象实例 </returns>
         public static TObject Get(Func<TObject> createInstanceAction)
         {
             if (Instance == null)
                 lock (_locker)
-                    if (Instance == null)
-                        Instance = createInstanceAction();
+                    Instance ??= createInstanceAction();
             return Instance;
         }
 
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext()
             => GetFromCallContext((Type x) => (TObject)Activator.CreateInstance(x));
+        /// <summary>
+        /// 获取对象
+        /// </summary>
+        /// <param name="createInstance"> 自定义实例初始化方法 </param>
+        /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext(Func<Type, TObject> createInstance)
         {
             Type typeFromHandle = typeof(TObject);
@@ -83,4 +126,3 @@ namespace OYMLCN.Helpers
         private static object _locker = new object();
     }
 }
-#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
