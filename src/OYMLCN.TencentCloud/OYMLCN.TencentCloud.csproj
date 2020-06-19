@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description> 本扩展库主要封装 腾讯云 V3 API 的调用过程，暂时只封装短信接口。 </Description>
+    <Description>本扩展库主要封装 腾讯云 V3 API 的调用过程，暂时只封装短信接口。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
 
@@ -19,10 +19,8 @@
     <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
 
     <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
-    <RootNamespace>OYMLCN</RootNamespace>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
+    <RootNamespace>OYMLCN.TencentCloud</RootNamespace>
+    <DelaySign>true</DelaySign>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
 
@@ -42,11 +40,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="OYMLCN.Extension" Version="3.0.0-beta1" />
     <PackageReference Include="TencentCloudSDK" Version="3.0.69" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OYMLCN.Extension\OYMLCN.Extension.csproj" />
   </ItemGroup>
 
 </Project>
