@@ -7,14 +7,24 @@ using OYMLCN.Helpers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using OYMLCN.AspNetCore;
+using OYMLCN.AspNetCore.TencentCloud;
+using System.Collections.Generic;
+using OYMLCN.TencentCloud;
+using SmsSender = OYMLCN.AspNetCore.TencentCloud.SmsSender;
+using Microsoft.Extensions.Configuration;
 
 namespace OYMLCN.AspNetCore.Test.Controllers
 {
-
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
+            var conf = this.GetRequiredService<IConfiguration>();
+            //var sender = this.GetRequiredService<SmsSender>();
+            //var rsp = sender.SendToPhone(sender.GetTemplateID("Reg"), conf.GetValue<string>("PhoneNumber"), new[] { DateTime.Now.ToTimeString(true), "10" });
+            //var ok = rsp.IsAllOk();
+
             this.TransferJob(() => Console.WriteLine("Hello World Job0"));
             this.TransferJob<IWebHostEnvironment>(env => TaskJob(env));
             this.TransferJob<IWebHostEnvironment>(env => VoidJob(env));

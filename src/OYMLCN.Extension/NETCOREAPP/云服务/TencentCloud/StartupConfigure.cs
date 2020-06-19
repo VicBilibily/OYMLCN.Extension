@@ -16,8 +16,7 @@ namespace Microsoft.Extensions.Configuration
         public static IServiceCollection AddTencentCloudScopeds(this IServiceCollection services)
         {
             services
-                .AddScoped<CosCloud>()
-                .AddScoped<SmsSender>();
+                .AddScoped<CosCloud>();
             return services;
         }
     }

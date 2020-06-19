@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>b5817283-e262-4afd-909d-ffebe6bf8549</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OYMLCN.Extension\OYMLCN.Extension.csproj" />
+    <ProjectReference Include="..\..\src\OYMLCN.TencentCloud\OYMLCN.TencentCloud.csproj" />
   </ItemGroup>
-
 
 </Project>

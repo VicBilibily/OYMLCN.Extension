@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using OYMLCN.AspNetCore.TencentCloud;
+using OYMLCN.TencentCloud;
+using SmsSender = OYMLCN.AspNetCore.TencentCloud.SmsSender;
 
 namespace OYMLCN.AspNetCore.Test
 {
@@ -26,6 +29,10 @@ namespace OYMLCN.AspNetCore.Test
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.Configure<TencentCloudOptions>(Configuration.GetSection("TencentCloud"));
+            //services.AddScoped<SmsSender>();
+            services.AddTencentCloud();
+
             services.AddTransferJob();
             services.AddJwtAuthentication();
 
