@@ -60,7 +60,7 @@ namespace OYMLCN.RPC.Server
             #endregion
 
             // 一进入就开始计时
-            _stopwatch.Start();
+            _stopwatch.Restart();
             #region 一进来就开启同步IO，以读取Body内容
             var syncIOFeature = context.Features.Get<IHttpBodyControlFeature>();
             if (syncIOFeature != null)
@@ -244,6 +244,7 @@ namespace OYMLCN.RPC.Server
                 paramters = new object[requestParams.Count];
                 for (int i = 0; i < requestParams.Count; i++)
                 {
+                    if (i >= methodParamters.Length) break;
                     var param = methodParamters[i];
                     var type = param.ParameterType;
                     if (type.IsValueType || type == typeof(string) || type.IsEnum)
@@ -268,7 +269,7 @@ namespace OYMLCN.RPC.Server
                     return;
                 }
                 // 可选参数传入默认值
-                if (paramters.Length != methodParamters.Length)
+                if (paramters.Length < methodParamters.Length)
                 {
                     var list = new List<object>();
                     list.AddRange(paramters);
@@ -277,6 +278,9 @@ namespace OYMLCN.RPC.Server
                         list.Add(methodParamters[index++].DefaultValue);
                     paramters = list.ToArray();
                 }
+                // 超出参数长度时尝试截断参数
+                if (paramters.Length > methodParamters.Length)
+                    paramters = paramters.Take(methodParamters.Length).ToArray();
             }
             #endregion
             #region 传入的参数为对象时尝试将对象的值转换为调用参数
@@ -351,7 +355,7 @@ namespace OYMLCN.RPC.Server
                 {
                     Data = rpcContext.ReturnValue,
                     Code = 0,
-                    Time = _stopwatch.ElapsedMilliseconds,
+                    Time = _stopwatch.ElapsedTicks / 10000d,
                 };
                 await context.HttpContext.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
             });

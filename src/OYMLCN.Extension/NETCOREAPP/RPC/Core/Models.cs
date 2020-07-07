@@ -43,7 +43,7 @@ namespace OYMLCN.RPC.Core
         /// 请求处理时间(ms)
         /// </summary>
         [JsonProperty(PropertyName = "time")]
-        public long? Time { get; set; }
+        public double? Time { get; set; }
         /// <summary>
         /// 过程调用响应信息
         /// </summary>
