@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using OYMLCN.Extensions;
 using OYMLCN.RPC.Core;
@@ -23,6 +25,7 @@ namespace OYMLCN.RPC.Server
     {
         private static readonly ConcurrentDictionary<string, IEnumerable<PropertyInfo>> _filterFromServices = new ConcurrentDictionary<string, IEnumerable<PropertyInfo>>();
         private readonly Stopwatch _stopwatch;
+        private readonly ILogger _logger;
 
         private readonly RequestDelegate _next;
         private readonly RpcServerOptions _options;
@@ -34,9 +37,10 @@ namespace OYMLCN.RPC.Server
         /// <summary>
         /// 过程调用中间件
         /// </summary>
-        public RpcMiddleware(RequestDelegate next, RpcServerOptions rpcServerOptions)
+        public RpcMiddleware(RequestDelegate next, RpcServerOptions rpcServerOptions, ILoggerFactory loggerFactory)
         {
             _stopwatch = new Stopwatch();
+            _logger = loggerFactory.CreateLogger<RpcMiddleware>();
 
             _next = next;
             _options = rpcServerOptions;
@@ -358,6 +362,12 @@ namespace OYMLCN.RPC.Server
                     Time = _stopwatch.ElapsedTicks / 10000d,
                 };
                 await context.HttpContext.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
+                _logger.LogInformation("请求地址：{0}，过程调用执行成功，调用目标：{1}，调用过程：{2}，执行耗时：{3}ms",
+                    rpcContext.HttpContext.Request.GetDisplayUrl(),
+                    rpcContext.TargetType.FullName,
+                    rpcContext.Method.Name,
+                    responseModel.Time
+                );
             });
             List<RpcFilterAttribute> interceptorAttributes = GetFilterAttributes(context);
             if (interceptorAttributes.Any())
