@@ -25,7 +25,7 @@ namespace OYMLCN.Extensions
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        static string DecodeUnicode(Match match)
+        internal static string DecodeUnicode(Match match)
         {
             if (!match.Success)
                 return null;

@@ -2,17 +2,12 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using OYMLCN.Extensions;
 using OYMLCN.Helpers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OYMLCN.AspNetCore;
-using OYMLCN.AspNetCore.TencentCloud;
-using System.Collections.Generic;
-using OYMLCN.TencentCloud;
-using SmsSender = OYMLCN.AspNetCore.TencentCloud.SmsSender;
-using Microsoft.Extensions.Configuration;
 
 namespace OYMLCN.AspNetCore.Test.Controllers
 {

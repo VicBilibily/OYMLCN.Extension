@@ -1,19 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
-using OYMLCN.AspNetCore.TencentCloud;
-using OYMLCN.TencentCloud;
-using SmsSender = OYMLCN.AspNetCore.TencentCloud.SmsSender;
 
 namespace OYMLCN.AspNetCore.Test
 {
@@ -31,34 +21,46 @@ namespace OYMLCN.AspNetCore.Test
         {
             //services.Configure<TencentCloudOptions>(Configuration.GetSection("TencentCloud"));
             //services.AddScoped<SmsSender>();
-            services.AddTencentCloud();
+            //services.AddTencentCloud();
 
             services.AddTransferJob();
-            services.AddJwtAuthentication();
+            //services.AddJwtAuthentication();
 
-            services.AddControllersWithViews();
+            services
+                .AddSingleton<DemoTest.IDAL.IPersonDal, DemoTest.DAL.PersonDal>()
+                //.AddSingleton<DemoTest.IService.IPersonService, DemoTest.Service.PersonService>()
+                .AddRpcServer(options => options
+                    //.SetRpcUrl(null)
+                    //.AddNameSpace("Test.IService")
+                    .AddInterface<DemoTest.IService.IPersonService>()
+                    .SetDefaultInterface<DemoTest.IService.IPersonService>());
+
+            //services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.UseCalculateExecutionTime();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            //app.UseRouting();
 
-            // 用于调试部分异常以显示敏感信息，正式项目不要出现此句
-            IdentityModelEventSource.ShowPII = true; 
+            //// 用于调试部分异常以显示敏感信息，正式项目不要出现此句
+            //IdentityModelEventSource.ShowPII = true;
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseRpcMiddleware();
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapDefaultControllerRoute();
+            //});
         }
     }
 }

@@ -5,15 +5,15 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace OYMLCN.Extensions
 {
     /// <summary>
     /// EnvironmentExtension
     /// </summary>
-    public static class EnvironmentExtension
+    public static partial class EnvironmentExtension
     {
-
         /// <summary>
         /// 获取当前执行程序内容目录
         /// </summary>

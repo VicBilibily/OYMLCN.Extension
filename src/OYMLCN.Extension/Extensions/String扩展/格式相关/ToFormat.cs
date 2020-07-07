@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using OYMLCN.ArgumentChecker;
 #if Xunit
 using Xunit;
@@ -151,6 +153,31 @@ namespace OYMLCN.Extensions
 
             str = "你好，世界！";
             Assert.Equal(str, str.FirstCharToUpper());
+        }
+#endif
+        #endregion
+
+        #region public static string CamelCaseToUnderline(this string input)
+        /// <summary>
+        /// 驼峰转下划线
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string CamelCaseToUnderline(this string input)
+        {
+            input.ThrowIfNull(nameof(input));
+
+            if (input.IsEmpty()) return "";
+            return new Regex("([a-z])([A-Z])").Replace(input, "$1_$2").ToLower();
+        }
+#if Xunit
+        [Fact]
+        public static void CamelCaseToUnderlineTest()
+        {
+            string str = null;
+            Assert.Throws<ArgumentNullException>(() => str.CamelCaseToUnderline());
+            str = "CamelCase";
+            Assert.Equal("camel_case", str.CamelCaseToUnderline());
         }
 #endif 
         #endregion
