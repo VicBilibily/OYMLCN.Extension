@@ -12,9 +12,9 @@ namespace OYMLCN.RPC.Server
     public class RpcServerOptions
     {
         /// <summary>
-        /// 默认过程调用地址（默认为\"/__rpc__\"，null或空所有请求都会尝试进入调用过程处理）
+        /// 默认过程调用地址（默认为根目录）
         /// </summary>
-        public string RpcUrl { get; private set; } = "/__rpc__";
+        public string RpcUrl { get; private set; } = "/";
         /// <summary>
         /// 默认调用的接口
         /// </summary>
@@ -39,7 +39,7 @@ namespace OYMLCN.RPC.Server
         /// <returns></returns>
         public RpcServerOptions SetRpcUrl(string path)
         {
-            this.RpcUrl = path;
+            this.RpcUrl = path?.StartsWith('/') ?? false ? path : $"/{path}";
             return this;
         }
         /// <summary>

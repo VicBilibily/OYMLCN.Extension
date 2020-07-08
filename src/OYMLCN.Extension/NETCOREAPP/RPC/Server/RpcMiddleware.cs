@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
@@ -23,7 +22,6 @@ namespace OYMLCN.RPC.Server
     /// </summary>
     public class RpcMiddleware
     {
-        private static readonly ConcurrentDictionary<string, IEnumerable<PropertyInfo>> _filterFromServices = new ConcurrentDictionary<string, IEnumerable<PropertyInfo>>();
         private readonly Stopwatch _stopwatch;
         private readonly ILogger _logger;
 
@@ -54,14 +52,14 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         public async Task InvokeAsync(HttpContext context)
         {
-            #region 判断是否是否设置了自定义处理入口
-            if (_options.RpcUrl.IsNotNullOrEmpty() && _options.RpcUrl != "/" &&
-                    !context.Request.Path.StartsWithSegments(_options.RpcUrl, StringComparison.OrdinalIgnoreCase))
+            bool isRootPath = context.Request.Path == "/";
+            bool isMatchUrl = context.Request.Path.Equals(_options.RpcUrl, StringComparison.OrdinalIgnoreCase);
+            // 不匹配入口路径时直接交由后续管道处理
+            if (isMatchUrl == false)
             {
                 await _next.Invoke(context);
                 return;
             }
-            #endregion
 
             // 一进入就开始计时
             _stopwatch.Restart();
@@ -74,49 +72,48 @@ namespace OYMLCN.RPC.Server
             #region 读取请求JSON数据并进行基础判断
             using var requestReader = new StreamReader(context.Request.Body);
             var requestContent = requestReader.ReadToEnd();
+            RequestModel requestModel = null;
+
             ResponseModel responseModel = new ResponseModel { Code = -1 };
             // 过程调用通讯格式均为 JSON，一进来就固定返回内容类型为 JSON
             context.Response.ContentType = "application/json;charset=utf-8";
-            if (HttpMethods.IsGet(context.Request.Method))
+
+            if (HttpMethods.IsGet(context.Request.Method) && !isRootPath && isMatchUrl)
+                responseModel.Message = "过程调用只接受POST请求调用";
+            else
             {
-                responseModel.Message = "接口只接受POST请求调用";
-                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                return;
-            }
-            RequestModel requestModel = null;
-            // 鬼知道前端会 POST 什么鬼东西进来，反序列化失败时就报格式错误
-            try
-            {
-                requestModel = requestContent.FromJson<RequestModel>();
-            }
-            catch
-            {
-                responseModel.Message = "读取请求调用数据失败，请检查POST请求的JSON格式";
-                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                return;
-            }
-            // 反序列化能通过，但没内容时就返回示例 JSON 格式
-            if (requestContent.IsNullOrEmpty() || requestModel == null)
-            {
-                responseModel.Message = "读取请求调用数据失败，调用内容应为JSON格式的数据：{type:调用目标路径,method:调用方法名称,params:[调用参数集合]}";
-                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                return;
-            }
-            // 检查调用目标是否为空
-            if (requestModel.Target.IsNullOrWhiteSpace())
-            {
-                responseModel.Message = $"未指定调用目标";
-                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                return;
-            }
-            // 检查调用方法名称是否为空
-            if (requestModel.Action.IsNullOrWhiteSpace())
-            {
-                responseModel.Message = $"未指定调用方法";
-                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                return;
+                // 鬼知道前端会 POST 什么鬼东西进来，反序列化失败时就报格式错误
+                try
+                {
+                    requestModel = requestContent.FromJson<RequestModel>();
+                    // 反序列化能通过，但没内容时就返回示例 JSON 格式
+                    if (requestContent.IsNullOrEmpty() || requestModel == null)
+                        responseModel.Message = "读取请求调用数据失败，调用内容应为JSON格式的数据：{type:调用目标路径,method:调用方法名称,params:[调用参数集合]}";
+                    // 检查调用目标是否为空
+                    else if (requestModel.Target.IsNullOrWhiteSpace())
+                        responseModel.Message = $"未指定调用目标";
+                    // 检查调用方法名称是否为空
+                    else if (requestModel.Action.IsNullOrWhiteSpace())
+                        responseModel.Message = $"未指定调用方法";
+                }
+                catch
+                {
+                    responseModel.Message = "读取请求调用数据失败，请检查POST请求的JSON格式";
+                    return;
+                }
             }
             #endregion
+
+            // 初步判断不符合过程调用数据条件，返回错误信息
+            // 如果与指定路径不匹配则交由后续管道处理
+            if (responseModel.Message.IsNotNullOrEmpty())
+            {
+                if (!isRootPath && isMatchUrl)
+                    await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
+                else await _next.Invoke(context);
+                _logger.LogDebug("过程调用参数检查未通过：{0}", responseModel.Message);
+                return;
+            }
 
             // 将调用方法的 . 替换为 _ 
             requestModel.Action = requestModel.Action.Replace('.', '_');
@@ -152,31 +149,24 @@ namespace OYMLCN.RPC.Server
                         // 检查是否找到多个目标
                         targets = targets.Where(v => v.Name.EqualsIgnoreCase(requestModel.Target)).ToArray();
                         if (targets.Length > 1)
-                        {
                             responseModel.Message = $"调用目标名称 {requestModel.Target} 指定不明确，当前已注册的目标有：{targets.Select(v => v.FullName).ToArray().Join("、")}";
-                            await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                            return;
+                        else
+                        {
+                            targetType = targets.FirstOrDefault();
+                            if (targetType == null)
+                                responseModel.Message = $"在接口 {requestModel.Interface} 中未找到指定的目标名称 {requestModel.Target}";
                         }
-                        targetType = targets.FirstOrDefault();
                     }
                 }
                 else if (requestModel.Interface.IsNullOrWhiteSpace())
-                {
                     responseModel.Message = $"未指定调用目标接口或未设置默认接口名称";
-                    await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                    return;
-                }
                 else
-                {
                     responseModel.Message = $"调用目标接口 {requestModel.Interface} 未注册";
-                    await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                    return;
-                }
             }
-            if (targetType == null)
+            if (responseModel.Message.IsNotNullOrEmpty())
             {
-                responseModel.Message = $"在接口 {requestModel.Interface} 中未找到指定的目标名称 {requestModel.Target}";
                 await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
+                _logger.LogDebug("未能匹配调用目标，调用接口：{0}，调用目标：{1}，查找结果：{2}", requestModel.Interface, requestModel.Target, responseModel.Message);
                 return;
             }
             #endregion
@@ -195,10 +185,8 @@ namespace OYMLCN.RPC.Server
                 args.Add(context.RequestServices.GetService(param.ParameterType));
             // 创建调用目标实例
             var instance = Activator.CreateInstance(targetType, args.ToArray());
+            Utils.PropertieFromServicesInject(context.RequestServices, instance);
             var instanceType = instance.GetType();
-            var properties = _filterFromServices.GetOrAdd($"{instanceType.FullName}", key => instanceType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(i => i.GetCustomAttribute<FromServicesAttribute>() != null));
-            foreach (var propertyInfo in properties)
-                propertyInfo.SetValue(instance, context.RequestServices.GetService(propertyInfo.PropertyType));
             var method = instanceType.GetMethod(requestModel.Action);
             if (method == null) // 默认区分大小写，找不到再按不区分大小写找一遍
                 method = instanceType.GetMethods().Where(v => v.Name.EqualsIgnoreCase(requestModel.Action)).FirstOrDefault();
@@ -211,34 +199,54 @@ namespace OYMLCN.RPC.Server
             #endregion
             #region 初始化方法调用的参数
             var methodParamters = method.GetParameters();
-            object GetStructInfoData()
+            object GetStructInfoData() => new
             {
-                return new
+                @params = methodParamters.ToDictionary(v => v.Name + (v.HasDefaultValue ? string.Empty : "*"), v =>
                 {
-                    @params = methodParamters.ToDictionary(
-                        v => v.Name,
-                        v =>
-                        {
-                            if (v.ParameterType.IsValueType || v.ParameterType == typeof(string) || v.ParameterType.IsEnum)
+                    if (v.ParameterType.IsValueType || v.ParameterType == typeof(string) || v.ParameterType.IsEnum)
+                    {
+                        if (v.HasDefaultValue)
+                            return new
                             {
-                                if (v.HasDefaultValue)
+                                type = v.ParameterType.Name.FirstCharToLower(),
+                                @default = v.DefaultValue
+                            };
+                        else
+                            return (object)v.ParameterType.Name.FirstCharToLower();
+                    }
+                    else
+                        return new
+                        {
+                            type = v.ParameterType.Name.CamelCaseToUnderline(),
+                            @struct = v.ParameterType.GetProperties()
+                                .Select(p =>
+                                {
+                                    var rpcPropertyAttribute = p.GetAttribute<RpcPropertyAttribute>();
                                     return new
                                     {
-                                        type = v.ParameterType.Name.FirstCharToLower(),
-                                        @default = v.DefaultValue
+                                        p.Name,
+                                        Type = p.PropertyType.Name.FirstCharToLower(),
+                                        Require = rpcPropertyAttribute?.Require ?? false,
+                                        rpcPropertyAttribute?.DefaultValue,
+                                        rpcPropertyAttribute?.Message,
                                     };
-                                else
-                                    return (object)v.ParameterType.Name.FirstCharToLower();
-                            }
-                            else
-                                return new
-                                {
-                                    type = v.ParameterType.Name.FirstCharToLower(),
-                                    @struct = v.ParameterType.GetProperties().ToDictionary(p => p.Name, p => p.PropertyType.Name.FirstCharToLower())
-                                };
-                        })
-                };
-            }
+                                })
+                                .ToDictionary(
+                                    p => p.Name.FirstCharToLower() + (p.Require ? "*" : string.Empty),
+                                    p =>
+                                    {
+                                        var dict = new Dictionary<string, object>();
+                                        dict["type"] = p.Type.CamelCaseToUnderline();
+                                        if (p.DefaultValue != null) dict["default"] = p.DefaultValue;
+                                        if (p.Message != null) dict["msg"] = p.Message;
+
+                                        if (dict.Count == 1) return dict["type"];
+                                        else return dict;
+                                    })
+                        };
+                })
+            };
+
 
             object[] paramters = new object[0];
             #region 传入的参数为数组时尝试过转换数据类型
@@ -303,7 +311,7 @@ namespace OYMLCN.RPC.Server
                             catch { paramters[i] = default; }
                         else if (type.IsValueType || type == typeof(string) || type.IsEnum)
                             try { paramters[i] = Convert.ChangeType(value, type); }
-                            catch { paramters[i] = param.HasDefaultValue ? param.DefaultValue : default; }
+                            catch { paramters[i] = param.HasDefaultValue ? param.DefaultValue : Activator.CreateInstance(type); }
                     }
                     else
                         paramters[i] = param.HasDefaultValue ? param.DefaultValue : default;
@@ -313,48 +321,69 @@ namespace OYMLCN.RPC.Server
                     {
                         var param = methodParamters[i];
                         var type = param.ParameterType;
-                        if (paramters[i] == null && type.IsClass)
-                            try { paramters[i] = requestObject.ToObject(type); }
-                            catch { paramters[i] = default; }
+                        if (paramters[i] == null)
+                        {
+                            if (type.IsClass)
+                                try { paramters[i] = requestObject.ToObject(type); } catch { }
+                            else if (type.IsValueType || type == typeof(string) || type.IsEnum)
+                                try { paramters[i] = param.HasDefaultValue ? param.DefaultValue : Activator.CreateInstance(type); } catch { }
+                        }
                     }
             }
             #endregion
-            #endregion
-
-            try
+            // 判断必填的方法参数个数是否满足
+            if (paramters.Count() < methodParamters.Count(v => !v.HasDefaultValue))
             {
-                RpcContext rpcContext = new RpcContext
-                {
-                    Parameters = paramters,
-                    HttpContext = context,
-                    TargetType = instanceType,
-                    Method = method
-                };
-                TaskPiplineBuilder pipline = CreatPipleline(rpcContext);
-                RpcRequestDelegate rpcRequestDelegate = pipline.Build(PiplineEndPoint(instance, rpcContext));
-                await rpcRequestDelegate(rpcContext);
+                responseModel.Message = $"调用目标方法需要以下参数：{methodParamters.Select(v => v.HasDefaultValue ? $"[{v.Name}]" : v.Name).Join(",")}";
+                responseModel.Data = GetStructInfoData();
+                await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
+                return;
             }
+            #endregion
+            paramters.ForEach(param =>
+            {
+                var type = param.GetType();
+                if (type.IsClass)
+                    type.GetProperties().ForEach(p =>
+                    {
+                        var attr = p.GetAttribute<RpcPropertyAttribute>();
+                        if (attr != null && attr.DefaultValue != null)
+                            try { p.SetValue(param, attr.DefaultValue); } catch { }
+                    });
+            });
+
+            RpcContext rpcContext = new RpcContext
+            {
+                Parameters = paramters,
+                HttpContext = context,
+                TargetType = instanceType,
+                Method = method
+            };
+            TaskPiplineBuilder pipline = CreatPipleline(rpcContext);
+            RpcRequestDelegate rpcRequestDelegate = pipline.Build(PiplineEndPoint(instance, rpcContext));
+            try { await rpcRequestDelegate(rpcContext); }
             catch (Exception e)
             {
-                responseModel.Message = context.RequestServices.IsDevelopment() ? e.StackTrace : e.Message;
+                responseModel.Message = context.RequestServices.IsDevelopment() ? e.InnerException?.StackTrace : e.InnerException?.Message;
                 await context.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
+                _logger.LogError("过程调用方法时发生未处理异常：{0}\r\n异常信息：{1}", e.InnerException?.Message, e.InnerException?.StackTrace);
                 return;
             }
         }
 
         /// <summary>
-        /// 创建执行管道
+        /// 创建任务执行管道
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
         private TaskPiplineBuilder CreatPipleline(RpcContext context)
         {
             TaskPiplineBuilder pipline = new TaskPiplineBuilder();
             //第一个中间件构建包装数据
             pipline.Use(async (rpcContext, next) =>
             {
+                // 等待中间件过程调用返回数据
                 await next(rpcContext);
                 _stopwatch.Stop();
+                // 使用新的数据对象返回调用结果
                 ResponseModel responseModel = new ResponseModel
                 {
                     Data = rpcContext.ReturnValue,
@@ -362,8 +391,7 @@ namespace OYMLCN.RPC.Server
                     Time = _stopwatch.ElapsedTicks / 10000d,
                 };
                 await context.HttpContext.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
-                _logger.LogInformation("请求地址：{0}，过程调用执行成功，调用目标：{1}，调用过程：{2}，执行耗时：{3}ms",
-                    rpcContext.HttpContext.Request.GetDisplayUrl(),
+                _logger.LogInformation("过程调用执行成功，调用目标：{1}，调用过程：{1}，执行耗时：{2}ms",
                     rpcContext.TargetType.FullName,
                     rpcContext.Method.Name,
                     responseModel.Time
@@ -377,24 +405,30 @@ namespace OYMLCN.RPC.Server
         }
 
         /// <summary>
-        /// 管道终结点
+        /// 过程调用管道终结点
         /// </summary>
-        /// <returns></returns>
         private static RpcRequestDelegate PiplineEndPoint(object instance, RpcContext rpcContext)
         {
             return rpcContext =>
             {
-                var returnValue = rpcContext.Method.Invoke(instance, rpcContext.Parameters);
-                if (returnValue != null)
+                try
                 {
-                    var returnValueType = returnValue.GetType();
-                    if (typeof(Task).IsAssignableFrom(returnValueType))
+                    var returnValue = rpcContext.Method.Invoke(instance, rpcContext.Parameters);
+                    if (returnValue != null)
                     {
-                        var resultProperty = returnValueType.GetProperty("Result");
-                        rpcContext.ReturnValue = resultProperty.GetValue(returnValue);
-                        return Task.CompletedTask;
+                        var returnValueType = returnValue.GetType();
+                        if (typeof(Task).IsAssignableFrom(returnValueType))
+                        {
+                            var resultProperty = returnValueType.GetProperty("Result");
+                            rpcContext.ReturnValue = resultProperty.GetValue(returnValue);
+                            return Task.CompletedTask;
+                        }
+                        rpcContext.ReturnValue = returnValue;
                     }
-                    rpcContext.ReturnValue = returnValue;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("过程调用发生未知错误", e.InnerException);
                 }
                 return Task.CompletedTask;
             };
@@ -403,7 +437,6 @@ namespace OYMLCN.RPC.Server
         /// <summary>
         /// 获取Attribute
         /// </summary>
-        /// <returns></returns>
         private List<RpcFilterAttribute> GetFilterAttributes(RpcContext rpcContext)
         {
             var methondInfo = rpcContext.Method;
@@ -411,17 +444,17 @@ namespace OYMLCN.RPC.Server
                 key =>
                 {
                     var methondAttributes = methondInfo.GetCustomAttributes(true)
-                                   .Where(i => typeof(RpcFilterAttribute).IsAssignableFrom(i.GetType()))
-                                   .Cast<RpcFilterAttribute>().ToList();
+                        .Where(i => typeof(RpcFilterAttribute).IsAssignableFrom(i.GetType()))
+                        .Cast<RpcFilterAttribute>().ToList();
                     var classAttributes = methondInfo.DeclaringType.GetCustomAttributes(true)
                         .Where(i => typeof(RpcFilterAttribute).IsAssignableFrom(i.GetType()))
                         .Cast<RpcFilterAttribute>();
                     methondAttributes.AddRange(classAttributes);
-                    var glableInterceptorAttribute = RpcFilterUtils.GetInstances(rpcContext.HttpContext.RequestServices, _filterTypes);
+                    var glableInterceptorAttribute = Utils.GetRpcFilterInstances(rpcContext.HttpContext.RequestServices, _filterTypes);
                     methondAttributes.AddRange(glableInterceptorAttribute);
                     return methondAttributes;
                 });
-            RpcFilterUtils.PropertiesInject(rpcContext.HttpContext.RequestServices, methondInterceptorAttributes);
+            Utils.PropertiesFromServicesInject(rpcContext.HttpContext.RequestServices, methondInterceptorAttributes);
             return methondInterceptorAttributes;
         }
     }

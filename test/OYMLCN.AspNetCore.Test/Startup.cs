@@ -21,21 +21,21 @@ namespace OYMLCN.AspNetCore.Test
         {
             //services.Configure<TencentCloudOptions>(Configuration.GetSection("TencentCloud"));
             //services.AddScoped<SmsSender>();
-            //services.AddTencentCloud();
+            services.AddTencentCloud();
 
             services.AddTransferJob();
-            //services.AddJwtAuthentication();
+            services.AddJwtAuthentication();
 
             services
                 .AddSingleton<DemoTest.IDAL.IPersonDal, DemoTest.DAL.PersonDal>()
                 //.AddSingleton<DemoTest.IService.IPersonService, DemoTest.Service.PersonService>()
                 .AddRpcServer(options => options
-                    //.SetRpcUrl(null)
+                    //.SetRpcUrl("__rpc__")
                     //.AddNameSpace("Test.IService")
                     .AddInterface<DemoTest.IService.IPersonService>()
                     .SetDefaultInterface<DemoTest.IService.IPersonService>());
 
-            //services.AddControllersWithViews();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,20 +47,20 @@ namespace OYMLCN.AspNetCore.Test
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseRouting();
+            app.UseRouting();
 
-            //// 用于调试部分异常以显示敏感信息，正式项目不要出现此句
-            //IdentityModelEventSource.ShowPII = true;
+            // 用于调试部分异常以显示敏感信息，正式项目不要出现此句
+            IdentityModelEventSource.ShowPII = true;
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRpcMiddleware();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapDefaultControllerRoute();
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
     }
 }
