@@ -43,6 +43,11 @@ namespace OYMLCN.RPC.Server
         /// 响应内容主体
         /// </summary>
         public ResponseModel RpcResponse { get; set; }
+        /// <summary>
+        /// 获取客户端提供的请求上下文数据
+        /// </summary>
+        public T GetRpcSession<T>() where T : class, new()
+            => RpcRequest?.Sessions?.ToJson()?.FromJson<T>();
 
         /// <summary>
         /// 将响应内容写入响应流

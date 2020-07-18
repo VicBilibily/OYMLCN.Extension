@@ -160,6 +160,7 @@ namespace OYMLCN.RPC.Server
                     Code = 0,
                     Time = rpcContext.Stopwatch.ElapsedTicks / 10000d,
                 };
+                context.HttpContext.Response.ContentType = "application/json;charset=utf-8";
                 await context.HttpContext.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
                 _logger.LogInformation("过程调用成功，调用目标：{0}，调用过程：{1}，执行耗时：{2}ms",
                             rpcContext.TargetType.FullName,
