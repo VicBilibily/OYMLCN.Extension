@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -32,6 +33,10 @@ namespace OYMLCN.RPC.Core.RpcBuilder
         /// 请求上下文
         /// </summary>
         public HttpContext HttpContext { get; set; }
+        /// <summary>
+        /// 任务处理计时器
+        /// </summary>
+        public Stopwatch Stopwatch { get; internal set; } = new Stopwatch();
     }
 
     /// <summary>

@@ -15,6 +15,10 @@ namespace OYMLCN.RPC.Core
     public class RpcPropertyAttribute : Attribute
     {
         /// <summary>
+        /// 描述文本
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
         /// 必填项目
         /// </summary>
         public bool Require { get; set; }

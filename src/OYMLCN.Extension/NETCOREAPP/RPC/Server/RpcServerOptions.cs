@@ -23,6 +23,8 @@ namespace OYMLCN.RPC.Server
         private readonly IDictionary<string, Type> _types = new Dictionary<string, Type>();
         private readonly IList<Type> _filterTypes = new List<Type>();
         private readonly IServiceCollection _services;
+        internal Type RpcHelperType { get; private set; } = typeof(RpcHelper);
+
 
         /// <summary>
         /// 过程调用配置类
@@ -126,6 +128,15 @@ namespace OYMLCN.RPC.Server
         }
 
         /// <summary>
+        /// 设置辅助方法实例类型
+        /// </summary>
+        public RpcServerOptions AddRpcHelper<T>() where T : RpcHelper
+        {
+            this.RpcHelperType = typeof(T);
+            return this;
+        }
+
+        /// <summary>
         /// 获取接口及实现接口的类型
         /// </summary>
         /// <returns></returns>
@@ -140,6 +151,8 @@ namespace OYMLCN.RPC.Server
         /// 获取已注册的过滤器
         /// </summary>
         public IEnumerable<Type> GetFilterTypes() => _filterTypes.ToArray();
+
+
     }
 
 }

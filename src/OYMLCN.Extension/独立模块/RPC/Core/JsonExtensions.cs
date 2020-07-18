@@ -22,8 +22,8 @@ namespace OYMLCN.RPC.Core
                 Formatting = Formatting.Indented,
                 // 最大序列化 10 层
                 MaxDepth = 10,
-                // 遇到循环引用时报错
-                ReferenceLoopHandling = ReferenceLoopHandling.Error,
+                // 遇到循环引用时忽略，不进行对循环引用的进行序列化
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
 
                 // 采用驼峰式序列化
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

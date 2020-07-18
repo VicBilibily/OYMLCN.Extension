@@ -1,4 +1,6 @@
-﻿using OYMLCN.Extensions;
+﻿using Microsoft.AspNetCore.Http;
+using OYMLCN.Extensions;
+using OYMLCN.RPC.Core;
 using OYMLCN.RPC.Server;
 using System;
 
@@ -16,9 +18,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="options"></param>
         public static IServiceCollection AddRpcServer(this IServiceCollection services, Action<RpcServerOptions> options)
         {
+            services.AddMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransferJob();
+
             RpcServerOptions rpcServerOptions = new RpcServerOptions(services);
             options.Invoke(rpcServerOptions);
             services.AddSingleton(rpcServerOptions);
+            if (rpcServerOptions.RpcHelperType?.BaseType == typeof(RpcHelper))
+                services.AddScoped(rpcServerOptions.RpcHelperType);
             return services;
         }
     }
@@ -36,6 +44,8 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         /// <param name="applicationBuilder"></param>
         public static IApplicationBuilder UseRpcMiddleware(this IApplicationBuilder applicationBuilder)
-            => applicationBuilder.UseMiddleware<RpcMiddleware>();
+        {
+            return applicationBuilder.UseMiddleware<RpcMiddleware>();
+        }
     }
 }

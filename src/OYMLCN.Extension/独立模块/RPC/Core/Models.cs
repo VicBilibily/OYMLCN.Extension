@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Linq;
 
 namespace OYMLCN.RPC.Core
 {
@@ -7,6 +8,29 @@ namespace OYMLCN.RPC.Core
     /// </summary>
     public sealed class RequestModel
     {
+        public RequestModel() { }
+        public RequestModel(string target, string action, object[] args = null) : this(null, target, action, args) { }
+        public RequestModel(string @interface, string target, string action, object[] args = null)
+        {
+            this.Interface = @interface;
+            this.Target = target;
+            this.Action = action;
+
+            this.Paramters = args;
+            if (args.Length == 1)
+            {
+                var arg = args.First();
+                if (arg?.GetType().IsClass ?? false)
+                    this.Paramters = arg;
+            }
+        }
+
+        /// <summary>
+        /// 调用上下文信息
+        /// </summary>
+        [JsonProperty(PropertyName = "sessions")]
+        public object Sessions { get; set; }
+
         /// <summary>
         /// 调用接口名称
         /// </summary>
