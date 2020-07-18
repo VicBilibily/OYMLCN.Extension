@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -141,19 +142,30 @@ namespace OYMLCN.RPC.Server
                 // 等待中间件过程调用返回数据
                 await next(rpcContext);
                 rpcContext.Stopwatch.Stop();
+
+                object returnData = rpcContext.ReturnValue;
+                // 如果返回的类型为元组，则将元组项目转换为数组结果返回
+                if (returnData != null && returnData.GetType().GetInterfaces().Contains(typeof(ITuple)))
+                {
+                    var data = returnData as ITuple;
+                    var obj = new object[data.Length];
+                    for (var i = 0; i < data.Length; i++)
+                        obj[i] = data[i];
+                    returnData = obj;
+                }
                 // 使用新的数据对象返回调用结果
                 ResponseModel responseModel = new ResponseModel
                 {
-                    Data = rpcContext.ReturnValue,
+                    Data = returnData,
                     Code = 0,
                     Time = rpcContext.Stopwatch.ElapsedTicks / 10000d,
                 };
                 await context.HttpContext.Response.WriteAsync(responseModel.ToJson(), Encoding.UTF8);
                 _logger.LogInformation("过程调用成功，调用目标：{0}，调用过程：{1}，执行耗时：{2}ms",
-                    rpcContext.TargetType.FullName,
-                    rpcContext.Method.Name,
-                    responseModel.Time
-                );
+                            rpcContext.TargetType.FullName,
+                            rpcContext.Method.Name,
+                            responseModel.Time
+                        );
             });
             List<RpcFilterAttribute> interceptorAttributes = GetFilterAttributes(context);
             if (interceptorAttributes.Any())

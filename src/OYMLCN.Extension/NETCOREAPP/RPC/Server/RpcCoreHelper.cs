@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -185,6 +186,8 @@ namespace OYMLCN.RPC.Server
                         return $"array[{GetTypeName(genericTypes.First())}]";
                     if (interfaces.Contains(typeof(IDictionary)))
                         return $"dict[{GetTypeName(genericTypes.First())},{GetTypeName(genericTypes.Last())}]";
+                    if (interfaces.Contains(typeof(ITuple)))
+                        return $"tuple({type.GenericTypeArguments.Select(t => GetTypeName(t)).Join(",")})";
                 }
                 return type.Name.FirstCharToLower();
             }
