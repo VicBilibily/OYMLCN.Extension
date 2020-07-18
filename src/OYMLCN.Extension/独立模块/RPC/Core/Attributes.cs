@@ -31,4 +31,11 @@ namespace OYMLCN.RPC.Core
         /// </summary>
         public string Message { get; set; }
     }
+    /// <summary>
+    /// 调用过程返回属性字段
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public class RpcResponsePropertyAttribute : RpcPropertyAttribute
+    {
+    }
 }

@@ -8,8 +8,24 @@ namespace OYMLCN.RPC.Core
     /// </summary>
     public sealed class RequestModel
     {
+        /// <summary>
+        /// 过程调用请求数据模型
+        /// </summary>
         public RequestModel() { }
+        /// <summary>
+        /// 过程调用请求数据模型
+        /// </summary>
+        /// <param name="target"> 目标类型（或全限定名称） </param>
+        /// <param name="action"> 调用方法名称 </param>
+        /// <param name="args"> 调用参数（若有则传入） </param>
         public RequestModel(string target, string action, object[] args = null) : this(null, target, action, args) { }
+        /// <summary>
+        /// 过程调用请求数据模型
+        /// </summary>
+        /// <param name="interface"> 接口名称（或全限定名称） </param>
+        /// <param name="target"> 目标类型（或全限定名称） </param>
+        /// <param name="action"> 调用方法名称 </param>
+        /// <param name="args"> 调用参数（若有则传入） </param>
         public RequestModel(string @interface, string target, string action, object[] args = null)
         {
             this.Interface = @interface;
@@ -51,6 +67,12 @@ namespace OYMLCN.RPC.Core
         /// </summary>
         [JsonProperty(PropertyName = "params")]
         public object Paramters { get; set; }
+
+        /// <summary>
+        /// 获取远程调用目标方法的请求及响应结构信息
+        /// </summary>
+        [JsonProperty(PropertyName = "gsinfo")]
+        public bool GetStructInfoData { get; set; }
     }
 
     /// <summary>

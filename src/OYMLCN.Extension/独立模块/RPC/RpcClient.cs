@@ -14,6 +14,12 @@ namespace OYMLCN.RPC
     public class RpcClient
     {
         private HttpClient HttpClient;
+        /// <summary>
+        /// 远程调用客户端
+        /// </summary>
+        /// <param name="httpClient"> <see cref="HttpClient"/> 实例 </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="httpClient"/> 不能为 null </exception>
+        /// <exception cref="ArgumentException"> <paramref name="httpClient"/> 的 <see cref="HttpClient.BaseAddress"/> 不能为 null </exception>
         public RpcClient(HttpClient httpClient)
         {
             httpClient.ThrowIfNull(nameof(httpClient), $"{nameof(HttpClient)} 不能为 null");
