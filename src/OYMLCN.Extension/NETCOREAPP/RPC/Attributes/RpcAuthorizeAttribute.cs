@@ -8,5 +8,9 @@ namespace OYMLCN.RPC.Core
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class RpcAuthorizeAttribute : Attribute
     {
+        /// <summary>
+        /// 目标方法允许匿名访问（仅对目标方法有效）
+        /// </summary>
+        public bool AllowAnonymous { get; set; }
     }
 }

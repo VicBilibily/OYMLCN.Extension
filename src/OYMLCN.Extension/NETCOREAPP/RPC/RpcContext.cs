@@ -18,15 +18,16 @@ namespace OYMLCN.RPC.Core
     public class RpcContext
     {
         /// <summary>
-        /// 过程调用目标是否包含身份认证访问标记
+        /// 过程调用目标方法允许匿名调用
         /// </summary>
-        public bool HasTargetMethodAttribute
+        public bool MethodAllowAnonymous
         {
             get
             {
                 var methodAttribute = Method?.GetAttribute<RpcAuthorizeAttribute>();
                 var targetAttribute = TargetType?.GetAttribute<RpcAuthorizeAttribute>();
-                return methodAttribute != null || targetAttribute != null;
+                if (methodAttribute == null && targetAttribute == null) return true;
+                return methodAttribute != null && methodAttribute.AllowAnonymous;
             }
         }
 
