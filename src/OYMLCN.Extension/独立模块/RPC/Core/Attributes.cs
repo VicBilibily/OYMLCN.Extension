@@ -38,4 +38,5 @@ namespace OYMLCN.RPC.Core
     public class RpcResponsePropertyAttribute : RpcPropertyAttribute
     {
     }
+
 }

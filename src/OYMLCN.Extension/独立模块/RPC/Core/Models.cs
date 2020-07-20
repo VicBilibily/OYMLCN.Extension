@@ -45,33 +45,45 @@ namespace OYMLCN.RPC.Core
         /// 调用上下文信息
         /// </summary>
         [JsonProperty(PropertyName = "sessions")]
+        [RpcProperty(Description = "请求上下文必要信息")]
         public object Sessions { get; set; }
+        /// <summary>
+        /// Rpc Token
+        /// </summary>
+        [JsonProperty(PropertyName = "token")]
+        [RpcProperty(Description = "用于身份认证的Token")]
+        public string Token { get; set; }
 
         /// <summary>
         /// 调用接口名称
         /// </summary>
         [JsonProperty(PropertyName = "interface")]
+        [RpcProperty(Description = "调用接口名称")]
         public string Interface { get; set; }
         /// <summary>
         /// 目标类型名称
         /// </summary>
         [JsonProperty(PropertyName = "target")]
+        [RpcProperty(Description = "调用目标类型", Require = true)]
         public string Target { get; set; }
         /// <summary>
         /// 目标名称（调用的目标方法）
         /// </summary>
         [JsonProperty(PropertyName = "action")]
+        [RpcProperty(Description = "调用目标名称", Require = true)]
         public string Action { get; set; }
         /// <summary>
-        /// 调用参数（调用所使用的必要参数）
+        /// 调用参数（调用目标的参数）
         /// </summary>
         [JsonProperty(PropertyName = "params")]
+        [RpcProperty(Description = "调用参数（如果调用方法有参数则必须提供）")]
         public object Paramters { get; set; }
 
         /// <summary>
         /// 获取远程调用目标方法的请求及响应结构信息
         /// </summary>
         [JsonProperty(PropertyName = "gsinfo")]
+        [RpcProperty(Description = "获取远程调用目标方法的请求及响应结构信息")]
         public bool GetStructInfoData { get; set; }
     }
 

@@ -24,6 +24,7 @@ namespace OYMLCN.RPC.Server
         private readonly IList<Type> _filterTypes = new List<Type>();
         private readonly IServiceCollection _services;
         internal Type RpcHelperType { get; private set; } = typeof(RpcHelper);
+        private string[] _cacheSessionKeys = new string[0];
 
 
         /// <summary>
@@ -140,18 +141,39 @@ namespace OYMLCN.RPC.Server
         /// 获取接口及实现接口的类型
         /// </summary>
         /// <returns></returns>
-        public IDictionary<string, Type[]> GetInterfaceTypes()
+        internal IDictionary<string, Type[]> GetInterfaceTypes()
             => _interface.ToDictionary(i => i.Key, i => i.Value.ToArray());
         /// <summary>
         /// 获取已注册的类型
         /// </summary>
-        public IDictionary<string, Type> GetTypes()
+        internal IDictionary<string, Type> GetTypes()
             => _types.ToDictionary(i => i.Key, i => i.Value);
         /// <summary>
         /// 获取已注册的过滤器
         /// </summary>
-        public IEnumerable<Type> GetFilterTypes() => _filterTypes.ToArray();
+        internal IEnumerable<Type> GetFilterTypes() => _filterTypes.ToArray();
 
+        /// <summary>
+        /// 添加过程调用内置响应缓存模块
+        /// </summary>
+        /// <returns></returns>
+        public RpcServerOptions AddResponseCache()
+        {
+            var filter = typeof(RpcResponseCacheFilter);
+            if (_filterTypes.Contains(filter) == false)
+                _filterTypes.Add(filter);
+            return this;
+        }
+        /// <summary>
+        /// 设置内置响应缓存模块需要缓存的上下文键值
+        /// </summary>
+        public RpcServerOptions SetResponseCacheSessionKeys(params string[] keys)
+        {
+            this.AddResponseCache();
+            this._cacheSessionKeys = keys;
+            return this;
+        }
+        internal List<string> GetResponseCacheSessionKeys() => _cacheSessionKeys.ToList();
 
     }
 

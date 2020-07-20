@@ -4,12 +4,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OYMLCN.Extensions;
 using OYMLCN.RPC.Core;
-using OYMLCN.RPC.Core.RpcBuilder;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace OYMLCN.RPC.Server
         /// <summary>
         /// RPC远程调用服务配置信息
         /// </summary>
-        public RpcServerOptions RpcServerOptions => _rpcServerOptions ??= RequestServices.GetRequiredService<RpcServerOptions>();
+        public RpcServerOptions RpcServerOptions => _rpcServerOptions ??= ServiceProvider.GetRequiredService<RpcServerOptions>();
 
         /// <summary>
         /// 是否通过匹配的RPC地址进入调用过程（对于使用根目录处理的会一直返回false）
@@ -49,15 +50,19 @@ namespace OYMLCN.RPC.Server
         public T GetRpcSession<T>() where T : class, new()
             => RpcRequest?.Sessions?.ToJson()?.FromJson<T>();
 
+        #region RPC远程调用请求数据检查及初始化分解方法
         /// <summary>
         /// 将响应内容写入响应流
         /// </summary>
-        internal async Task WriteRpcResponseAsync()
+        public async Task WriteRpcResponseAsync()
         {
             RpcContext.Stopwatch.Stop();
             RpcResponse.Time = RpcContext.Stopwatch.ElapsedTicks / 10000d;
-            RpcContext.HttpContext.Response.ContentType = "application/json;charset=utf-8";
-            await RpcContext.HttpContext.Response.WriteAsync(RpcResponse.ToJson(), Encoding.UTF8);
+            if (!RpcContext.HttpContext.Response.HasStarted)
+            {
+                RpcContext.HttpContext.Response.ContentType = "application/json;charset=utf-8";
+                await RpcContext.HttpContext.Response.WriteAsync(RpcResponse.ToJson(), Encoding.UTF8);
+            }
         }
         /// <summary>
         /// 读取请求JSON数据并进行基础判断
@@ -67,7 +72,7 @@ namespace OYMLCN.RPC.Server
             var httpRequest = HttpContext.Request;
             var requestReader = new StreamReader(httpRequest.Body);
             var requestContent = requestReader.ReadToEnd();
-
+            RpcContext.RequestBody = requestContent;
             RpcResponse = new ResponseModel { Code = -1 };
             // 过程调用通讯格式均为 JSON，一进来就固定返回内容类型为 JSON
             if (HttpMethods.IsGet(httpRequest.Method))
@@ -80,7 +85,10 @@ namespace OYMLCN.RPC.Server
                     RpcRequest = requestContent.FromJson<RequestModel>();
                     // 反序列化能通过，但没内容时就返回示例 JSON 格式
                     if (requestContent.IsNullOrEmpty() || RpcRequest == null)
-                        RpcResponse.Message = "读取请求调用数据失败，调用内容应为JSON格式的数据：{type:调用目标路径,method:调用方法名称,params:[调用参数集合]}";
+                    {
+                        RpcResponse.Message = "读取请求调用数据失败，调用内容应为JSON格式的数据：";
+                        RpcResponse.Data = GetTypeStruct(typeof(RequestModel));
+                    }
                     // 检查调用目标是否为空
                     else if (RpcRequest.Target.IsNullOrWhiteSpace())
                         RpcResponse.Message = $"未指定调用目标";
@@ -167,8 +175,10 @@ namespace OYMLCN.RPC.Server
                 return false;
             }
             var method = RpcContext.TargetType.GetMethod(RpcRequest.Action);
+            if (method == null) // 如果按全程找不到方法则试试找异步方法
+                method = RpcContext.TargetType.GetMethod(RpcRequest.Action + "Async");
             if (method == null) // 默认区分大小写，找不到再按不区分大小写找一遍
-                method = RpcContext.TargetType.GetMethods().Where(v => v.Name.EqualsIgnoreCase(RpcRequest.Action)).FirstOrDefault();
+                method = RpcContext.TargetType.GetMethods().Where(v => v.Name.EqualsIgnoreCase(RpcRequest.Action) || v.Name.EqualsIgnoreCase(RpcRequest.Action + "Async")).FirstOrDefault();
             if (method == null)
             {
                 RpcResponse.Message = $"调用目标方法 {RpcRequest.Action} 在 {RpcContext.TargetType.FullName} 中未找到";
@@ -177,90 +187,90 @@ namespace OYMLCN.RPC.Server
             RpcContext.Method = method;
             return true;
         }
-        private object GetStructInfoData()
+
+        string GetTypeName(Type type)
         {
-            string GetTypeName(Type type)
+            if (type.IsGenericType)
             {
-                if (type.IsGenericType)
-                {
-                    if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
-                        return type.GenericTypeArguments.First().Name.FirstCharToLower() + "?";
-                    var interfaces = type.GetGenericTypeDefinition().GetInterfaces();
-                    var genericTypes = type.GetGenericArguments();
-                    if (interfaces.Contains(typeof(IList)))
-                        return $"array[{GetTypeName(genericTypes.First())}]";
-                    if (interfaces.Contains(typeof(IDictionary)))
-                        return $"dict[{GetTypeName(genericTypes.First())},{GetTypeName(genericTypes.Last())}]";
-                    if (interfaces.Contains(typeof(ITuple)))
-                        return $"tuple({type.GenericTypeArguments.Select(t => GetTypeName(t)).Join(",")})";
-                }
-                return type.Name.FirstCharToLower();
+                if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    return type.GenericTypeArguments.First().Name.FirstCharToLower() + "?";
+                var interfaces = type.GetGenericTypeDefinition().GetInterfaces();
+                var genericTypes = type.GetGenericArguments();
+                if (interfaces.Contains(typeof(IList)))
+                    return $"array[{GetTypeName(genericTypes.First())}]";
+                if (interfaces.Contains(typeof(IDictionary)))
+                    return $"dict[{GetTypeName(genericTypes.First())},{GetTypeName(genericTypes.Last())}]";
+                if (interfaces.Contains(typeof(ITuple)))
+                    return $"tuple({type.GenericTypeArguments.Select(t => GetTypeName(t)).Join(",")})";
             }
-            object GetTypeStruct(Type type, bool requestStruct = false)
+            return type.Name.FirstCharToLower();
+        }
+        object GetTypeStruct(Type type, bool requestStruct = false)
+        {
+            if (type.IsValueType || type == typeof(string) || type.IsEnum)
+                return GetTypeName(type);
+
+            var dict = new Dictionary<string, object>();
+            if (type.IsGenericType)
             {
-                if (type.IsValueType || type == typeof(string) || type.IsEnum)
-                    return GetTypeName(type);
-
-                var dict = new Dictionary<string, object>();
-                if (type.IsGenericType)
+                var interfaces = type.GetGenericTypeDefinition().GetInterfaces();
+                var genericTypes = type.GetGenericArguments();
+                if (interfaces.Contains(typeof(IList)))
+                    dict.Add(GetTypeName(type), GetTypeStruct(genericTypes.First()));
+                else if (interfaces.Contains(typeof(IDictionary)))
                 {
-                    var interfaces = type.GetGenericTypeDefinition().GetInterfaces();
-                    var genericTypes = type.GetGenericArguments();
-                    if (interfaces.Contains(typeof(IList)))
-                        dict.Add(GetTypeName(type), GetTypeStruct(genericTypes.First()));
-                    else if (interfaces.Contains(typeof(IDictionary)))
+                    dict.Add(GetTypeName(type), new
                     {
-                        dict.Add(GetTypeName(type), new
-                        {
-                            key = GetTypeStruct(genericTypes.First()),
-                            value = GetTypeStruct(genericTypes.Last())
-                        });
-                    }
+                        key = GetTypeStruct(genericTypes.First()),
+                        value = GetTypeStruct(genericTypes.Last())
+                    });
                 }
-                else
+            }
+            else
+            {
+                var props = type.GetProperties();
+                foreach (var prop in props)
                 {
-                    var props = type.GetProperties();
-                    foreach (var prop in props)
+                    if (prop.GetAttribute<JsonIgnoreAttribute>() != null)
+                        continue;
+                    var jsonProperty = prop.GetAttribute<JsonPropertyAttribute>();
+                    var rpcProperty = prop.GetAttribute<RpcPropertyAttribute>();
+                    var rpcRspProperty = prop.GetAttribute<RpcResponsePropertyAttribute>();
+                    if (jsonProperty != null || rpcProperty != null || requestStruct == false && rpcRspProperty != null)
                     {
-                        if (prop.GetAttribute<JsonIgnoreAttribute>() != null)
-                            continue;
-                        var jsonProperty = prop.GetAttribute<JsonPropertyAttribute>();
-                        var rpcProperty = prop.GetAttribute<RpcPropertyAttribute>();
-                        var rpcRspProperty = prop.GetAttribute<RpcResponsePropertyAttribute>();
-                        if (jsonProperty != null || rpcProperty != null || requestStruct == false && rpcRspProperty != null)
+                        var propType = prop.PropertyType;
+                        var name = jsonProperty?.PropertyName ?? prop.Name.FirstCharToLower();
+                        if (rpcProperty?.Require ?? false) name = name + "*";
+
+
+                        var typeName = GetTypeName(propType);
+                        if (rpcProperty == null && rpcRspProperty == null)
+                            dict.Add(name, typeName);
+                        else
                         {
-                            var propType = prop.PropertyType;
-                            var name = jsonProperty?.PropertyName ?? prop.Name.FirstCharToLower();
-                            if (rpcProperty?.Require ?? false) name = name + "*";
+                            var tmp = new Dictionary<string, object>();
+                            tmp["type"] = typeName;
+                            var defValue = rpcRspProperty?.DefaultValue ?? rpcProperty?.DefaultValue;
+                            var desc = rpcRspProperty?.Description ?? rpcProperty?.Description;
+                            var msg = rpcRspProperty?.Message ?? rpcProperty?.Message;
+                            if (defValue != null) tmp["default"] = defValue;
+                            if (desc != null) tmp["desc"] = desc;
+                            if (msg != null) tmp["msg"] = msg;
+                            if (requestStruct == false && rpcRspProperty != null && propType.IsClass)
+                                tmp["struct"] = GetTypeStruct(propType, true);
 
-
-                            var typeName = GetTypeName(propType);
-                            if (rpcProperty == null && rpcRspProperty == null)
+                            if (tmp.Count == 1)
                                 dict.Add(name, typeName);
                             else
-                            {
-                                var tmp = new Dictionary<string, object>();
-                                tmp["type"] = typeName;
-                                var defValue = rpcRspProperty?.DefaultValue ?? rpcProperty?.DefaultValue;
-                                var desc = rpcRspProperty?.Description ?? rpcProperty?.Description;
-                                var msg = rpcRspProperty?.Message ?? rpcProperty?.Message;
-                                if (defValue != null) tmp["default"] = defValue;
-                                if (desc != null) tmp["desc"] = desc;
-                                if (msg != null) tmp["msg"] = msg;
-                                if (requestStruct == false && rpcRspProperty != null && propType.IsClass)
-                                    tmp["struct"] = GetTypeStruct(propType, true);
-
-                                if (tmp.Count == 1)
-                                    dict.Add(name, typeName);
-                                else
-                                    dict.Add(name, tmp);
-                            }
+                                dict.Add(name, tmp);
                         }
                     }
                 }
-                return dict;
             }
-
+            return dict;
+        }
+        private object GetStructInfoData()
+        {
             var methodParamters = RpcContext.Method.GetParameters();
             var returnType = RpcContext.Method.ReturnType;
             object returnValue = null;
@@ -293,6 +303,7 @@ namespace OYMLCN.RPC.Server
                 @return = returnValue,
             };
         }
+
         /// <summary>
         /// 检查并修正调用目标参数，无法修正则返回false
         /// </summary>
@@ -421,6 +432,106 @@ namespace OYMLCN.RPC.Server
             });
             return true;
         }
+        #endregion
+
+        internal void RpcPiplineEndPointResultHandler(object returnValue)
+        {
+            // 如果返回的类型为元组，则将元组项目转换为数组结果返回
+            if (returnValue != null && returnValue.GetType().GetInterfaces().Contains(typeof(ITuple)))
+            {
+                var data = returnValue as ITuple;
+                var obj = new object[data.Length];
+                for (var i = 0; i < data.Length; i++)
+                    obj[i] = data[i];
+                returnValue = obj;
+            }
+            RpcContext.ReturnValue = returnValue;
+            // 远程调用过程执行成功，将之前的默认错误码改为0
+            if (RpcResponse.Code == -1)
+                RpcResponse.Code = 0;
+            RpcResponse.Data = returnValue;
+        }
+
+        #region 响应缓存相关辅助方法
+        internal string GetRpcResponseCacheKey()
+        {
+            var methodCache = RpcContext.Method?.GetAttribute<RpcCacheAttribute>();
+            var targetCache = RpcContext.TargetType?.GetAttribute<RpcCacheAttribute>();
+            if (methodCache == null && targetCache == null) return null;
+            if (methodCache != null && methodCache.NoCache) return null;
+
+            var key = string.Empty;
+            var sessions = new List<string>();
+            var cacheSessionKeys = RpcServerOptions.GetResponseCacheSessionKeys();
+            if (methodCache != null && methodCache.CacheSession.IsNotNullOrWhiteSpace())
+                cacheSessionKeys.AddRange(methodCache.CacheSession.Split(','));
+            if (targetCache != null && targetCache.CacheSession.IsNotNullOrWhiteSpace())
+                cacheSessionKeys.AddRange(targetCache.CacheSession.Split(','));
+            if (cacheSessionKeys.Any())
+            {
+                var reqSess = RpcRequest.Sessions as JObject;
+                if (reqSess != null)
+                    foreach (var propertyName in cacheSessionKeys)
+                        if (reqSess.TryGetValue(propertyName.Trim(), StringComparison.OrdinalIgnoreCase, out JToken value))
+                            sessions.Add(value.ToString());
+            }
+            if (methodCache != null && methodCache.CacheParameters || methodCache == null && targetCache != null && targetCache.CacheParameters)
+                key = RpcContext.Parameters?.Select(v => v.ToString()).Join("|") ?? string.Empty;
+
+            return $"{sessions.Join("/")}_{RpcContext.TargetType.FullName}+{RpcContext.Method.Name}*{key}";
+        }
+        internal int GetRpcResponseCacheTime()
+        {
+            var methodCache = RpcContext.Method?.GetAttribute<RpcCacheAttribute>();
+            if (methodCache != null) return methodCache.CacheTime;
+            var targetCache = RpcContext.TargetType?.GetAttribute<RpcCacheAttribute>();
+            if (targetCache != null) return targetCache.CacheTime;
+            return 0;
+        }
+        #endregion
+
+        #region RPC对象从依赖注入获取相关辅助方法
+        private static readonly ConcurrentDictionary<string, IEnumerable<PropertyInfo>> _filterFromServices = new ConcurrentDictionary<string, IEnumerable<PropertyInfo>>();
+        /// <summary>
+        /// 获取指定的过滤器实例
+        /// </summary>
+        internal RpcFilterAttribute GetRpcFilterInstance(Type filterType)
+            => ActivatorUtilities.CreateInstance(ServiceProvider, filterType) as RpcFilterAttribute;
+        /// <summary>
+        /// 获取指定的过滤器实例集合
+        /// </summary>
+        internal IEnumerable<RpcFilterAttribute> GetRpcFilterInstances(IEnumerable<Type> filterTypes)
+        {
+            foreach (var filterType in filterTypes)
+                yield return GetRpcFilterInstance(filterType);
+        }
+
+        /// <summary>
+        /// 服务注入对象
+        /// </summary>
+        internal void PropertieFromServicesInject<T>(T rpcFilterAttribute)
+        {
+            var rpcHelperType = typeof(RpcHelper);
+            var properties = _filterFromServices.GetOrAdd($"{rpcFilterAttribute.GetType().FullName}", key => rpcFilterAttribute.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(i => i.GetCustomAttribute<FromServicesAttribute>() != null));
+            if (properties.Any())
+                foreach (var propertyInfo in properties)
+                {
+                    var propertyType = propertyInfo.PropertyType;
+                    object obj = this;
+                    if (propertyType != rpcHelperType && propertyType.BaseType != rpcHelperType)
+                        obj = ServiceProvider.GetService(propertyType);
+                    propertyInfo.SetValue(rpcFilterAttribute, obj);
+                }
+        }
+        /// <summary>
+        /// 服务注入对象
+        /// </summary>
+        internal void PropertiesFromServicesInject(IEnumerable<RpcFilterAttribute> rpcFilterAttributes)
+        {
+            foreach (var fitler in rpcFilterAttributes)
+                PropertieFromServicesInject(fitler);
+        }
+        #endregion
 
     }
 }
