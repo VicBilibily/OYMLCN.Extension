@@ -20,11 +20,11 @@ namespace OYMLCN.RPC.Core
         /// <summary>
         /// 缓存时间（单位:秒）
         /// </summary>
-        public int CacheTime { get; private set; }
+        public int CacheTime { get; private set; } = 10;
         /// <summary>
-        /// 是否进行参数缓存
+        /// 是否进行参数缓存（默认开启）
         /// </summary>
-        public bool CacheParameters { get; set; }
+        public bool CacheParameters { get; set; } = true;
 
         /// <summary>
         /// 缓存上下文参数（多个参数则用英文逗号[,]区分）
@@ -32,7 +32,7 @@ namespace OYMLCN.RPC.Core
         public string CacheSession { get; set; }
 
         /// <summary>
-        /// 不缓存输出结果（仅对目标方法有效）
+        /// 不缓存输出结果（目标方法有效设置优先）
         /// </summary>
         public bool NoCache { get; set; }
     }

@@ -273,6 +273,8 @@ namespace OYMLCN.RPC.Server
         {
             var methodParamters = RpcContext.Method.GetParameters();
             var returnType = RpcContext.Method.ReturnType;
+            if (returnType.BaseType == typeof(Task))
+                returnType = returnType.GenericTypeArguments.FirstOrDefault() ?? typeof(void);
             object returnValue = null;
             if (returnType.IsClass)
                 returnValue = GetTypeStruct(returnType);
@@ -458,7 +460,7 @@ namespace OYMLCN.RPC.Server
             var methodCache = RpcContext.Method?.GetAttribute<RpcCacheAttribute>();
             var targetCache = RpcContext.TargetType?.GetAttribute<RpcCacheAttribute>();
             if (methodCache == null && targetCache == null) return null;
-            if (methodCache != null && methodCache.NoCache) return null;
+            if (methodCache?.NoCache ?? targetCache?.NoCache ?? false) return null;
 
             var key = string.Empty;
             var sessions = new List<string>();
@@ -476,9 +478,9 @@ namespace OYMLCN.RPC.Server
                             sessions.Add(value.ToString());
             }
             if (methodCache != null && methodCache.CacheParameters || methodCache == null && targetCache != null && targetCache.CacheParameters)
-                key = RpcContext.Parameters?.Select(v => v.ToString()).Join("|") ?? string.Empty;
+                key = RpcContext.Parameters?.JsonSerialize() ?? string.Empty;
 
-            return $"{sessions.Join("/")}_{RpcContext.TargetType.FullName}+{RpcContext.Method.Name}*{key}";
+            return $"rpcRspCache_{sessions.Join("/")}-{RpcContext.TargetType.FullName}+{RpcContext.Method.Name}*{key}";
         }
         internal int GetRpcResponseCacheTime()
         {

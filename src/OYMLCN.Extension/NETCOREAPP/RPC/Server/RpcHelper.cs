@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using OYMLCN.AspNetCore;
 using OYMLCN.AspNetCore.TransferJob;
 using OYMLCN.Extensions;
+using OYMLCN.RPC.Core;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -194,6 +195,47 @@ namespace OYMLCN.RPC.Server
                      .SetValue(value);
                 return value;
             });
+
+        #region 远程调用响应对外快捷导出
+        /// <summary>
+        /// 远程调用响应代码
+        /// </summary>
+        public int? RpcResponseCode
+        {
+            get => RpcResponse?.Code;
+            set
+            {
+                RpcResponse ??= new ResponseModel();
+                RpcResponse.Code = value.Value;
+            }
+        }
+        /// <summary>
+        /// 远程调用响应时间(ms)
+        /// </summary>
+        public double RpcResponseTime => RpcResponse?.Time ?? RpcContext.Stopwatch.ElapsedTicks / 10000d;
+        /// <summary>
+        /// 远程调用响应数据
+        /// </summary>
+        public object RpcResponseData
+        {
+            set
+            {
+                RpcResponse ??= new ResponseModel();
+                RpcResponse.Data = value;
+            }
+        }
+        /// <summary>
+        /// 远程调用响应消息
+        /// </summary>
+        public string RpcResponseMsg
+        {
+            set
+            {
+                RpcResponse ??= new ResponseModel();
+                RpcResponse.Message = value;
+            }
+        }
+        #endregion
 
 
     }
