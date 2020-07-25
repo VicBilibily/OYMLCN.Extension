@@ -51,7 +51,7 @@ namespace OYMLCN.Extensions
             obj = new object();
             Assert.True(obj.IsNotNull());
         }
-#endif 
+#endif
         #endregion
 
     }

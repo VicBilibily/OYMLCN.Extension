@@ -479,6 +479,8 @@ namespace OYMLCN.RPC.Server
             }
             if (methodCache != null && methodCache.CacheParameters || methodCache == null && targetCache != null && targetCache.CacheParameters)
                 key = RpcContext.Parameters?.JsonSerialize() ?? string.Empty;
+            if (methodCache != null && methodCache.CacheToken || methodCache == null && targetCache != null && targetCache.CacheToken)
+                key += RpcRequest.Token;
 
             return $"rpcRspCache_{sessions.Join("/")}-{RpcContext.TargetType.FullName}+{RpcContext.Method.Name}*{key}";
         }

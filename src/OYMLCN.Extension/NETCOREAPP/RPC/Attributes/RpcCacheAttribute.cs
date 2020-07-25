@@ -25,6 +25,10 @@ namespace OYMLCN.RPC.Core
         /// 是否进行参数缓存（默认开启）
         /// </summary>
         public bool CacheParameters { get; set; } = true;
+        /// <summary>
+        /// 使用用户登录Token进行区分缓存（默认关闭）
+        /// </summary>
+        public bool CacheToken { get; set; } = false;
 
         /// <summary>
         /// 缓存上下文参数（多个参数则用英文逗号[,]区分）

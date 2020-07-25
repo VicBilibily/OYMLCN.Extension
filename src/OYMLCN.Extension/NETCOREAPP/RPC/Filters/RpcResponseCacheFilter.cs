@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using OYMLCN.Extensions;
 using OYMLCN.RPC.Core;
 using System;
@@ -14,11 +16,13 @@ namespace OYMLCN.RPC.Server
         [FromServices]
         public ILoggerFactory LoggerFactory { get; set; }
 
+        private static IMemoryCache RspCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+
         public override async Task InvokeAsync(RpcContext context, RpcRequestDelegate next)
         {
             var cacheKey = Helper.GetRpcResponseCacheKey();
             if (cacheKey.IsNotNullOrEmpty() &&
-                Helper.MemoryCache.TryGetValue(cacheKey, out ResponseModel rpcResult))
+                RspCache.TryGetValue(cacheKey, out ResponseModel rpcResult))
             {
                 Helper.RpcResponse = rpcResult;
                 await Helper.WriteRpcResponseAsync();
@@ -36,7 +40,7 @@ namespace OYMLCN.RPC.Server
                 {
                     var cacheTime = Helper.GetRpcResponseCacheTime();
                     if (cacheTime > 0 && Helper.RpcResponseCode == 0)
-                        Helper.MemoryCache.Set(cacheKey, Helper.RpcResponse, TimeSpan.FromSeconds(cacheTime));
+                        RspCache.Set(cacheKey, Helper.RpcResponse, TimeSpan.FromSeconds(cacheTime));
                 }
             }
         }

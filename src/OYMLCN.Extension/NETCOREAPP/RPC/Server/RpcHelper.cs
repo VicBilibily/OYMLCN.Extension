@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OYMLCN.AspNetCore;
 using OYMLCN.AspNetCore.TransferJob;
 using OYMLCN.Extensions;
+using OYMLCN.Helpers;
 using OYMLCN.RPC.Core;
 using System;
 using System.Collections.Generic;
@@ -71,6 +73,7 @@ namespace OYMLCN.RPC.Server
            => _backgroundRunService ??= ServiceProvider.GetRequiredService<IBackgroundRunService>();
 
         #region 用户身份认证
+        private static IMemoryCache JWTCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         /// <summary>
         /// 创建用户认证Token
         /// </summary>
@@ -80,11 +83,11 @@ namespace OYMLCN.RPC.Server
         public string CreateToken<T>(JwtOptions options, T data) where T : class, new()
         {
             var json = data.JsonSerialize();
-            var md5 = json.HashToMD5();
+            var md5 = $"{StringHelper.RandCode()}{json}{StringHelper.RandCode()}".HashToMD5L16();
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, md5),
-                new Claim("aes",json.AESEncrypt(options.Secret.HashToMD5()))
+                new Claim("aes", json.AESEncrypt(md5 + md5))
             };
 
             DateTime? expires = null;
@@ -94,9 +97,11 @@ namespace OYMLCN.RPC.Server
             var credentials = new SigningCredentials(options.SigningKey, SecurityAlgorithms.HmacSha256);
             var jwtToken = new JwtSecurityToken(options.Issuer, options.Audience, claims, expires: expires, signingCredentials: credentials);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            var token = tokenString.Split('.').TakeLast(2).Join("."); ;
-            MemoryCache.Set($"tokenCache_{token}", md5, TimeSpan.FromMinutes(options.AccessExpiration));
-            MemoryCache.Set($"tokenCacheData_{token}", data, TimeSpan.FromMinutes(options.AccessExpiration));
+            var token = tokenString.Split('.').TakeLast(2).Join(".");
+            // 本地缓存生成的认证凭据，一直有效的缓存半小时
+            if (options.AccessExpiration > 0 == false) options.AccessExpiration = 30;
+            JWTCache.Set($"tokenCache_{token}", md5, TimeSpan.FromMinutes(options.AccessExpiration));
+            JWTCache.Set($"tokenCacheData_{token}", data, TimeSpan.FromMinutes(options.AccessExpiration));
             return token;
         }
         /// <summary>
@@ -114,7 +119,7 @@ namespace OYMLCN.RPC.Server
         {
             if (token.IsNullOrWhiteSpace()) return false;
 
-            if (MemoryCache.TryGetValue($"tokenCache_{token}", out _))
+            if (JWTCache.TryGetValue($"tokenCache_{token}", out _))
                 return true;
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -129,16 +134,22 @@ namespace OYMLCN.RPC.Server
                     ValidAudiences = jwtSecurityToken.Audiences,
                     ValidIssuer = options.Issuer,
                     IssuerSigningKey = options.SigningKey,
+                    RequireExpirationTime = options.AccessExpiration > 0,
                 }, out SecurityToken validatedToken);
             }
             catch { return false; }
 
-            int.TryParse(claims.FirstOrDefault(v => v.Type == "exp").Value, out int timestamp);
-            if (DateTime.UtcNow.ToTimestampInt64() - timestamp > options.AccessExpiration * 60)
-                return false;
-
+            // 恢复本地缓存通过认证的凭据，一直有效的缓存半小时
             var md5 = claims.FirstOrDefault(v => v.Type == JwtRegisteredClaimNames.Jti)?.Value;
-            MemoryCache.Set($"tokenCache_{token}", md5, TimeSpan.FromSeconds(timestamp - DateTime.UtcNow.ToTimestampInt64()));
+            if (options.AccessExpiration > 0)
+            {
+                int.TryParse(claims.FirstOrDefault(v => v.Type == "exp").Value, out int timestamp);
+                var cacheTime = timestamp - DateTime.UtcNow.ToTimestampInt64();
+                if (cacheTime < 60) return false;
+                JWTCache.Set($"tokenCache_{token}", md5, TimeSpan.FromSeconds(cacheTime));
+            }
+            else
+                JWTCache.Set($"tokenCache_{token}", md5, TimeSpan.FromMinutes(30));
             return true;
         }
         /// <summary>
@@ -158,7 +169,7 @@ namespace OYMLCN.RPC.Server
         {
             if (token.IsNullOrWhiteSpace()) return default;
             if (!ValidateToken(options, token)) return default;
-            if (MemoryCache.TryGetValue($"tokenCacheData_{token}", out T info))
+            if (JWTCache.TryGetValue($"tokenCacheData_{token}", out T info))
                 return info;
 
             var fullToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." + token.Split('.').TakeLast(2).Join(".");
@@ -172,9 +183,9 @@ namespace OYMLCN.RPC.Server
             if (jti.IsNullOrWhiteSpace() || aes.IsNullOrWhiteSpace()) return default;
             try
             {
-                info = aes.AESDecrypt(options.Secret.HashToMD5()).JsonDeserialize<T>();
+                info = aes.AESDecrypt(jti + jti).JsonDeserialize<T>();
                 int.TryParse(claims.FirstOrDefault(v => v.Type == "exp").Value, out int timestamp);
-                MemoryCache.Set($"tokenCacheData_{token}", info, TimeSpan.FromSeconds(timestamp - DateTime.UtcNow.ToTimestampInt64()));
+                JWTCache.Set($"tokenCacheData_{token}", info, TimeSpan.FromSeconds(timestamp - DateTime.UtcNow.ToTimestampInt64()));
                 return info;
             }
             catch { return default; }
