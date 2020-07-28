@@ -18,8 +18,6 @@ namespace OYMLCN.RPC.Core
                 // 格式化时间
                 DateFormatHandling = DateFormatHandling.MicrosoftDateFormat,
                 DateFormatString = "yyyy-MM-dd HH:mm:ss",
-                // 输出内容有缩进格式
-                Formatting = Formatting.Indented,
                 // 最大序列化 10 层
                 MaxDepth = 10,
                 // 遇到循环引用时忽略，不进行对循环引用的进行序列化

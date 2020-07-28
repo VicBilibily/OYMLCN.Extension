@@ -15,6 +15,15 @@ namespace OYMLCN.RPC.Core
     public class RpcPropertyAttribute : Attribute
     {
         /// <summary>
+        /// 标记过程调用对象属性（用于序列化参数判断）
+        /// </summary>
+        public RpcPropertyAttribute() { }
+        /// <summary>
+        /// 标记过程调用对象属性（用于序列化参数判断）
+        /// </summary>
+        public RpcPropertyAttribute(string description)
+            => this.Description = description;
+        /// <summary>
         /// 描述文本
         /// </summary>
         public string Description { get; set; }
@@ -30,6 +39,11 @@ namespace OYMLCN.RPC.Core
         /// 提示消息
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// 最大长度限制(0表示无限制)
+        /// </summary>
+        public int MaxLength { get; set; }
     }
     /// <summary>
     /// 调用过程返回属性字段
@@ -37,6 +51,15 @@ namespace OYMLCN.RPC.Core
     [AttributeUsage(AttributeTargets.Property)]
     public class RpcResponsePropertyAttribute : RpcPropertyAttribute
     {
+        /// <summary>
+        /// 调用过程返回属性字段
+        /// </summary>
+        public RpcResponsePropertyAttribute() { }
+        /// <summary>
+        /// 调用过程返回属性字段
+        /// </summary>
+        public RpcResponsePropertyAttribute(string description)
+            => this.Description = description;
     }
 
 }

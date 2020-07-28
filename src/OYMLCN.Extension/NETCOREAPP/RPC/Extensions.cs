@@ -23,7 +23,8 @@ namespace Microsoft.Extensions.DependencyInjection
             RpcServerOptions rpcServerOptions = new RpcServerOptions(services);
             options.Invoke(rpcServerOptions);
             services.AddSingleton(rpcServerOptions);
-            if (rpcServerOptions.RpcHelperType?.BaseType == typeof(RpcHelper))
+            if (rpcServerOptions.RpcHelperType?.BaseType == typeof(RpcHelper) ||
+                rpcServerOptions.RpcHelperType == typeof(RpcHelper))
                 services.AddScoped(rpcServerOptions.RpcHelperType);
             return services;
         }
@@ -42,8 +43,6 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         /// <param name="applicationBuilder"></param>
         public static IApplicationBuilder UseRpcMiddleware(this IApplicationBuilder applicationBuilder)
-        {
-            return applicationBuilder.UseMiddleware<RpcMiddleware>();
-        }
+            => applicationBuilder.UseMiddleware<RpcMiddleware>();
     }
 }

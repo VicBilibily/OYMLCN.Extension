@@ -52,6 +52,15 @@ namespace OYMLCN.RPC.Server
 
         #region RPC远程调用请求数据检查及初始化分解方法
         /// <summary>
+        /// 将消息和错误码写入响应流
+        /// </summary>
+        public async Task WriteRpcResponseMsgAsync(string msg, int code = -1)
+        {
+            RpcResponse.Message = msg;
+            RpcResponse.Code = code;
+            await WriteRpcResponseAsync();
+        }
+        /// <summary>
         /// 将响应内容写入响应流
         /// </summary>
         public async Task WriteRpcResponseAsync()
@@ -69,22 +78,35 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         internal bool RpcRequestCheck()
         {
-            var httpRequest = HttpContext.Request;
-            var requestReader = new StreamReader(httpRequest.Body);
-            var requestContent = requestReader.ReadToEnd();
-            RpcContext.RequestBody = requestContent;
             RpcResponse = new ResponseModel { Code = -1 };
+
+            var httpRequest = HttpContext.Request;
             // 过程调用通讯格式均为 JSON，一进来就固定返回内容类型为 JSON
             if (HttpMethods.IsGet(httpRequest.Method))
                 RpcResponse.Message = "过程调用只接受POST请求调用";
             else
             {
+
+                if (httpRequest.HasFormContentType && httpRequest.Form.ContainsKey("data"))
+                    RpcContext.RequestBody = httpRequest.Form["data"].FirstOrDefault();
+                else if (httpRequest.ContentType.IsNotNullOrEmpty() && httpRequest.ContentType.StartsWith("application/json"))
+                {
+                    var requestReader = new StreamReader(httpRequest.Body);
+                    RpcContext.RequestBody = requestReader.ReadToEnd();
+                }
+                else
+                {
+                    RpcResponse.Code = 415;
+                    RpcResponse.Message = "不受支持的请求资源格式，仅支持 application/json 和 multipart/form-data 解析处理";
+                    return false;
+                }
+
                 // 鬼知道前端会 POST 什么鬼东西进来，反序列化失败时就报格式错误
                 try
                 {
-                    RpcRequest = requestContent.FromJson<RequestModel>();
+                    RpcRequest = RpcContext.RequestBody.FromJson<RequestModel>();
                     // 反序列化能通过，但没内容时就返回示例 JSON 格式
-                    if (requestContent.IsNullOrEmpty() || RpcRequest == null)
+                    if (RpcRequest == null)
                     {
                         RpcResponse.Message = "读取请求调用数据失败，调用内容应为JSON格式的数据：";
                         RpcResponse.Data = GetTypeStruct(typeof(RequestModel));

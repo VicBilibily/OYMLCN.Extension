@@ -68,11 +68,12 @@ namespace OYMLCN.RPC.Server
             if (!rpcHelper.RpcRequestCheck())
             {
                 rpcContext.Stopwatch.Stop();
-                var rpcResponse = rpcHelper.RpcResponse;
                 if (!isRootPath && isMatchUrl)
+                {
                     await rpcHelper.WriteRpcResponseAsync();
+                    _logger.LogDebug("过程调用参数检查未通过：{0}", rpcHelper.RpcResponse?.Message);
+                }
                 else await _next.Invoke(context);
-                _logger.LogDebug("过程调用参数检查未通过：{0}", rpcResponse.Message);
                 return;
             }
 
@@ -97,9 +98,6 @@ namespace OYMLCN.RPC.Server
                 await rpcHelper.WriteRpcResponseAsync();
                 return;
             }
-
-
-
 
             var rpcContext = rpcHelper.RpcContext;
             // 创建调用目标实例

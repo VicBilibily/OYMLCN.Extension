@@ -74,6 +74,7 @@ namespace OYMLCN.RPC.Server
 
         #region 用户身份认证
         private static IMemoryCache JWTCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+
         /// <summary>
         /// 创建用户认证Token
         /// </summary>
@@ -87,7 +88,7 @@ namespace OYMLCN.RPC.Server
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, md5),
-                new Claim("aes", json.AESEncrypt(md5 + md5))
+                new Claim("aes", json.AESEncrypt(options.Secret.HashToMD5()))
             };
 
             DateTime? expires = null;
@@ -177,13 +178,11 @@ namespace OYMLCN.RPC.Server
             var jwtSecurityToken = tokenHandler.ReadJwtToken(fullToken);
             var claims = jwtSecurityToken.Claims;
 
-            var jti = claims.FirstOrDefault(v => v.Type == JwtRegisteredClaimNames.Jti)?.Value;
             var aes = claims.FirstOrDefault(v => v.Type == "aes")?.Value;
 
-            if (jti.IsNullOrWhiteSpace() || aes.IsNullOrWhiteSpace()) return default;
             try
             {
-                info = aes.AESDecrypt(jti + jti).JsonDeserialize<T>();
+                info = aes.AESDecrypt(options.Secret.HashToMD5()).JsonDeserialize<T>();
                 int.TryParse(claims.FirstOrDefault(v => v.Type == "exp").Value, out int timestamp);
                 JWTCache.Set($"tokenCacheData_{token}", info, TimeSpan.FromSeconds(timestamp - DateTime.UtcNow.ToTimestampInt64()));
                 return info;
