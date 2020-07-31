@@ -26,6 +26,8 @@
 
     <DocumentationFile Condition="'$(TargetFramework)'=='netstandard2.0'">bin\xml\NETSTANDARD2_0\OYMLCN.Extension.xml</DocumentationFile>
     <DocumentationFile Condition="'$(TargetFramework)'=='netcoreapp3.1'">bin\xml\NETCOREAPP3_1\OYMLCN.Extension.xml</DocumentationFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,7 +21,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>OYMLCN</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>

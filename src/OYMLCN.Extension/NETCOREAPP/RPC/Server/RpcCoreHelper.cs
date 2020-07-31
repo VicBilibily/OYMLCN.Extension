@@ -227,6 +227,11 @@ namespace OYMLCN.RPC.Server
             }
             return type.Name.FirstCharToLower();
         }
+        /// <summary>
+        /// 创建类型对象的接口信息
+        /// </summary>
+        /// <param name="type"> 类型 </param>
+        /// <param name="requestStruct"> 是否输入仅用于请求的参数类型 </param>
         object GetTypeStruct(Type type, bool requestStruct = false)
         {
             if (type.IsValueType || type == typeof(string) || type.IsEnum)
@@ -238,13 +243,13 @@ namespace OYMLCN.RPC.Server
                 var interfaces = type.GetGenericTypeDefinition().GetInterfaces();
                 var genericTypes = type.GetGenericArguments();
                 if (interfaces.Contains(typeof(IList)))
-                    dict.Add(GetTypeName(type), GetTypeStruct(genericTypes.First()));
+                    dict.Add(GetTypeName(type), GetTypeStruct(genericTypes.First(), requestStruct));
                 else if (interfaces.Contains(typeof(IDictionary)))
                 {
                     dict.Add(GetTypeName(type), new
                     {
-                        key = GetTypeStruct(genericTypes.First()),
-                        value = GetTypeStruct(genericTypes.Last())
+                        key = GetTypeStruct(genericTypes.First(), requestStruct),
+                        value = GetTypeStruct(genericTypes.Last(), requestStruct)
                     });
                 }
             }
@@ -258,34 +263,32 @@ namespace OYMLCN.RPC.Server
                     var jsonProperty = prop.GetAttribute<JsonPropertyAttribute>();
                     var rpcProperty = prop.GetAttribute<RpcPropertyAttribute>();
                     var rpcRspProperty = prop.GetAttribute<RpcResponsePropertyAttribute>();
-                    if (jsonProperty != null || rpcProperty != null || requestStruct == false && rpcRspProperty != null)
+                    if (requestStruct && rpcProperty == null) continue;
+
+                    var propType = prop.PropertyType;
+                    var name = jsonProperty?.PropertyName ?? prop.Name.FirstCharToLower();
+                    if (rpcProperty?.Require ?? false) name = name + "*";
+
+                    var typeName = GetTypeName(propType);
+                    if (rpcProperty == null && rpcRspProperty == null)
+                        dict.Add(name, typeName);
+                    else
                     {
-                        var propType = prop.PropertyType;
-                        var name = jsonProperty?.PropertyName ?? prop.Name.FirstCharToLower();
-                        if (rpcProperty?.Require ?? false) name = name + "*";
+                        var tmp = new Dictionary<string, object>();
+                        tmp["type"] = typeName;
+                        var defValue = rpcRspProperty?.DefaultValue ?? rpcProperty?.DefaultValue;
+                        var desc = rpcRspProperty?.Description ?? rpcProperty?.Description;
+                        var msg = rpcRspProperty?.Message ?? rpcProperty?.Message;
+                        if (defValue != null) tmp["default"] = defValue;
+                        if (desc != null) tmp["desc"] = desc;
+                        if (msg != null) tmp["msg"] = msg;
+                        if (requestStruct == false && rpcRspProperty != null && propType.IsClass)
+                            tmp["struct"] = GetTypeStruct(propType, true);
 
-
-                        var typeName = GetTypeName(propType);
-                        if (rpcProperty == null && rpcRspProperty == null)
+                        if (tmp.Count == 1)
                             dict.Add(name, typeName);
                         else
-                        {
-                            var tmp = new Dictionary<string, object>();
-                            tmp["type"] = typeName;
-                            var defValue = rpcRspProperty?.DefaultValue ?? rpcProperty?.DefaultValue;
-                            var desc = rpcRspProperty?.Description ?? rpcProperty?.Description;
-                            var msg = rpcRspProperty?.Message ?? rpcProperty?.Message;
-                            if (defValue != null) tmp["default"] = defValue;
-                            if (desc != null) tmp["desc"] = desc;
-                            if (msg != null) tmp["msg"] = msg;
-                            if (requestStruct == false && rpcRspProperty != null && propType.IsClass)
-                                tmp["struct"] = GetTypeStruct(propType, true);
-
-                            if (tmp.Count == 1)
-                                dict.Add(name, typeName);
-                            else
-                                dict.Add(name, tmp);
-                        }
+                            dict.Add(name, tmp);
                     }
                 }
             }

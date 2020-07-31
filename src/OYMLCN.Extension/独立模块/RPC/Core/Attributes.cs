@@ -49,7 +49,7 @@ namespace OYMLCN.RPC.Core
     /// 调用过程返回属性字段
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class RpcResponsePropertyAttribute : RpcPropertyAttribute
+    public class RpcResponsePropertyAttribute : Attribute
     {
         /// <summary>
         /// 调用过程返回属性字段
@@ -60,6 +60,19 @@ namespace OYMLCN.RPC.Core
         /// </summary>
         public RpcResponsePropertyAttribute(string description)
             => this.Description = description;
+
+        /// <summary>
+        /// 描述文本
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public object DefaultValue { get; set; }
+        /// <summary>
+        /// 提示消息
+        /// </summary>
+        public string Message { get; set; }
     }
 
 }
