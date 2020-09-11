@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace OYMLCN.T3P.Encrypt
@@ -30,7 +31,7 @@ namespace OYMLCN.T3P.Encrypt
                 hex = "0" + hex;
             byte[] result = new byte[hex.Length / 2];
             for (int i = 0; i < hex.Length / 2; i++)
-                result[i] = byte.Parse(hex.Substring(2 * i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+                result[i] = byte.Parse(hex.Substring(2 * i, 2), NumberStyles.AllowHexSpecifier);
             return result;
         }
     }

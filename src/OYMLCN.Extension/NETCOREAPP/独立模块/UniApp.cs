@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using OYMLCN.AspNetCore;
 using OYMLCN.Extensions;
-using OYMLCN.Helpers;
 
 namespace OYMLCN.AspNetCore
 {
@@ -21,7 +18,7 @@ namespace OYMLCN.AspNetCore
     /// </summary>
     public class UniAppPageOptions
     {
-        private bool _RedirectAll = false;
+        private bool _RedirectAll;
         /// <summary>
         /// 开启全部自动跳转
         /// - 自动跳转到手机端专用域名
@@ -34,14 +31,14 @@ namespace OYMLCN.AspNetCore
             set
             {
                 _RedirectAll = value;
-                this.AutoRedirectHost = value;
+                AutoRedirectHost = value;
             }
         }
 
         /// <summary>
         /// 开启自动跳转到手机端专用域名（默认值false）
         /// </summary>
-        public bool AutoRedirectHost { get; set; } = false;
+        public bool AutoRedirectHost { get; set; }
         /// <summary>
         /// 手机页面域名完整域，结尾不包含斜杠（eg：https://m.qq.com）
         /// </summary>

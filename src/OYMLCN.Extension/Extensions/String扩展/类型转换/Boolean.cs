@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-#if Xunit
+﻿#if Xunit
 using Xunit;
 #endif
 
@@ -12,7 +10,7 @@ namespace OYMLCN.Extensions
     public static partial class StringConvertExtension
     {
         private static readonly string[] _TrueStringValues
-            = new[] { "1", "true", "yes", "ok", "checked", "是", "对" };
+            = { "1", "true", "yes", "ok", "checked", "是", "对" };
 
         #region public static bool IsTrueStringValue(this string input)
         /// <summary>

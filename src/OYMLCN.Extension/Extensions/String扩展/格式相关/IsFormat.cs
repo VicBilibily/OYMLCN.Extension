@@ -1,9 +1,10 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -39,7 +40,8 @@ namespace OYMLCN.Extensions
                     return false; // 生日验证  
                 return true; // 符合GB11643-1989标准
             }
-            else if (value.Length == 18)
+
+            if (value.Length == 18)
             {
                 if (long.TryParse(value.Remove(17), out n) == false || n < Math.Pow(10, 16) || long.TryParse(value.Replace('x', '0').Replace('X', '0'), out n) == false)
                     return false; // 数字验证  
@@ -100,7 +102,7 @@ namespace OYMLCN.Extensions
 
             int iS = 0;
             //加权因子常数
-            int[] iW = new int[] { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+            int[] iW = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
             //校验码常数
             string LastCode = "10X98765432";
             //新身份证号
@@ -234,7 +236,7 @@ namespace OYMLCN.Extensions
                 ipAddress = IPAddressTryParse(value);
 
             if (ipArray.IsEmpty()) return new[] { ipAddress };
-            else return ipArray;
+            return ipArray;
         }
         private static string IPAddressTryParse(string value)
         {
@@ -434,11 +436,11 @@ namespace OYMLCN.Extensions
                     string[] chinaTelecomPrefix = "133、149、153、173、177、180、181、189、191、193、199、190".Split('、');
                     string[] chinaUnicomPrefix = "130、131、132、145、155、156、166、171、175、176、185、186、196".Split('、');
                     string[] chinaMobilePrefix = "134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、172、178、182、183、184、187、188、195、198、197".Split('、');
-                    string[] chinaBroadcstPrefix = new[] { "192" };
+                    string[] chinaBroadcstPrefix = { "192" };
                     string[] chinaTelecomVirtualPrefix = "1700、1701、1702、162".Split('、');
                     string[] chinaUnicomVirtualPrefix = "1704、1707、1708、1709、171、167".Split('、');
                     string[] chinaMobileVirtualPrefix = "1703、1705、1706、165".Split('、');
-                    string[] satelliteCommunicationPrefix = new[] { "1349" };
+                    string[] satelliteCommunicationPrefix = { "1349" };
 
                     var prefix = new List<string>();
                     prefix.AddRange(chinaTelecomPrefix); // 中国电信号段

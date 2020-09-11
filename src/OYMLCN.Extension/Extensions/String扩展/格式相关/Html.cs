@@ -1,7 +1,8 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif

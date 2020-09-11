@@ -1,8 +1,8 @@
-﻿using OYMLCN.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using OYMLCN.Extensions;
 
 namespace OYMLCN
 {
@@ -22,7 +22,7 @@ namespace OYMLCN
             if (_instance == null)
             {
                 Type typeFromHandle = typeof(T);
-                object obj = _lockers.GetValueOrSetDefaultFunc(typeFromHandle, (Type x) => new object());
+                object obj = _lockers.GetValueOrSetDefaultFunc(typeFromHandle, x => new object());
                 lock (obj)
                     if (_instance == null)
                     {

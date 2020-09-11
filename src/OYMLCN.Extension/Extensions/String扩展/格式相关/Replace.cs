@@ -1,8 +1,9 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -25,7 +26,7 @@ namespace OYMLCN.Extensions
         {
             input.ThrowIfNull(nameof(input));
 
-            string[] param = new string[] { "\r\n", "\n" };
+            string[] param = { "\r\n", "\n" };
             char[] chars = input.ReplaceValuesRegexMatches("\n", param).ToCharArray();
             char preChar = default;
             StringBuilder sb = new StringBuilder();

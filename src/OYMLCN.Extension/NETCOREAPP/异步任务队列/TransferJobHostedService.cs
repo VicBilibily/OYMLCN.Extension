@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// InjectionServiceCollectionExtensions
     /// </summary>
-    public static partial class InjectionServiceCollectionExtensions
+    public static class InjectionServiceCollectionExtensions
     {
         /// <summary>
         /// 注入后台处理任务依赖

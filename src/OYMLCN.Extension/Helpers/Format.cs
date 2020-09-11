@@ -1,11 +1,8 @@
-﻿using OYMLCN.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Web;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.Helpers
 {
@@ -95,7 +92,7 @@ namespace OYMLCN.Helpers
                 return (bytes / (double)M).ToString("F3") + "MiB";
             if (bytes > K * 2)
                 return (bytes / (double)K).ToString("F1") + "KiB";
-            return bytes.ToString() + "B";
+            return bytes + "B";
         }
 
         /// <summary>

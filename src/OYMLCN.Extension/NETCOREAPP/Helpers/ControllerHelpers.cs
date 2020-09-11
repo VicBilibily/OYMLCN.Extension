@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -10,11 +15,6 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace OYMLCN.Helpers
 {
@@ -39,7 +39,7 @@ namespace OYMLCN.Helpers
         private static ActionDescriptor CreateActionDescriptor<TController>(string actionName, RouteData routeData)
         {
             var controllerType = typeof(TController);
-            var actionDesciptor = new ControllerActionDescriptor()
+            var actionDesciptor = new ControllerActionDescriptor
             {
                 ControllerName = controllerType.Name,
                 ActionName = actionName,
@@ -102,7 +102,7 @@ namespace OYMLCN.Helpers
             using (var output = new StringWriter())
             {
                 //视图上下文对于视图渲染来说很重要，视图中的前后台交互都需要它
-                var viewContext = new ViewContext()
+                var viewContext = new ViewContext
                 {
                     HttpContext = context,
                     Writer = output,

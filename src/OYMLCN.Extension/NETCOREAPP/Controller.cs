@@ -1,20 +1,12 @@
-using Microsoft.AspNetCore.Http.Features;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Headers;
-using OYMLCN.Extensions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Net.Http.Headers;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.AspNetCore
 {
@@ -98,7 +90,7 @@ namespace OYMLCN.AspNetCore
         /// <summary>
         /// 判断是否使用手机浏览
         /// </summary>
-        public bool IsMobileRequest => IsMobileAgent(this.RequestUserAgent);
+        public bool IsMobileRequest => IsMobileAgent(RequestUserAgent);
         #endregion
 
         private Dictionary<string, string> requestQueryParams;
@@ -118,19 +110,16 @@ namespace OYMLCN.AspNetCore
 
                 if (Request.Method != "POST")
                     return requestQueryParams;
-                else
-                {
-                    if (Request.Form.IsNotEmpty())
-                        foreach (var item in Request.Form)
-                            requestQueryParams[item.Key] = item.Value;
-                    else if (Request.ContentType.Equals("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase))
-                        foreach (var item in Request.Body.ReadToEnd().Split("&"))
-                        {
-                            var query = item.Split("=");
-                            requestQueryParams.Add(query.FirstOrDefault(), query.Skip(1).FirstOrDefault());
-                        }
-                    return requestQueryParams;
-                }
+                if (Request.Form.IsNotEmpty())
+                    foreach (var item in Request.Form)
+                        requestQueryParams[item.Key] = item.Value;
+                else if (Request.ContentType.Equals("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase))
+                    foreach (var item in Request.Body.ReadToEnd().Split("&"))
+                    {
+                        var query = item.Split("=");
+                        requestQueryParams.Add(query.FirstOrDefault(), query.Skip(1).FirstOrDefault());
+                    }
+                return requestQueryParams;
             }
         }
     }

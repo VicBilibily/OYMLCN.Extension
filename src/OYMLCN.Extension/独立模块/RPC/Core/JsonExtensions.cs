@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.RPC.Core
 {
@@ -9,7 +10,7 @@ namespace OYMLCN.RPC.Core
     {
         static JsonExtensions()
         {
-            settings = new JsonSerializerSettings()
+            settings = new JsonSerializerSettings
             {
                 // 包含属性默认值
                 DefaultValueHandling = DefaultValueHandling.Include,
@@ -31,7 +32,7 @@ namespace OYMLCN.RPC.Core
         static readonly JsonSerializerSettings settings;
 
         public static string ToJson<T>(this T data) where T : class, new()
-            => Regex.Replace(JsonConvert.SerializeObject(data, settings), @"\\u[0123456789abcdef]{4}", Extensions.NewtonsoftJsonExtension.DecodeUnicode);
+            => Regex.Replace(JsonConvert.SerializeObject(data, settings), @"\\u[0123456789abcdef]{4}", NewtonsoftJsonExtension.DecodeUnicode);
 
         public static T FromJson<T>(this string json) where T : class, new()
             => JsonConvert.DeserializeObject<T>(json);

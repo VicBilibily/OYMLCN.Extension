@@ -1,10 +1,10 @@
-﻿using OYMLCN.ArgumentChecker;
-using OYMLCN.RPC.Core;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using OYMLCN.ArgumentChecker;
+using OYMLCN.RPC.Core;
 
 namespace OYMLCN.RPC
 {
@@ -25,7 +25,7 @@ namespace OYMLCN.RPC
             httpClient.ThrowIfNull(nameof(httpClient), $"{nameof(HttpClient)} 不能为 null");
             if (httpClient.BaseAddress == null)
                 throw new ArgumentException($"{nameof(HttpClient)} 的 {nameof(HttpClient.BaseAddress)} 不能为 null，您需要为 {nameof(HttpClient)} 提供发送请求时使用的 Internet 资源的统一资源标识符 (URI) 的基址 {nameof(HttpClient.BaseAddress)}", nameof(httpClient));
-            this.HttpClient = httpClient;
+            HttpClient = httpClient;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace OYMLCN.RPC
         /// <param name="target"> 调用目标类型 </param>
         /// <param name="action"> 调用目标名称 </param>
         /// <param name="args"> 调用目标参数 </param>
-        public async Task<TResult> InvokeAsync<TResult>(string target, string action, params object[] args) where TResult : class, new()
+        public async Task<TResult> InvokeAsync<TResult>(string target, string action, params object[] args)
             => await InvokeAsync<TResult>(null, target, action, args);
         /// <summary>
         /// 远程目标调用
@@ -45,14 +45,14 @@ namespace OYMLCN.RPC
         /// <param name="target"> 调用目标类型 </param>
         /// <param name="action"> 调用目标名称 </param>
         /// <param name="args"> 调用目标参数 </param>
-        public async Task<TResult> InvokeAsync<TResult>(string @interface, string target, string action, params object[] args) where TResult : class, new()
+        public async Task<TResult> InvokeAsync<TResult>(string @interface, string target, string action, params object[] args)
             => await InvokeAsync<TResult>(new RequestModel(@interface, target, action, args));
         /// <summary>
         /// 远程目标调用
         /// </summary>
         /// <typeparam name="TResult"> 返回数据的类型 </typeparam>
         /// <param name="requestModel"> 调用目标数据模型 </param>
-        public async Task<TResult> InvokeAsync<TResult>(RequestModel requestModel) where TResult : class, new()
+        public async Task<TResult> InvokeAsync<TResult>(RequestModel requestModel)
         {
             requestModel.ThrowIfNull(nameof(requestModel));
 
@@ -66,9 +66,17 @@ namespace OYMLCN.RPC
                 {
                     ResponseModel responseModel = result.FromJson<ResponseModel>();
                     if (responseModel.Code != 0)
-                        throw new Exception($"请求出错,返回内容:{result}");
+                        throw new Exception($"请求出错，返回内容：{result}");
                     if (responseModel.Data != null)
-                        return responseModel.Data.ToJson().FromJson<TResult>();
+                    {
+                        if (typeof(TResult).IsClass)
+                            return (TResult)responseModel.Data.ToJson().FromJson(typeof(TResult));
+                        try
+                        {
+                            return (TResult)Convert.ChangeType(responseModel.Data, typeof(TResult));
+                        }
+                        catch { return default; }
+                    }
                     return default;
                 }
             }

@@ -33,7 +33,7 @@ namespace OYMLCN
         /// </summary>
         public LambadaExpression(Expression<Func<T, bool>> exp)
         {
-            this.Result = exp;
+            Result = exp;
         }
         /// <summary>
         /// 条件表达式输出

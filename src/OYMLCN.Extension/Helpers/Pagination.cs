@@ -113,7 +113,7 @@ namespace OYMLCN
                 if (NextPage > max) NextPage = max;
             }
 
-            this.Page = page;
+            Page = page;
             return page;
         }
 
@@ -147,11 +147,11 @@ namespace OYMLCN
             for (int i = start; i <= end; i++)
                 mid.Add(i);
 
-            this.PageArray = mid.ToArray();
-            this.LeftSplit = start > 2;
-            this.RightSplit = end + 1 < Pages;
-            if (start > 1) this.ShowFirst = true;
-            if (end > 2 && end != max) this.ShowLast = true;
+            PageArray = mid.ToArray();
+            LeftSplit = start > 2;
+            RightSplit = end + 1 < Pages;
+            if (start > 1) ShowFirst = true;
+            if (end > 2 && end != max) ShowLast = true;
             return this;
         }
 

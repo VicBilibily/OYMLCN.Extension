@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OYMLCN.Extensions;
-using OYMLCN.RPC.Core;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,6 +8,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using OYMLCN.Extensions;
+using OYMLCN.RPC.Core;
 
 namespace OYMLCN.RPC.Server
 {
@@ -113,10 +113,10 @@ namespace OYMLCN.RPC.Server
                     }
                     // 检查调用目标是否为空
                     else if (RpcRequest.Target.IsNullOrWhiteSpace())
-                        RpcResponse.Message = $"未指定调用目标";
+                        RpcResponse.Message = "未指定调用目标";
                     // 检查调用方法名称是否为空
                     else if (RpcRequest.Action.IsNullOrWhiteSpace())
-                        RpcResponse.Message = $"未指定调用方法";
+                        RpcResponse.Message = "未指定调用方法";
                 }
                 catch
                 {
@@ -177,7 +177,7 @@ namespace OYMLCN.RPC.Server
                         }
                     }
                     else if (RpcRequest.Interface.IsNullOrWhiteSpace())
-                        RpcResponse.Message = $"未指定调用目标接口或未设置默认接口名称";
+                        RpcResponse.Message = "未指定调用目标接口或未设置默认接口名称";
                     else if (targets.Length == 0)
                         RpcResponse.Message = $"调用目标接口 {RpcRequest.Interface} 无实现";
                 }
@@ -308,25 +308,24 @@ namespace OYMLCN.RPC.Server
             return new
             {
                 @params = methodParamters.ToDictionary(v => v.Name + (v.HasDefaultValue ? string.Empty : "*"), v =>
-                  {
-                      if (v.ParameterType.IsValueType || v.ParameterType == typeof(string) || v.ParameterType.IsEnum)
-                      {
-                          if (v.HasDefaultValue)
+                {
+                    if (v.ParameterType.IsValueType || v.ParameterType == typeof(string) || v.ParameterType.IsEnum)
+                    {
+                        if (v.HasDefaultValue)
                               return new
                               {
                                   type = GetTypeName(v.ParameterType),
                                   @default = v.DefaultValue
                               };
-                          else
-                              return (object)GetTypeName(v.ParameterType);
-                      }
-                      else
-                          return new
-                          {
-                              type = GetTypeName(v.ParameterType),
-                              @struct = GetTypeStruct(v.ParameterType, true)
-                          };
-                  }),
+                        return (object)GetTypeName(v.ParameterType);
+                    }
+
+                    return new
+                    {
+                        type = GetTypeName(v.ParameterType),
+                        @struct = GetTypeStruct(v.ParameterType, true)
+                    };
+                }),
                 @return = returnValue,
             };
         }
@@ -337,9 +336,9 @@ namespace OYMLCN.RPC.Server
         internal bool RpcInitParameters()
         {
             RpcContext.Parameters = new object[0];
-            if (!this.RpcInitArrayParameters()) return false;
-            this.RpcFixObjectParameters();
-            if (!this.RpcFixInvokeParameters()) return false;
+            if (!RpcInitArrayParameters()) return false;
+            RpcFixObjectParameters();
+            if (!RpcFixInvokeParameters()) return false;
             return true;
         }
         private bool RpcInitArrayParameters()
@@ -347,7 +346,7 @@ namespace OYMLCN.RPC.Server
             if (RpcRequest.GetStructInfoData)
             {
                 RpcResponse.Code = 0;
-                RpcResponse.Message = $"获取远程调用目标方法的请求及响应结构信息";
+                RpcResponse.Message = "获取远程调用目标方法的请求及响应结构信息";
                 RpcResponse.Data = GetStructInfoData();
                 return false;
             }

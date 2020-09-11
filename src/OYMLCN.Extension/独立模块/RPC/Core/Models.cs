@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
+﻿using System.Linq;
+using Newtonsoft.Json;
 
 namespace OYMLCN.RPC.Core
 {
@@ -28,16 +28,16 @@ namespace OYMLCN.RPC.Core
         /// <param name="args"> 调用参数（若有则传入） </param>
         public RequestModel(string @interface, string target, string action, object[] args = null)
         {
-            this.Interface = @interface;
-            this.Target = target;
-            this.Action = action;
+            Interface = @interface;
+            Target = target;
+            Action = action;
 
-            this.Paramters = args;
-            if (args.Length == 1)
+            Paramters = args;
+            if (args?.Length == 1)
             {
                 var arg = args.First();
                 if (arg?.GetType().IsClass ?? false)
-                    this.Paramters = arg;
+                    Paramters = arg;
             }
         }
 

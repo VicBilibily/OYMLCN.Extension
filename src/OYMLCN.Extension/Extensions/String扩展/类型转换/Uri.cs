@@ -1,4 +1,5 @@
 ﻿using System;
+
 #if Xunit
 using Xunit;
 #endif

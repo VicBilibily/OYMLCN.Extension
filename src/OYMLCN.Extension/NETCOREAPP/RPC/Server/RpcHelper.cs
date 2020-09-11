@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -10,11 +15,6 @@ using OYMLCN.AspNetCore.TransferJob;
 using OYMLCN.Extensions;
 using OYMLCN.Helpers;
 using OYMLCN.RPC.Core;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 
 namespace OYMLCN.RPC.Server
 {
@@ -32,7 +32,7 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         public RpcHelper(IServiceProvider requestServices)
         {
-            this.ServiceProvider = requestServices;
+            ServiceProvider = requestServices;
         }
 
         private IWebHostEnvironment _hostEnvironment;
@@ -110,7 +110,7 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         /// <param name="options"> JWT 配置信息 </param>
         public bool ValidateToken(JwtOptions options)
-            => this.ValidateToken(options, RpcRequest.Token);
+            => ValidateToken(options, RpcRequest.Token);
         /// <summary>
         /// 验证用户认证Token是否有效
         /// </summary>
@@ -130,7 +130,7 @@ namespace OYMLCN.RPC.Server
             var claims = jwtSecurityToken.Claims;
             try
             {
-                tokenHandler.ValidateToken(fullToken, new TokenValidationParameters()
+                tokenHandler.ValidateToken(fullToken, new TokenValidationParameters
                 {
                     ValidAudiences = jwtSecurityToken.Audiences,
                     ValidIssuer = options.Issuer,
@@ -159,7 +159,7 @@ namespace OYMLCN.RPC.Server
         /// <param name="options"> JWT 配置信息 </param>
         /// <returns> 如果 token 是由服务颁发的有效凭证且未过期，则会返回生成时提供的用户认证数据信息，否则返回 null。 </returns>
         public T GetTokenInfo<T>(JwtOptions options) where T : class, new()
-            => this.GetTokenInfo<T>(options, RpcRequest.Token);
+            => GetTokenInfo<T>(options, RpcRequest.Token);
         /// <summary>
         /// 从 Token 获取用户认证数据
         /// </summary>

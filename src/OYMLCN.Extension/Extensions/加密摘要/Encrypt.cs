@@ -1,6 +1,6 @@
-﻿using OYMLCN.T3P.Encrypt;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using OYMLCN.T3P.Encrypt;
 
 namespace OYMLCN.Extensions
 {

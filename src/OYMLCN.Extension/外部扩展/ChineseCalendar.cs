@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OYMLCN
 {
@@ -558,12 +556,11 @@ namespace OYMLCN
         private bool BitTest32(int num, int bitpostion)
         {
             if ((bitpostion > 31) || (bitpostion < 0))
-                throw new Exception("Error Param: bitpostion[0-31]:" + bitpostion.ToString());
+                throw new Exception("Error Param: bitpostion[0-31]:" + bitpostion);
             int bit = 1 << bitpostion;
             if ((num & bit) == 0)
                 return false;
-            else
-                return true;
+            return true;
         }
         /// <summary>
         /// 将星期几转成数字表示

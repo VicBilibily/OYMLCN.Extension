@@ -1,8 +1,7 @@
 using System;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using OYMLCN.Extensions;
-using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.Mvc.TagHelpers
 {
@@ -111,8 +110,7 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
             {
                 if (RouteValues.TryGetValue(rule.Key, out string source) && Equals(rule.Value, source))
                     continue;
-                else
-                    return false;
+                return false;
             }
             return true;
         }
@@ -141,7 +139,7 @@ namespace Microsoft.AspNetCore.Mvc.TagHelpers
             var addClass = Convert.ToBoolean(LayuiThis);
 
             if (!addClass && AutoThis == true)
-                addClass = base.ActionCatch;
+                addClass = ActionCatch;
             // 如果未指示需要添加样式，尝试对比参数
             if (!addClass)
             {

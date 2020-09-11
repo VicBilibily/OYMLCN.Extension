@@ -1,4 +1,3 @@
-using OYMLCN.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,13 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using OYMLCN.Extensions;
 
 namespace OYMLCN.Helpers
 {
     /// <summary>
     /// HttpClient方法封装
     /// </summary>
-    public partial class HttpClientHelper
+    public class HttpClientHelper
     {
         /// <summary>
         /// 全局连接
@@ -89,7 +89,7 @@ namespace OYMLCN.Helpers
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
         public string PostString(string url, string data, Encoding encoder = null, Encoding decoder = null)
-            => PostData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
+            => PostData(url, data, encoder).ReadToEnd(decoder ?? Encoding.UTF8);
         ///// <summary>
         ///// 通过HttpPost提交Json数据
         ///// </summary>
@@ -184,7 +184,7 @@ namespace OYMLCN.Helpers
         /// <param name="decoder">返回数据编码（默认为UTF-8）</param>
         /// <returns></returns>
         public string PutString(string url, string data, Encoding encoder = null, Encoding decoder = null)
-            => PutData(url, data, encoder, "text/text").ReadToEnd(decoder ?? Encoding.UTF8);
+            => PutData(url, data, encoder).ReadToEnd(decoder ?? Encoding.UTF8);
         /// <summary>
         /// 通过HttpPut提交Json数据
         /// </summary>
@@ -270,7 +270,7 @@ namespace OYMLCN.Helpers
             request.Method = "POST";
             request.Timeout = timeout * 1000;
             var postStream = new MemoryStream();
-            string boundary = "----" + System.DateTime.Now.Ticks.ToString("x");
+            string boundary = "----" + DateTime.Now.Ticks.ToString("x");
             string fileFormdataTemplate = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: application/octet-stream\r\n\r\n";
             string dataFormdataTemplate = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"{0}\"\r\n\r\n{1}";
             foreach (var file in queryDir)

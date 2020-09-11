@@ -1,10 +1,8 @@
+using System;
+using System.Net;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using OYMLCN.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
 
 namespace OYMLCN.AspNetCore
 {
@@ -27,15 +25,15 @@ namespace OYMLCN.AspNetCore
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="memoryCache"></param>
-        public EmailSender(IConfiguration configuration, IMemoryCache memoryCache) : base()
+        public EmailSender(IConfiguration configuration, IMemoryCache memoryCache)
         {
             var config = configuration.GetSection("EmailSender");
-            base.DisplayName = config.GetValue<string>("DisplayName");
-            base.UserName = config.GetValue<string>("UserName");
-            base.SMTP = config.GetValue<string>("SMTP");
-            base.Password = config.GetValue<string>("Password");
-            base.Port = config.GetValue<int>("Port");
-            this.MemoryCache = memoryCache;
+            DisplayName = config.GetValue<string>("DisplayName");
+            UserName = config.GetValue<string>("UserName");
+            SMTP = config.GetValue<string>("SMTP");
+            Password = config.GetValue<string>("Password");
+            Port = config.GetValue<int>("Port");
+            MemoryCache = memoryCache;
         }
         /// <summary>
         /// 邮件发送

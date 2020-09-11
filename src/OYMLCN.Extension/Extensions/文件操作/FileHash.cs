@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -21,8 +19,7 @@ namespace OYMLCN.Extensions
             if (file.Exists)
                 using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
                     return stream.GetMD5Hash();
-            else
-                return null;
+            return null;
         }
         /// <summary>
         /// 计算文件流的MD5摘要值
@@ -50,8 +47,7 @@ namespace OYMLCN.Extensions
             if (file.Exists)
                 using (FileStream stream = new FileStream(file.FullName, FileMode.Open))
                     return stream.GetSHA1Hash();
-            else
-                return null;
+            return null;
         }
         /// <summary>
         /// 计算文件流的SHA1摘要值

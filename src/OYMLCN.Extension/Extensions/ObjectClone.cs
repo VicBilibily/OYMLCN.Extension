@@ -1,12 +1,12 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
-using OYMLCN.ArgumentChecker;
-using System.Runtime.Serialization;
-using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using System.Data;
 using Xunit;
@@ -207,9 +207,12 @@ namespace OYMLCN.Extensions
                 FieldInfo field = fields[i];
                 var fieldValue = field.GetValue(obj);
                 if (fieldValue == null) continue;
+                var fieldType = fieldValue.GetType();
                 // 值类型，字符串，枚举类型直接把值复制，不存在浅拷贝
-                if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
+                if (fieldType.IsValueType || fieldValue is string || fieldType.IsEnum)
                     field.SetValue(returnObj, fieldValue);
+                else if (fieldType.IsArray)
+                    field.SetValue(returnObj, (fieldValue as Array).Clone());
                 else
                     field.SetValue(returnObj, DeepClone(fieldValue));
             }
@@ -220,8 +223,11 @@ namespace OYMLCN.Extensions
                 PropertyInfo property = properties[i];
                 var propertyValue = property.GetValue(obj);
                 if (propertyValue == null) continue;
-                if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
+                var propertyType = propertyValue.GetType();
+                if (propertyType.IsValueType || propertyValue is string || propertyType.IsEnum)
                     property.SetValue(returnObj, propertyValue);
+                else if (propertyType.IsArray)
+                    property.SetValue(returnObj, (propertyValue as Array).Clone());
                 else
                     property.SetValue(returnObj, DeepClone(propertyValue));
             }
@@ -312,7 +318,7 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-        #region public static T AutoCopyTo<T>(this object obj) where T : class, new()
+        #region public static T AutoCopyTo<T>(this object obj, bool onlyValueType = false) where T : class, new()
         /// <summary>
         /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝
         /// </summary>
@@ -339,8 +345,11 @@ namespace OYMLCN.Extensions
                 var fieldValue = field.GetValue(obj);
                 var setField = returnField.FirstOrDefault(v => v.Name == field.Name && v.FieldType == field.FieldType);
                 if (setField == null || fieldValue == null) continue;
-                if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
+                var fieldType = fieldValue.GetType();
+                if (fieldType.IsValueType || fieldValue is string || fieldType.IsEnum)
                     setField.SetValue(returnObj, fieldValue);
+                else if (fieldType.IsArray)
+                    field.SetValue(returnObj, (fieldValue as Array).Clone());
                 else if (onlyValueType == false)
                     setField.SetValue(returnObj, DeepClone(fieldValue));
             }
@@ -350,14 +359,59 @@ namespace OYMLCN.Extensions
                 var propertyValue = property.GetValue(obj);
                 var setProperty = returnProperty.FirstOrDefault(v => v.Name == property.Name && v.PropertyType == property.PropertyType);
                 if (setProperty == null || propertyValue == null) continue;
-                if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
+                var propertyType = propertyValue.GetType();
+                if (propertyType.IsValueType || propertyValue is string || propertyType.IsEnum)
                     setProperty.SetValue(returnObj, propertyValue);
+                else if (propertyType.IsArray)
+                    property.SetValue(returnObj, (propertyValue as Array).Clone());
                 else if (onlyValueType == false)
                     setProperty.SetValue(returnObj, DeepClone(propertyValue));
             }
             return returnObj;
         }
         #endregion
+        #region public static T AutoCopyTo<T>(this object obj, T target) where T : class, new()
+        /// <summary>
+        /// 采用 Reflection 对象反射的方式实现引用对象跨目标类型拷贝
+        /// </summary>
+        /// <typeparam name="T"> 对象实例的类型 </typeparam>
+        /// <param name="obj"> 要进行拷贝的对象实例 </param>
+        /// <param name="target"> 目标对象 </param>
+        /// <returns> 一个与 <paramref name="obj"/> 对象的数据结构相同的新目标对象实例 </returns>
+        /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不能为 null </exception>
+        public static T AutoCopyTo<T>(this object obj, T target) where T : class, new()
+        {
+            obj.ThrowIfNull(nameof(obj));
+            var sourceType = obj.GetType();
+            var targetType = typeof(T);
+            // 对于没有公共无参构造函数的类型会报错
+            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var sourceField = sourceType.GetFields(flags);
+            var returnField = targetType.GetFields(flags);
+            var sourceProperty = sourceType.GetProperties(flags);
+            var returnProperty = targetType.GetProperties(flags);
+            for (int i = 0; i < sourceField.Length; i++)
+            {
+                FieldInfo field = sourceField[i];
+                var fieldValue = field.GetValue(obj);
+                var setField = returnField.FirstOrDefault(v => v.Name == field.Name && v.FieldType == field.FieldType);
+                if (setField == null || fieldValue == null) continue;
+                if (fieldValue.GetType().IsValueType || fieldValue is string || fieldValue.GetType().IsEnum)
+                    setField.SetValue(target, fieldValue);
+            }
+            for (int i = 0; i < sourceProperty.Length; i++)
+            {
+                PropertyInfo property = sourceProperty[i];
+                var propertyValue = property.GetValue(obj);
+                var setProperty = returnProperty.FirstOrDefault(v => v.Name == property.Name && v.PropertyType == property.PropertyType);
+                if (setProperty == null || propertyValue == null) continue;
+                if (propertyValue.GetType().IsValueType || propertyValue is string || propertyValue.GetType().IsEnum)
+                    setProperty.SetValue(target, propertyValue);
+            }
+            return target;
+        }
+        #endregion
+
         #region public static T AutoCopyValues<T>(this T obj) where T : class, new()
         /// <summary>
         /// 采用 Reflection 对象反射的方式实现引用对象值拷贝

@@ -1,6 +1,7 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Linq;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif

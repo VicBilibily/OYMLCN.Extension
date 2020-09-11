@@ -1,9 +1,9 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -243,7 +243,7 @@ namespace OYMLCN.Extensions
 
             var paramArr = new List<string>();
             foreach (var kv in formData.Where(v => v.Key.IsNotNullOrWhiteSpace() && v.Value.IsNotNullOrEmpty()))
-                paramArr.Add(string.Format("{0}={1}", kv.Key, kv.Value?.ToString().UriEscapeDataString()));
+                paramArr.Add(string.Format("{0}={1}", kv.Key, kv.Value?.UriEscapeDataString()));
             return paramArr.Join("&");
         }
 #if Xunit

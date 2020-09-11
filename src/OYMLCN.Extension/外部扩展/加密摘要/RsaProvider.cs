@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace OYMLCN.T3P.Encrypt
 {
@@ -17,8 +14,8 @@ namespace OYMLCN.T3P.Encrypt
     internal class RsaProvider
     {
         static private Regex _PEMCode = new Regex(@"--+.+?--+|\s+");
-        static private byte[] _SeqOID = new byte[] { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
-        static private byte[] _Ver = new byte[] { 0x02, 0x01, 0x00 };
+        static private byte[] _SeqOID = { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
+        static private byte[] _Ver = { 0x02, 0x01, 0x00 };
 
         /// <summary>
 		/// Convert pem to rsa，support PKCS#1、PKCS#8 
@@ -40,7 +37,7 @@ namespace OYMLCN.T3P.Encrypt
             var idx = 0;
 
             //read  length
-            Func<byte, int> readLen = (first) =>
+            Func<byte, int> readLen = first =>
             {
                 if (data[idx] == first)
                 {
@@ -50,12 +47,14 @@ namespace OYMLCN.T3P.Encrypt
                         idx++;
                         return data[idx++];
                     }
-                    else if (data[idx] == 0x82)
+
+                    if (data[idx] == 0x82)
                     {
                         idx++;
                         return (((int)data[idx++]) << 8) + data[idx++];
                     }
-                    else if (data[idx] < 0x80)
+
+                    if (data[idx] < 0x80)
                         return data[idx++];
                 }
                 throw new Exception("Not found any content in pem file");
@@ -74,7 +73,7 @@ namespace OYMLCN.T3P.Encrypt
                 return val;
             };
 
-            Func<byte[], bool> eq = (byts) =>
+            Func<byte[], bool> eq = byts =>
             {
                 for (var i = 0; i < byts.Length; i++, idx++)
                 {
@@ -170,7 +169,7 @@ namespace OYMLCN.T3P.Encrypt
         {
             var ms = new MemoryStream();
 
-            Action<int> writeLenByte = (len) =>
+            Action<int> writeLenByte = len =>
             {
                 if (len < 0x80)
                 {
@@ -189,7 +188,7 @@ namespace OYMLCN.T3P.Encrypt
                 }
             };
             //write moudle data
-            Action<byte[]> writeBlock = (byts) =>
+            Action<byte[]> writeBlock = byts =>
             {
                 var addZero = (byts[0] >> 4) >= 0x8;
                 ms.WriteByte(0x02);

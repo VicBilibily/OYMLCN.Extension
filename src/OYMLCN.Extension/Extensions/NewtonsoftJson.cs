@@ -1,9 +1,10 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 using Xunit.Sdk;
@@ -19,7 +20,7 @@ namespace OYMLCN.Extensions
         /// <summary>
         /// 扩展默认序列化配置
         /// </summary>
-        public readonly static JsonSerializerSettings DefaultSettings = new JsonSerializerSettings()
+        public readonly static JsonSerializerSettings DefaultSettings = new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore

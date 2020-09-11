@@ -15,7 +15,7 @@ namespace OYMLCN.RPC.Core
         /// <param name="cacheTime"> 缓存时间（默认10s） </param>
         public RpcCacheAttribute(int cacheTime = 10)
         {
-            this.CacheTime = cacheTime;
+            CacheTime = cacheTime;
         }
         /// <summary>
         /// 缓存时间（单位:秒）

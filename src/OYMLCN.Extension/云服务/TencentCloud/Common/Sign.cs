@@ -1,8 +1,8 @@
 using System;
-using System.Text;
 using System.Security.Cryptography;
-using OYMLCN.TencentCloud.Util;
+using System.Text;
 using OYMLCN.Extensions;
+using OYMLCN.TencentCloud.Util;
 
 namespace OYMLCN.TencentCloud.Common
 {

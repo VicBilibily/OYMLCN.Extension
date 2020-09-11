@@ -1,17 +1,12 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
+using System.Net;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Text;
 using OYMLCN.Extensions;
-using System.Net;
-using OYMLCN.AspNetCore;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.Configuration
 {

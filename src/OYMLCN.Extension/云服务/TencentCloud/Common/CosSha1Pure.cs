@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace OYMLCN.TencentCloud.Common
@@ -28,7 +29,7 @@ namespace OYMLCN.TencentCloud.Common
             StringBuilder digest = new StringBuilder();
             for(int i = 0; i < _H.Length; ++i)
             {       
-                byte[] digestByte = System.BitConverter.GetBytes(_H[i]);
+                byte[] digestByte = BitConverter.GetBytes(_H[i]);
                 for (int j = 0; j < digestByte.Length; ++j)
                 {
                     digest.Append(digestByte[j].ToString("x2"));
@@ -58,19 +59,17 @@ namespace OYMLCN.TencentCloud.Common
             {
                 if (cbSize < (BLOCK_SIZE_BYTES - _ProcessingBufferCount))
                 {
-                    System.Buffer.BlockCopy(rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, cbSize);
+                    Buffer.BlockCopy(rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, cbSize);
                     _ProcessingBufferCount += cbSize;
                     return;
                 }
-                else
-                {
-                    i = (BLOCK_SIZE_BYTES - _ProcessingBufferCount);
-                    System.Buffer.BlockCopy(rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, i);
-                    ProcessBlock(_ProcessingBuffer, 0);
-                    _ProcessingBufferCount = 0;
-                    ibStart += i;
-                    cbSize -= i;
-                }
+
+                i = (BLOCK_SIZE_BYTES - _ProcessingBufferCount);
+                Buffer.BlockCopy(rgb, ibStart, _ProcessingBuffer, _ProcessingBufferCount, i);
+                ProcessBlock(_ProcessingBuffer, 0);
+                _ProcessingBufferCount = 0;
+                ibStart += i;
+                cbSize -= i;
             }
 
             for (i = 0; i < cbSize - cbSize % BLOCK_SIZE_BYTES; i += BLOCK_SIZE_BYTES)
@@ -80,7 +79,7 @@ namespace OYMLCN.TencentCloud.Common
 
             if (cbSize % BLOCK_SIZE_BYTES != 0)
             {
-                System.Buffer.BlockCopy(rgb, cbSize - cbSize % BLOCK_SIZE_BYTES + ibStart, _ProcessingBuffer, 0, cbSize % BLOCK_SIZE_BYTES);
+                Buffer.BlockCopy(rgb, cbSize - cbSize % BLOCK_SIZE_BYTES + ibStart, _ProcessingBuffer, 0, cbSize % BLOCK_SIZE_BYTES);
                 _ProcessingBufferCount = cbSize % BLOCK_SIZE_BYTES;
             }
         }

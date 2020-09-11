@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OYMLCN.AspNetCore;
 using OYMLCN.Extensions;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace OYMLCN.AspNetCore
 {
@@ -97,10 +97,10 @@ namespace OYMLCN.AspNetCore
     {
         internal JwtToken(JwtSecurityToken token, string tokenName, int expires)
         {
-            this.token_name = tokenName;
-            this.access_token = new JwtSecurityTokenHandler().WriteToken(token);
-            this.refresh_token = Guid.NewGuid().ToString("N");
-            this.expires_in = expires * 60;
+            token_name = tokenName;
+            access_token = new JwtSecurityTokenHandler().WriteToken(token);
+            refresh_token = Guid.NewGuid().ToString("N");
+            expires_in = expires * 60;
         }
         /// <summary>
         /// 凭证名称（默认应为access_token）
@@ -150,7 +150,7 @@ namespace OYMLCN.AspNetCore
     /// <summary>
     /// JwtExtension
     /// </summary>
-    public static partial class JwtExtension
+    public static class JwtExtension
     {
         /// <summary>
         /// 传入用户信息构建JwtSecurityToken
@@ -266,7 +266,7 @@ namespace Microsoft.Extensions.Configuration
                 {
                     //options.RequireHttpsMetadata = false;
                     jwtBearerOptions.SaveToken = true;
-                    jwtBearerOptions.Events = new JwtBearerEvents()
+                    jwtBearerOptions.Events = new JwtBearerEvents
                     {
                         OnChallenge = context =>
                         {

@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using OYMLCN.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OYMLCN.RPC.Server
 {
@@ -42,7 +41,7 @@ namespace OYMLCN.RPC.Server
         /// <returns></returns>
         public RpcServerOptions SetRpcUrl(string path)
         {
-            this.RpcUrl = path?.StartsWith('/') ?? false ? path : $"/{path}";
+            RpcUrl = path?.StartsWith('/') ?? false ? path : $"/{path}";
             return this;
         }
         /// <summary>
@@ -51,7 +50,7 @@ namespace OYMLCN.RPC.Server
         public RpcServerOptions SetDefaultInterface(string typeName)
         {
             if (_interface.ContainsKey(typeName))
-                this.DefaultInterface = typeName;
+                DefaultInterface = typeName;
             else
                 throw new ArgumentException("设置的默认接口未完成注册", typeName);
             return this;
@@ -103,7 +102,8 @@ namespace OYMLCN.RPC.Server
             Type @interface = typeof(T);
             var types = new List<Type>();
             foreach (var item in ass)
-                types.AddRange(item.ExportedTypes.Where(v => v.IsClass && v.GetInterfaces().Contains(@interface)));
+                try { types.AddRange(item.ExportedTypes.Where(v => v.IsClass && v.GetInterfaces().Contains(@interface))); }
+                catch { }
             _interface.TryAdd(@interface.FullName, types.ToArray());
             types.ForEach(type => _types.TryAdd(type.FullName, type));
             return this;
@@ -133,7 +133,7 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         public RpcServerOptions AddRpcHelper<T>() where T : RpcHelper
         {
-            this.RpcHelperType = typeof(T);
+            RpcHelperType = typeof(T);
             return this;
         }
 
@@ -169,8 +169,8 @@ namespace OYMLCN.RPC.Server
         /// </summary>
         public RpcServerOptions SetResponseCacheSessionKeys(params string[] keys)
         {
-            this.AddResponseCache();
-            this._cacheSessionKeys = keys;
+            AddResponseCache();
+            _cacheSessionKeys = keys;
             return this;
         }
         internal List<string> GetResponseCacheSessionKeys() => _cacheSessionKeys.ToList();

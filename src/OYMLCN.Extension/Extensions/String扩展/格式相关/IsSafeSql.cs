@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+
 #if Xunit
 using Xunit;
 #endif
@@ -41,7 +42,7 @@ namespace OYMLCN.Extensions
             }
             return !Regex.IsMatch(input.ToLower(), BadSqlInputKeywordsRegex);
         }
-        private static string BadSqlInputKeywordsRegex = null;
+        private static string BadSqlInputKeywordsRegex;
 #if Xunit
         [Fact]
         public static void IsSafeSqlDataTest()

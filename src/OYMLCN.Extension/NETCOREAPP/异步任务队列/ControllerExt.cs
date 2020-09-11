@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using OYMLCN.AspNetCore.TransferJob;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Controller = Microsoft.AspNetCore.Mvc.Controller;
+using Microsoft.AspNetCore.Mvc;
+using OYMLCN.AspNetCore.TransferJob;
 
 namespace OYMLCN.Extensions
 {

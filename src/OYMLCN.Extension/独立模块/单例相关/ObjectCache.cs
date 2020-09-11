@@ -52,7 +52,7 @@ namespace OYMLCN
         /// </summary>
         /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext()
-            => GetFromCallContext((Type x) => (TObject)Activator.CreateInstance(x));
+            => GetFromCallContext(x => (TObject)Activator.CreateInstance(x));
         /// <summary>
         /// 获取对象
         /// </summary>
@@ -103,7 +103,7 @@ namespace OYMLCN
         /// </summary>
         /// <returns> 对象实例 </returns>
         public static TObject GetFromCallContext()
-            => GetFromCallContext((Type x) => (TObject)Activator.CreateInstance(x));
+            => GetFromCallContext(x => (TObject)Activator.CreateInstance(x));
         /// <summary>
         /// 获取对象
         /// </summary>

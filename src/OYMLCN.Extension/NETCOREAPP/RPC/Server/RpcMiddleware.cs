@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OYMLCN.Extensions;
 using OYMLCN.RPC.Core;
 using OYMLCN.RPC.Core.RpcBuilder;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OYMLCN.RPC.Server
 {
@@ -49,7 +49,7 @@ namespace OYMLCN.RPC.Server
             #endregion
 
             var rpcHelper = context.RequestServices.GetRequiredService(_options.RpcHelperType) as RpcHelper;
-            var rpcContext = rpcHelper.RpcContext = new RpcContext() { HttpContext = context };
+            var rpcContext = rpcHelper.RpcContext = new RpcContext { HttpContext = context };
             rpcContext.Stopwatch.Start();
 
             bool isRootPath = context.Request.Path == "/";
@@ -78,7 +78,6 @@ namespace OYMLCN.RPC.Server
             }
 
             await HandleRequest(rpcHelper);
-            return;
         }
 
         /// <summary>
@@ -130,7 +129,6 @@ namespace OYMLCN.RPC.Server
                 rpcHelper.RpcResponse.Message = rpcHelper.ServiceProvider.IsDevelopment() ? e.InnerException?.Message + e.InnerException?.StackTrace : e.InnerException?.Message;
                 await rpcHelper.WriteRpcResponseAsync();
                 _logger.LogError(e.InnerException ?? e, "过程调用方法时发生未处理异常：{0}\r\n异常信息：{1}", e.InnerException?.Message + e.InnerException?.Message, e.InnerException?.StackTrace);
-                return;
             }
         }
 

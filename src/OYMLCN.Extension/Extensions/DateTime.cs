@@ -25,7 +25,7 @@ namespace OYMLCN.Extensions
         /// <returns>本年的天数</returns>
         public static int GetDaysOfYear(this DateTime dt, int year = 0)
             => IsLeapYear(dt, year) ? 366 : 365;
-        private static readonly int[] m31d = new[] { 1, 3, 5, 7, 8, 10, 12 };
+        private static readonly int[] m31d = { 1, 3, 5, 7, 8, 10, 12 };
         /// <summary>
         /// 本月有多少天
         /// </summary>
@@ -322,9 +322,9 @@ namespace OYMLCN.Extensions
         /// 时间转换为中文 年月日 时:分:秒
         /// </summary>
         public static string ToCnDatetimeString(this DateTime dt, bool second = false)
-            => second ? dt.ToString($"yyyy年MM月dd日 HH:mm:ss") : dt.ToString($"yyyy年MM月dd日 HH:mm");
-        private static readonly string[] WeekdayFullCN = new[] { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
-        private static readonly string[] WeekdayShortCN = new[] { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
+            => second ? dt.ToString("yyyy年MM月dd日 HH:mm:ss") : dt.ToString("yyyy年MM月dd日 HH:mm");
+        private static readonly string[] WeekdayFullCN = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        private static readonly string[] WeekdayShortCN = { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
         /// <summary>
         /// 时间转换 星期一至日（默认全称，可输出缩写）
         /// eg： 星期日 / 周日
@@ -353,35 +353,35 @@ namespace OYMLCN.Extensions
         /// 时间转字符 年-月-日 时:分:秒
         /// </summary>
         public static string ToDatetimeString(this DateTime dt, bool second = false)
-            => second ? dt.ToString($"yyyy-MM-dd HH:mm:ss") : dt.ToString($"yyyy-MM-dd HH:mm");
+            => second ? dt.ToString("yyyy-MM-dd HH:mm:ss") : dt.ToString("yyyy-MM-dd HH:mm");
         /// <summary>
         /// 标准时间格式 年-月-日 时:分:秒.毫秒
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
         public static string ToDatetimeMsString(this DateTime dt)
-            => dt.ToString($"yyyy-MM-dd HH:mm:ss.fff");
+            => dt.ToString("yyyy-MM-dd HH:mm:ss.fff");
         /// <summary>
         /// 标准时间格式 年-月-日 时:分:秒.微秒
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
         public static string ToDatetimeUsString(this DateTime dt)
-            => dt.ToString($"yyyy-MM-dd HH:mm:ss.ffffff");
+            => dt.ToString("yyyy-MM-dd HH:mm:ss.ffffff");
 
         /// <summary>
         /// 时间转换 时:分
         /// </summary>
         public static string ToTimeString(this DateTime dt, bool second = false)
-            => second ? dt.ToString($"HH:mm:ss") : dt.ToString($"HH:mm");
+            => second ? dt.ToString("HH:mm:ss") : dt.ToString("HH:mm");
         /// <summary>
         /// 时间转换 日 时:分
         /// </summary>
         public static string ToDayTimeString(this DateTime dt, bool second = false)
-            => second ? dt.ToString($"dd HH:mm:ss") : dt.ToString($"dd HH:mm");
+            => second ? dt.ToString("dd HH:mm:ss") : dt.ToString("dd HH:mm");
 
-        private static readonly string[] WeekdayFullEN = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-        private static readonly string[] WeekdayShortEN = new[] { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+        private static readonly string[] WeekdayFullEN = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+        private static readonly string[] WeekdayShortEN = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
         /// <summary>
         /// 时间转换 星期一至日（默认全称，可输出缩写）
         /// eg： Sunday / SUN
@@ -408,12 +408,11 @@ namespace OYMLCN.Extensions
                 day = day < 0 ? day * -1 : day;
                 if (day >= 365)
                     return $"{day / 365}年{endStr}";
-                else if (day >= 30)
+                if (day >= 30)
                     return $"{day / 30}个月{endStr}";
-                else if (day >= 7)
+                if (day >= 7)
                     return $"{day / 7}周{endStr}";
-                else
-                    return $"{day}天{endStr}";
+                return $"{day}天{endStr}";
             }
             var hour = interval.Hours;
             if (hour != 0)

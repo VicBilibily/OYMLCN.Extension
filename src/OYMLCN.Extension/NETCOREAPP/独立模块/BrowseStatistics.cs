@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using OYMLCN.AspNetCore;
 using OYMLCN.Extensions;
@@ -78,7 +76,7 @@ namespace OYMLCN.AspNetCore
     /// <summary>
     /// 浏览分析过滤器
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class BrowseStatisticsAttribute : ActionFilterAttribute
     {
         /// <summary>
@@ -132,14 +130,14 @@ namespace OYMLCN.AspNetCore
             // 合并最终的处理参数设置
             if (filters.Count > 1)
             {
-                if (this.Name == null)
-                    this.Name = filters.Select(v => v.Name)
+                if (Name == null)
+                    Name = filters.Select(v => v.Name)
                         .Where(v => v.IsNotNullOrEmpty()).LastOrDefault();
-                if (this.Remark == null)
-                    this.Remark = filters.Select(v => v.Remark)
+                if (Remark == null)
+                    Remark = filters.Select(v => v.Remark)
                         .Where(v => v.IsNotNullOrEmpty()).LastOrDefault();
-                this.Arguments = filters.Select(v => v.Arguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
-                this.RemoveArguments = filters.Select(v => v.RemoveArguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
+                Arguments = filters.Select(v => v.Arguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
+                RemoveArguments = filters.Select(v => v.RemoveArguments).Where(v => v.IsNotNullOrEmpty()).Join(",");
             }
 
             if (options != null && options.handlerDelegate != null)
@@ -154,33 +152,33 @@ namespace OYMLCN.AspNetCore
                 result.RequestQueryString = requset.QueryString;
                 result.RequestUserAgent = requset.Headers[HeaderNames.UserAgent];
 
-                result.AreaName = context.ActionDescriptor.RouteValues["area"] as string;
-                result.ControllerName = context.ActionDescriptor.RouteValues["controller"] as string;
-                result.ActionName = context.ActionDescriptor.RouteValues["action"] as string;
+                result.AreaName = context.ActionDescriptor.RouteValues["area"];
+                result.ControllerName = context.ActionDescriptor.RouteValues["controller"];
+                result.ActionName = context.ActionDescriptor.RouteValues["action"];
 
                 var ActionArguments = context.ActionArguments.ToDictionary(v => v.Key, v => v.Value);
-                if (this.Arguments.IsNotNullOrEmpty())
+                if (Arguments.IsNotNullOrEmpty())
                 {
-                    var paramArr = this.Arguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
+                    var paramArr = Arguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
                     ActionArguments = ActionArguments.Where(v => paramArr.Contains(v.Key.ToLower())).ToDictionary(v => v.Key, v => v.Value);
                 }
-                if (this.RemoveArguments.IsNotNullOrEmpty())
+                if (RemoveArguments.IsNotNullOrEmpty())
                 {
-                    if (this.RemoveArguments.ToLower() == "all")
+                    if (RemoveArguments.ToLower() == "all")
                         ActionArguments = new Dictionary<string, object>();
                     else
                     {
-                        var paramArr = this.RemoveArguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
+                        var paramArr = RemoveArguments.SplitAuto().Select(v => v.Trim().ToLower()).ToArray();
                         ActionArguments = ActionArguments.Where(v => !paramArr.Contains(v.Key.ToLower())).ToDictionary(v => v.Key, v => v.Value);
                     }
                 }
                 result.ActionArguments = ActionArguments;
 
-                result.FilterName = this.Name;
-                result.FilterRemark = this.Remark;
+                result.FilterName = Name;
+                result.FilterRemark = Remark;
 
                 var controller = context.Controller as Controller;
-                MemoryCache.GetOrCreate($"_bs_ip_{controller.RequestSourceIP}", (cache) =>
+                MemoryCache.GetOrCreate($"_bs_ip_{controller.RequestSourceIP}", cache =>
                 {
                     result.IsNewUV = true;
                     cache.SetValue(true);
@@ -188,7 +186,7 @@ namespace OYMLCN.AspNetCore
                     return true;
                 });
                 if (controller?.IsAuthenticated == true)
-                    MemoryCache.GetOrCreate($"_bs_nl_{controller.UserId}_{controller.UserName}", (cache) =>
+                    MemoryCache.GetOrCreate($"_bs_nl_{controller.UserId}_{controller.UserName}", cache =>
                     {
                         result.IsNewLogin = true;
                         cache.SetValue(true);

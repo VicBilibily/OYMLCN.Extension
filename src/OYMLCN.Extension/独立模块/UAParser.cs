@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OYMLCN
+﻿namespace OYMLCN
 {
     /// <summary>
     /// 基于 https://github.com/faisalman/ua-parser-js 0.7.21

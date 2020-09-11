@@ -1,9 +1,9 @@
-using OYMLCN.ArgumentChecker;
 using System;
 using System.IO;
 using System.IO.Compression;
 using System.Security;
-using System.Text;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -180,8 +180,7 @@ namespace OYMLCN.Extensions
                     int bytesRead = compressedzipStream.Read(block, 0, block.Length);
                     if (bytesRead <= 0)
                         break;
-                    else
-                        outBuffer.Write(block, 0, bytesRead);
+                    outBuffer.Write(block, 0, bytesRead);
                 }
             }
             return outBuffer.ToArray();

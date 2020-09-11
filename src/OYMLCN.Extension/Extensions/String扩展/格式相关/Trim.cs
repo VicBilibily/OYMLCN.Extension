@@ -1,5 +1,6 @@
 ﻿using System;
 using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -11,7 +12,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static partial class StringFormatExtension
     {
-        static readonly char[] Puntuation = new char[] {
+        static readonly char[] Puntuation = {
             '~', '～', '-', '—', '－', '–', '_', '＿',
             ',', '，', '.', '。', '?', '？', '!','！',
             ':', '：', ';', '；', '^', '*',

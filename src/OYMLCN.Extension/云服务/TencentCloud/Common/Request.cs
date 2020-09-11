@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net;
 using System.IO;
+using System.Net;
+using System.Text;
 using System.Web;
 using Newtonsoft.Json;
 using OYMLCN.Extensions;
 
 namespace OYMLCN.TencentCloud.Common
 {
-    enum HttpMethod { Get, Post };
+    enum HttpMethod { Get, Post }
     /// <summary>
     /// 请求调用类
     /// </summary>
@@ -23,7 +23,7 @@ namespace OYMLCN.TencentCloud.Common
             try
             {
                 //Console.WriteLine("url:" + url);
-                System.Net.ServicePointManager.Expect100Continue = false;
+                ServicePointManager.Expect100Continue = false;
                 if (requestMethod == HttpMethod.Get)
                 {
                     var paramStr = "";
@@ -51,7 +51,7 @@ namespace OYMLCN.TencentCloud.Common
                     if (header.ContainsKey("Content-Type") && header["Content-Type"] == "application/json")
                     {
                         var json = JsonConvert.SerializeObject(data);
-                        var jsonByte = Encoding.GetEncoding("utf-8").GetBytes(json.ToString());
+                        var jsonByte = Encoding.GetEncoding("utf-8").GetBytes(json);
                         memStream.Write(jsonByte, 0, jsonByte.Length);
                     }
                     else
@@ -66,7 +66,7 @@ namespace OYMLCN.TencentCloud.Common
                         {
                             strBuf.Append("\r\n--" + boundary + "\r\n");
                             strBuf.Append("Content-Disposition: form-data; name=\"" + key + "\"\r\n\r\n");
-                            strBuf.Append(data[key].ToString());
+                            strBuf.Append(data[key]);
                         }
                         var paramsByte = Encoding.GetEncoding("utf-8").GetBytes(strBuf.ToString());
                         memStream.Write(paramsByte, 0, paramsByte.Length);
@@ -138,8 +138,7 @@ namespace OYMLCN.TencentCloud.Common
                     using (var s = we.Response.GetResponseStream())
                     using (var reader = new StreamReader(s, Encoding.UTF8))
                         return reader.ReadToEnd();
-                else
-                    throw we;
+                throw we;
             }
             catch (Exception e)
             {

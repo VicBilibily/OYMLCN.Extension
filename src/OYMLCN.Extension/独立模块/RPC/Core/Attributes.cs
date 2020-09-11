@@ -22,7 +22,7 @@ namespace OYMLCN.RPC.Core
         /// 标记过程调用对象属性（用于序列化参数判断）
         /// </summary>
         public RpcPropertyAttribute(string description)
-            => this.Description = description;
+            => Description = description;
         /// <summary>
         /// 描述文本
         /// </summary>
@@ -59,7 +59,7 @@ namespace OYMLCN.RPC.Core
         /// 调用过程返回属性字段
         /// </summary>
         public RpcResponsePropertyAttribute(string description)
-            => this.Description = description;
+            => Description = description;
 
         /// <summary>
         /// 描述文本
@@ -75,4 +75,25 @@ namespace OYMLCN.RPC.Core
         public string Message { get; set; }
     }
 
+
+    [AttributeUsage(AttributeTargets.Field)]
+    public class RpcEnumAttribute : Attribute
+    {
+        public RpcEnumAttribute() { }
+        public RpcEnumAttribute(string description)
+            => Description = description;
+
+        /// <summary>
+        /// 描述文本
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public object DefaultValue { get; set; }
+        /// <summary>
+        /// 提示消息
+        /// </summary>
+        public string Message { get; set; }
+    }
 }

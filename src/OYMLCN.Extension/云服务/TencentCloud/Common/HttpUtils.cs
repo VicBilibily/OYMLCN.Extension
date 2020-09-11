@@ -6,6 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Web;
 
@@ -16,7 +17,7 @@ namespace OYMLCN.TencentCloud.Util
     /// </summary>
 	internal static class HttpUtils
 	{
-        static char[] reserveChar = new char[] {'/','?','*',':','|','\\','<','>','\"'};
+        static char[] reserveChar = {'/','?','*',':','|','\\','<','>','\"'};
 
         /// <summary>
         /// 远程路径Encode处理,会保证开头是/，结尾也是/

@@ -2,14 +2,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using OYMLCN.TencentCloud.Common;
-using OYMLCN.TencentCloud.Util;
-using System.Web;
 using System.IO;
+using System.Text;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OYMLCN.Extensions;
+using OYMLCN.TencentCloud.Common;
+using OYMLCN.TencentCloud.Util;
 
 namespace OYMLCN.TencentCloud
 {
@@ -46,7 +46,7 @@ namespace OYMLCN.TencentCloud
             this.secretId = secretId;
             this.secretKey = secretKey;
             this.timeOut = timeOut * 1000;
-            this.httpRequest = new Request();
+            httpRequest = new Request();
         }
 
         /// <summary>
@@ -306,19 +306,16 @@ namespace OYMLCN.TencentCloud
             var fileSize = new FileInfo(localPath).Length;
             if (fileSize <= SLICE_UPLOAD_FILE_SIZE)
                 return Upload(bucketName, remotePath, localPath, bizAttribute, insertOnly);
-            else
-            {
-                //分片上传
-                int sliceSize = SLICE_SIZE.SLIZE_SIZE_1M;
+            //分片上传
+            int sliceSize = SLICE_SIZE.SLIZE_SIZE_1M;
 
-                if (parameterDic != null && parameterDic.ContainsKey(CosParameters.PARA_SLICE_SIZE))
-                {
-                    sliceSize = Int32.Parse(parameterDic[CosParameters.PARA_SLICE_SIZE]);
-                    Console.WriteLine("slice size:" + sliceSize);
-                }
-                int slice_size = getSliceSize(sliceSize);
-                return SliceUploadFile(bucketName, remotePath, localPath, bizAttribute, slice_size, insertOnly);
+            if (parameterDic != null && parameterDic.ContainsKey(CosParameters.PARA_SLICE_SIZE))
+            {
+                sliceSize = Int32.Parse(parameterDic[CosParameters.PARA_SLICE_SIZE]);
+                Console.WriteLine("slice size:" + sliceSize);
             }
+            int slice_size = getSliceSize(sliceSize);
+            return SliceUploadFile(bucketName, remotePath, localPath, bizAttribute, slice_size, insertOnly);
         }
 
         /// <summary>
@@ -638,7 +635,6 @@ namespace OYMLCN.TencentCloud
                         ++retryCount;
                         offset -= sliceSize;
                         //Console.WriteLine("重试...");
-                        continue;
                     }
                     else
                         //Console.WriteLine("upload fail");
@@ -800,11 +796,9 @@ namespace OYMLCN.TencentCloud
                     Console.WriteLine("authority value error, please refer to the RestfullAPI");
                     return false;
                 }
-                else
-                {
-                    data.Add(CosParameters.PARA_AUTHORITY, val);
-                    return true;
-                }
+
+                data.Add(CosParameters.PARA_AUTHORITY, val);
+                return true;
             }
 
             return false;
@@ -913,7 +907,7 @@ namespace OYMLCN.TencentCloud
         /// </summary>
         /// <returns></returns>
         private string generateURL(string bucketName, string remotePath) =>
-            COSAPI_CGI_URL + this.appId + "/" + bucketName + HttpUtils.EncodeRemotePath(remotePath);
+            COSAPI_CGI_URL + appId + "/" + bucketName + HttpUtils.EncodeRemotePath(remotePath);
 
         /// <summary>
         /// 内部方法：构造URL

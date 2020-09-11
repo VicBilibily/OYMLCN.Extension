@@ -1,6 +1,7 @@
-﻿using OYMLCN.ArgumentChecker;
-using System;
+﻿using System;
 using System.Linq;
+using OYMLCN.ArgumentChecker;
+
 #if Xunit
 using Xunit;
 #endif
@@ -193,8 +194,7 @@ namespace OYMLCN.Extensions
             var chars = input.ToCharArray();
             if (chars.Length > length)
                 return symbolStr + input.Skip(chars.Length - length).ToArray().ConvertToString();
-            else
-                return symbolStr + input;
+            return symbolStr + input;
         }
 #if Xunit
         [Fact]

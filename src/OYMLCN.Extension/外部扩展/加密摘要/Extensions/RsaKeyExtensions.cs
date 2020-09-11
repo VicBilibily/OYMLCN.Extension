@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
 using System;
 using System.Security.Cryptography;
 using System.Xml;
+using Newtonsoft.Json;
 
 namespace OYMLCN.T3P.Encrypt
 {
@@ -51,7 +51,7 @@ namespace OYMLCN.T3P.Encrypt
         {
             RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
 
-            var parasJson = new RSAParametersJson()
+            var parasJson = new RSAParametersJson
             {
                 Modulus = parameters.Modulus != null ? Convert.ToBase64String(parameters.Modulus) : null,
                 Exponent = parameters.Exponent != null ? Convert.ToBase64String(parameters.Exponent) : null,

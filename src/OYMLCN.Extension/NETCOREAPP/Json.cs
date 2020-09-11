@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
 
 namespace OYMLCN.Extensions
 {
@@ -17,7 +17,7 @@ namespace OYMLCN.Extensions
         public static string TextJsonSerialize<T>(this T data, JsonSerializerOptions options = null) where T : class
             => JsonSerializer.Serialize(data, options);
 
-        internal static JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
+        internal static JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             IgnoreNullValues = true,

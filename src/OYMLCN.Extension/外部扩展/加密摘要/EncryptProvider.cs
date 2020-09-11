@@ -18,7 +18,7 @@ namespace OYMLCN.T3P.Encrypt
         /// <returns>return random value</returns>
         private static string GetRandomStr(int length)
         {
-            char[] arrChar = new char[]{
+            char[] arrChar = {
                 'a','b','d','c','e','f','g','h','i','j','k','l','m','n','p','r','q','s','t','u','v','w','z','y','x',
                 '0','1','2','3','4','5','6','7','8','9',
                 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','Q','P','R','T','S','V','U','W','X','Y','Z'
@@ -41,7 +41,7 @@ namespace OYMLCN.T3P.Encrypt
         /// <returns></returns>
         public static AESKey CreateAesKey()
         {
-            return new AESKey()
+            return new AESKey
             {
                 Key = GetRandomStr(32),
                 IV = GetRandomStr(16)
@@ -835,7 +835,7 @@ namespace OYMLCN.T3P.Encrypt
                 string publicKey = rsa.ToJsonString(false);
                 string privateKey = rsa.ToJsonString(true);
 
-                return new RSAKey()
+                return new RSAKey
                 {
                     PublicKey = publicKey,
                     PrivateKey = privateKey,
@@ -855,7 +855,7 @@ namespace OYMLCN.T3P.Encrypt
             Check.Argument.IsNotNull(rsa, nameof(rsa));
 
             string publicKey = rsa.ToJsonString(false);
-            var rsaKey = new RSAKey()
+            var rsaKey = new RSAKey
             {
                 PublicKey = publicKey,
 
