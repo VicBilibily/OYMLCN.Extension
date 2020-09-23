@@ -13,7 +13,7 @@ namespace OYMLCN.Extensions
     /// </summary>
     public static class StringExtension
     {
-        #region public static bool Contains(this string str, params string[] words)
+        #region public static bool ContainsWords(this string str, params string[] words)
         /// <summary>
         /// 返回一个值，该值指示指定的子串是否出现在此字符串中
         /// </summary>
@@ -21,7 +21,7 @@ namespace OYMLCN.Extensions
         /// <param name="words"> 要搜寻的字符串 </param>
         /// <returns> 如果要搜寻的字符串参数出现在搜寻对象字符串中，或者 <paramref name="words"/> 包含空字符串 ("")，则为 true；否则为 false。 </returns>
         /// <exception cref="ArgumentNullException"> <paramref name="words"/> 不能含有 null </exception>
-        public static bool Contains(this string str, params string[] words)
+        public static bool ContainsWords(this string str, params string[] words)
         {
             if (str.IsNullOrEmpty()) return false;
             return words.Any(word => str.Contains(word));
@@ -43,14 +43,14 @@ namespace OYMLCN.Extensions
 #endif
         #endregion
 
-        #region public static bool Contains(this IEnumerable<string> values, params string[] words)
+        #region public static bool ContainsWords(this IEnumerable<string> values, params string[] words)
         /// <summary>
         /// 确定某元素是否在 <see cref="IEnumerable{T}"/> 中
         /// </summary>
         /// <param name="values"> 搜寻字符串序列 </param>
         /// <param name="words"> 要搜寻的字符串对象 </param>
         /// <returns> 如果要搜寻的字符串在搜寻对象字符串中，则为 true；否则为 false。 </returns>
-        public static bool Contains(this IEnumerable<string> values, params string[] words)
+        public static bool ContainsWords(this IEnumerable<string> values, params string[] words)
         {
             if (values.IsNullOrEmpty()) return false;
             return words.Any(word => values.Any(val => val == word));
@@ -126,7 +126,7 @@ namespace OYMLCN.Extensions
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> 不能为 null </exception>
         /// <exception cref="ArgumentNullException"> <paramref name="words"/> 不能含有 null </exception>
         public static IEnumerable<string> WhereContains(this IEnumerable<string> source, params string[] words)
-            => source.Where(item => item.IsNotNull() && item.Contains(words));
+            => source.Where(item => item.IsNotNull() && item.ContainsWords(words));
 #if Xunit
         [Fact]
         public static void WhereContainsTest()

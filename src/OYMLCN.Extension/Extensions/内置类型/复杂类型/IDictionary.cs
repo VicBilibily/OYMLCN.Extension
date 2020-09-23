@@ -142,7 +142,7 @@ namespace OYMLCN.Extensions
         /// <returns></returns>
         public static IEnumerable<TValue> SelectKeyContainsValues<TValue>(this IDictionary<string, TValue> dict,
             params string[] keys)
-            => dict.Where(d => d.Key.Contains(keys)).Select(d => d.Value);
+            => dict.Where(d => d.Key.ContainsWords(keys)).Select(d => d.Value);
 
         /// <summary>
         /// 获取字典值

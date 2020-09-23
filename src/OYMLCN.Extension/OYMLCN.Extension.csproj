@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Authors>VicBilibily欧阳敏岚</Authors>
     <Company>欧阳敏岚工作室</Company>
-    <Description>（v3主要支持.NetCore3.1，已结束维护，跨版本号全新开发v5主要支持.Net5）本扩展库包含一些个人常用的方法扩展（跨平台兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
+    <Description>（v3主要支持.NetCore3.1）本扩展库包含一些个人常用的方法扩展（跨平台兼容Win&amp;CentOS7）。若需使用，请到GITHUB查看源码以做了解。</Description>
     <Copyright>The MIT License</Copyright>
     <LangVersion>8.0</LangVersion>
 
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Version Condition="'$(Configuration)' == 'Debug'">3.0.0-preview$([System.DateTime]::Now.ToString(MMddHHmm))</Version>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
