@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <Authors>VicBilibily欧阳敏岚</Authors>
+    <Description>（v5基于.Net5/C#9.0重新整理）本扩展库包含一些个人常用的方法扩展（跨平台测试兼容CentOS8）。</Description>
+    <Copyright>The MIT License</Copyright>
+    <LangVersion>9.0</LangVersion>
+
+    <Version>5.0.0</Version>
+    <Version Condition="'$(Configuration)' == 'Debug'">5.0.0-preview$([System.DateTime]::Now.ToString(MMddHHmm))</Version>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/VicBilibily/OYMLCN.Extension.git</RepositoryUrl>
+
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
+    <RootNamespace>OYMLCN</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>VicBilibily欧阳敏岚.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/VicBilibily/OYMLCN.Extension/</PackageProjectUrl>
+
+    <DocumentationFile>bin\xml\OYMLCN.Extension.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="'$(Configuration)' == 'Release'" />
+  </ItemGroup>
+
+</Project>
