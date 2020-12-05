@@ -1,3 +1,11 @@
+/*****************************************************************************
+Copyright: VicBilibily, 2008-2021 OYMLCN.
+License: The MIT License. 
+File name: Application.cs
+Author: VicBilibily
+Description: 单元测试代码，测试应用程序环境相关的帮助方法。
+*****************************************************************************/
+
 using System;
 using OYMLCN.Tools;
 using Xunit;
@@ -6,7 +14,7 @@ namespace OYMLCN.Tests.Tools
 {
     public class ApplicationTest
     {
-        [Fact(DisplayName = nameof(Application.GetExecutablePath))]
+        [Fact]
         public void GetExecutablePathTest()
         {
             string exePath = Application.GetExecutablePath();

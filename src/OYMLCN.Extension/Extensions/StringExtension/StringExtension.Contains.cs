@@ -33,7 +33,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsIgnoreCase(this string str, string value)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return str.Contains(value, StringComparison.CurrentCultureIgnoreCase);
         }
         /// <summary>
@@ -49,7 +49,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsIgnoreCase(this string str, char value)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return str.Contains(value, StringComparison.CurrentCultureIgnoreCase);
         }
 
@@ -72,7 +72,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsWords(this string str, params string[] words)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return words.Any(word => str.Contains(word));
         }
         /// <summary>
@@ -93,7 +93,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsWordsIgnoreCase(this string str, params string[] words)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return words.Any(word => str.Contains(word, StringComparison.CurrentCultureIgnoreCase));
         }
 
@@ -112,7 +112,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsChars(this string str, params char[] chars)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return chars.Any(@char => str.Contains(@char));
         }
         /// <summary>
@@ -129,7 +129,7 @@ namespace OYMLCN.Extensions
         /// </returns>
         public static bool ContainsCharsIgnoreCase(this string str, params char[] chars)
         {
-            if (str.IsNullOrEmpty()) return false;
+            if (string.IsNullOrEmpty(str)) return false;
             return chars.Any(@char => str.Contains(@char, StringComparison.CurrentCultureIgnoreCase));
         }
 

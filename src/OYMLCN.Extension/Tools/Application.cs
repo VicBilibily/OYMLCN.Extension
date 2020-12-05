@@ -1,4 +1,14 @@
-﻿using System.Reflection;
+﻿/*****************************************************************************
+Copyright: VicBilibily, 2008-2021 OYMLCN.
+License: The MIT License. 
+File name: Application.cs
+Author: VicBilibily
+Description: 
+    本代码主要定义一些应用程序环境相关的帮助方法。
+    根据开发使用过程中遇到的坑，由此找出的解决方案的方法封装。
+*****************************************************************************/
+
+using System.Reflection;
 
 namespace OYMLCN.Tools
 {
